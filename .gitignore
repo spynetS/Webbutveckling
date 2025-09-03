@@ -1,0 +1,52 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependency directories
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Runtime data
+*.pid
+*.seed
+*.pid.lock
+
+# dotenv environment files
+.env
+.env.local
+.env.*.local
+
+# Editor & system files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Coverage / test
+coverage/
+*.lcov
+
+# React specific
+# (CRA or Vite build artifacts)
+*.cache
+*.parcel-cache
+.eslintcache
+
+# Express specific
+# (e.g. if you use nodemon / PM2)
+.pnp/
+.pnp.js
+
+# Optional: lock files (if you don’t want to commit them)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
