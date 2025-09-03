@@ -1,6 +1,5 @@
-#+title: Readme
+#+title: Fitnessdual
 
-* Fitnessdual
 FitnessDual is a website where you can track your fitness journey. The main feauture is that you can set up goals and /"compete"/ agains your freinds to meet your goals.
 
 * Run the project
