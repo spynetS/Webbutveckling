@@ -1,0 +1,18 @@
+#+title: Readme
+
+* Fitnessdual
+FitnessDual is a website where you can track your fitness journey. The main feauture is that you can set up goals and /"compete"/ agains your freinds to meet your goals.
+
+* Run the project
+The backend /Express.js/
+#+begin_src bash
+cd backend
+npm install
+npm run start
+#+end_src
+The frontend /React.js/
+#+begin_src bash
+cd frontend
+npm install
+npm run dev
+#+end_src
