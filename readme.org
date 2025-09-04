@@ -15,3 +15,48 @@ cd frontend
 npm install
 npm run dev
 #+end_src
+
+
+* Features
+** Create excercises template
+*** Styrka
+mucle group
+reps
+weight
+description
+title
+image
+*** Cardio
+duration
+title
+image
+intensity
+
+** Create goals
+*** Short goals ( deprecated )
+Short goals are goals where you want to get better at an certain excersice. Example get *a* reps at *x* kgs.
+
+*** Long goals
+Long goals are the goals of your fitness.
+
+- Increase in stregth
+  We track this with data from the loged excercies.
+  If we have increased in weight and or reps we have increased stregth.
+
+- Losing weight
+  We track this by makeing the user weigh them selfs and getting the data that way.
+
+- Gaining weight
+  We track this by makeing the user weigh them selfs and getting the data that way.
+
+** Profiles
+Profiles include
+- profile picture
+- name
+- friend-code
+- friends
+- excercies
+- done excercies
+- weight
+
+A central role with users is that friends can se each others progress and /"compete"/ agains eachother to meet their own goals.
