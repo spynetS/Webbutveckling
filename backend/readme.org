@@ -1,8 +1,9 @@
 #+title: Readme
 
 On the backend we use a MVC pattern.
-we have the models in the *src/models* folder
-views in the *src/routes*
-controllers in the *src/controllers*
 
-Each model should have its own view (/route/) and controller associeted with it.
+- we have the models in the *src/models* folder
+- views in the *src/routes*
+- controllers in the *src/controllers*
+
+Each model should have its own view (/route/) and controller.
