@@ -1,32 +1,29 @@
-import logoDark from "./logo-dark.svg";
-import logoLight from "./logo-light.svg";
-
 import { useState } from "react"
-
-interface Data {
-  success: boolean
-}
+import type { User } from "../models/User"
 
 export function Welcome() {
 
-  const [data,setData] = useState<Data>({"success":true});
+  const [user,setUser] = useState<User>(null);
+  const [userName, setUsername] = useState<string>("")
 
-  async function fetchData() {
-    const response = await fetch(`http://localhost:3000/api/test`);
+  async function fetchUser() {
+    const response = await fetch(`http://localhost:3000/api/get-user?username=${userName}`);
 
-    let json: Data = await response.json()
-    setData(json)
+    let json: User = await response.json()
+    setUser(json)
   }
-
-
-
   return (
     <main className="flex items-center justify-center pt-16 pb-4">
-      <div className="flex-1 flex flex-col items-center gap-16 min-h-0">
-        <button onClick={fetchData} >
+      <div className="flex-1 flex flex-col items-center gap-2 min-h-0">
+
+        <input type="text" name="" onChange={(e)=>setUsername(e.target.value)} value={userName} placeholder="Name" className="border-1 p-1 rounded-lg "/>
+        <button onClick={fetchUser} className="bg-gray-200 rounded-lg hover:bg-gray-300 p-2 cursor-pointer duration-[150ms]" >
           Fetch
         </button>
-        <p>The request was successful: {data?.success.toString()}</p>
+
+        <p>Username: {user?.username.toString()}</p>
+        <p>Email: {user?.email.toString()}</p>
+        <p>Password: {user?.password.toString()}</p>
       </div>
     </main>
   );
