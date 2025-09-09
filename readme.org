@@ -1,6 +1,6 @@
-#+title: Fitnessdual
+#+title: Fitnessduel
 
-FitnessDual is a website where you can track your fitness journey. The main feauture is that you can set up goals and /"compete"/ agains your freinds to meet your goals.
+FitnessDuel is a website where you can track your fitness journey. The main feauture is that you can set up goals and /"compete"/ agains your freinds to meet your goals.
 
 * Run the project
 The backend /Express.js/
@@ -32,6 +32,13 @@ title
 image
 intensity
 
+** Workouts
+A workout is a list of excercies which can be set to a weekday.
+it has a
+title
+list of excercises
+history of past excercises.
+
 ** Create goals
 *** Short goals ( deprecated )
 Short goals are goals where you want to get better at an certain excersice. Example get *a* reps at *x* kgs.
@@ -60,3 +67,15 @@ Profiles include
 - weight
 
 A central role with users is that friends can se each others progress and /"compete"/ agains eachother to meet their own goals.
+
+
+** Pages
+- login
+- signup
+- profile
+- create excercise
+- create workout
+- fill excercise
+- fill weight
+- friends list
+- dashboard

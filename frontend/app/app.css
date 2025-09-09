@@ -1,15 +1,59 @@
 @import "tailwindcss";
+@plugin "daisyui";
+@plugin "daisyui/theme" {
+  name: "fitnesstheme";
+  default: true; /* set as default */
+  prefersdark: false;
+  color-scheme: light;
 
-@theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-}
+  /* base colors (backgrounds & text) */
+  --color-base-100: oklch(98% 0.02 230); /* soft white */
+  --color-base-200: oklch(95% 0.03 230); /* very light gray-blue */
+  --color-base-300: oklch(92% 0.04 230); /* light muted blue */
+  --color-base-content: oklch(20% 0.05 240); /* dark gray text */
 
-html,
-body {
-  @apply bg-white dark:bg-gray-950;
+  /* primary (buttons, highlights) */
+  --color-primary: oklch(60% 0.25 240); /* calm sky blue */
+  --color-primary-content: oklch(98% 0.01 240); /* white text on blue */
 
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-  }
+  /* secondary (cards, accents) */
+  --color-secondary: oklch(85% 0.15 80); /* light peach/orange */
+  --color-secondary-content: oklch(30% 0.05 80); /* darker orange text */
+
+  /* accent (special highlights, exercise focus) */
+  --color-accent: oklch(75% 0.18 160); /* mint green */
+  --color-accent-content: oklch(15% 0.05 160); /* deep green */
+
+  /* neutral (borders, muted UI) */
+  --color-neutral: oklch(50% 0.05 240); /* muted gray */
+  --color-neutral-content: oklch(98% 0.01 240); /* white text */
+
+  /* status colors */
+  --color-info: oklch(70% 0.2 220); /* light blue */
+  --color-info-content: oklch(98% 0.01 220);
+
+  --color-success: oklch(65% 0.25 140); /* green for completed goals */
+  --color-success-content: oklch(98% 0.01 140);
+
+  --color-warning: oklch(80% 0.25 80); /* soft yellow/orange */
+  --color-warning-content: oklch(20% 0.05 80);
+
+  --color-error: oklch(65% 0.3 30); /* warm red */
+  --color-error-content: oklch(98% 0.01 30);
+
+  /* border radius */
+  --radius-selector: 1rem;   /* pill-shaped buttons */
+  --radius-field: 0.5rem;    /* inputs */
+  --radius-box: 1.25rem;     /* cards */
+
+  /* sizes */
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+
+  /* borders */
+  --border: 1px;
+
+  /* effects */
+  --depth: 1;
+  --noise: 0;
 }
