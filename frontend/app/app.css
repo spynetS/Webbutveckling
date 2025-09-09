@@ -7,21 +7,21 @@
   color-scheme: light;
 
   /* base colors (backgrounds & text) */
-  --color-base-100: oklch(98% 0.02 230); /* soft white */
-  --color-base-200: oklch(95% 0.03 230); /* very light gray-blue */
+  --color-base-100: oklch(0.9978 0.001061 17.1758); /* soft white */
+  --color-base-200: oklch(0.9714 0.0025 48.72); /* very light gray-blue */
   --color-base-300: oklch(92% 0.04 230); /* light muted blue */
   --color-base-content: oklch(20% 0.05 240); /* dark gray text */
 
   /* primary (buttons, highlights) */
-  --color-primary: oklch(60% 0.25 240); /* calm sky blue */
+  --color-primary: oklch(0.7296 0.0765 252.5); /* calm sky blue */
   --color-primary-content: oklch(98% 0.01 240); /* white text on blue */
 
   /* secondary (cards, accents) */
-  --color-secondary: oklch(85% 0.15 80); /* light peach/orange */
+  --color-secondary: oklch(0.9377 0.0196 50.15); /* light peach/orange */
   --color-secondary-content: oklch(30% 0.05 80); /* darker orange text */
 
   /* accent (special highlights, exercise focus) */
-  --color-accent: oklch(75% 0.18 160); /* mint green */
+  --color-accent: oklch(0.9592 0.0137 258.35)z; /* mint green */
   --color-accent-content: oklch(15% 0.05 160); /* deep green */
 
   /* neutral (borders, muted UI) */
