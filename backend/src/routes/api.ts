@@ -1,6 +1,9 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { getHello } from "../controllers/hello";
-import { User } from "../models/User"
+import User from "../models/User"
+import ApiResponse from "../database/response"
+import process = require("process");
+
 const router = Router();
 
 // Middleware to disable caching
@@ -13,17 +16,21 @@ router.use((req: Request, res: Response, next: NextFunction) => {
 router.get("/hello", getHello);
 
 router.get("/test", (req: Request, res: Response) => {
-	res.json({"success":true})
+	User.create([
+    { name: "leo", email: "leo@example.com" },
+  ]).then(done=>{
+    res.json(new ApiResponse({data:"added"}))
+  });
 })
 
-router.get("/get-user", (req:Request, res: Response) => {
-	const username = (req.query.username as string) || "defaultUser"; // fallback
-	let user: User = {
-		username: username,
-		email: 'alfred@stensatter.se',
-		password: "password"
-	};
-	res.json(user)
+router.get("/get-users", (req:Request, res: Response) => {
+	try {
+   User.find().then(users =>{
+      res.json(new ApiResponse({data: users}));
+   })
+  } catch (err: any) {
+    res.status(500).json(new ApiResponse({status:"error",message:err}));
+  }
 })
 
 export default router;
