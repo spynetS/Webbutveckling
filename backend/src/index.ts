@@ -11,8 +11,14 @@ const port = 3000;
 init();
 
 // Middleware
-app.use(cors());
 app.use(express.json());
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "http://127.0.0.1:5173"], // allowed origins
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true, // allow cookies
+  })
+);
 
 // Routes
 app.use("/api", apiRouter);

@@ -4,9 +4,7 @@ import { Schema, model, Document } from "mongoose";
 export interface IUser extends Document {
   name: string;
   email: string;
-  friend-code: string;
   weight: number;
-  friends: Types.ObjectId[]; // array of User references
   createdAt: Date;
 }
 
@@ -15,7 +13,6 @@ const userSchema = new Schema<IUser>({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   createdAt: { type: Date, default: Date.now },
-  friends: [{ type: Schema.Types.ObjectId, ref: "User" }] 
 });
 
 // 3. Create the model
