@@ -16,6 +16,9 @@ npm install
 npm run dev
 #+end_src
 
+* Standards
+We are using the (JSend)[https://github.com/omniti-labs/jsend] standard for the json results from the backend
+
 
 * Features
 ** Create excercises template
