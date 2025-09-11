@@ -6,6 +6,7 @@ export interface IUser extends Document {
   email: string;
   weight: number;
   createdAt: Date;
+  password: string;
 }
 
 // 2. Define the schema
@@ -13,6 +14,7 @@ const userSchema = new Schema<IUser>({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   createdAt: { type: Date, default: Date.now },
+  password: { type: String, required: true, unique: false},
 });
 
 // 3. Create the model
