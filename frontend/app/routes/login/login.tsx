@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 
-const LOGIN_URL = "/login";
+const LOGIN_URL = "http://localhost:3000/api/login";
 const SIGNUP_URL = "https://example.com/signup"; // ← placeholder; change later to your real route
 
 const Login = () => {
@@ -93,7 +93,7 @@ const Login = () => {
               required
               placeholder="Password"
               autoComplete="current-password"
-              pattern="(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+
               title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

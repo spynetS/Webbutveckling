@@ -1,17 +1,7 @@
 import User from "../models/User"
 import ApiResponse from "../database/response"
-import { Router, Request, Response, NextFunction } from "express";
-
-export function userCreate(req: Request, res: Response)
-{
-    User.create([
-    { name: req.body.userName, email: req.body.email, password: req.body.password},
-  ]).then(done=>{
-    res.json(new ApiResponse({data:"added"}))
-  }).catch((error:any) => {
-    res.json(new ApiResponse({status:"fail",data:error}))
-  });
-}
+import { Request, Response, } from "express";
+import bcrypt from "bcrypt";
 
 
 
@@ -36,10 +26,12 @@ export async function userLogin(req: Request, res: Response) {
     }
 
     // Plain-text comparison 
-    const ok = user.password === password;
-    if (!ok) {
-      return res.status(401).json(new ApiResponse({ status: "fail", data: invalidMsg }));
-    }
+
+    bcrypt.compare(password, user.password, function(err, result) {
+      if (!result) {
+        return res.status(401).json(new ApiResponse({ status: "fail", data: invalidMsg }));
+      }
+    });
 
     // Success
     return res.json(new ApiResponse({ data: { message: "Logged in" } }));
@@ -50,3 +42,29 @@ export async function userLogin(req: Request, res: Response) {
   }
 }
 
+
+
+export async function userCreate(req: Request, res: Response) {
+  try {
+    const { userName, email, password } = req.body;
+
+    if (!userName || !email || !password) {
+      return res.status(400).json(new ApiResponse({
+        status: "fail",
+        data: "name, email, and password are required"
+      }));
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await User.create({
+      name: userName,
+      email: email,
+      password: hashedPassword
+    });
+
+    res.status(201).json(new ApiResponse({ data: "User added successfully" }));
+  } catch (error: any) {
+    res.status(500).json(new ApiResponse({ status: "error", message: error.message }));
+  }
+}

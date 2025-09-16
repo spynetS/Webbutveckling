@@ -52,7 +52,7 @@ router.get("/get-user/:name", (req:Request, res: Response) => {
 
 router.post("/signup", userCreate)
 
-router.post("/login", userLogin);       // added login
+router.post("/login", userLogin);
 
 
 export default router;
