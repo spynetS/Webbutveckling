@@ -3,7 +3,7 @@ import { getHello } from "../controllers/hello";
 import User from "../models/User"
 import ApiResponse from "../database/response"
 import process = require("process");
-import { userCreate } from "../controllers/userController";
+import { userCreate, userLogin} from "../controllers/userController";
 
 const router = Router();
 
@@ -51,6 +51,8 @@ router.get("/get-user/:name", (req:Request, res: Response) => {
 })
 
 router.post("/signup", userCreate)
+
+router.post("/login", userLogin);       // added login
 
 
 export default router;
