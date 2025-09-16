@@ -9,7 +9,7 @@ export interface IExerciseTemplate extends Document {
 }
 
 // 2. Define the schema
-const excersiceTemplateSchema = new Schema<IExerciseTemplate>({
+const exerciseTemplateSchema = new Schema<IExerciseTemplate>({
   title: { type: String, required: true },
   description: { type: String },
   creator: {type: Schema.Types.ObjectId, required: true},
@@ -17,6 +17,6 @@ const excersiceTemplateSchema = new Schema<IExerciseTemplate>({
 });
 
 // 3. Create the model
-const ExcersiceTemplate = model<IExerciseTemplate>("ExerciseTemplate", userSchema);
+const ExerciseTemplate = model<IExerciseTemplate>("ExerciseTemplate", exerciseTemplateSchema);
 
-export default ExcersiceTemplate;
+export default ExerciseTemplate;

@@ -5,6 +5,9 @@ import ApiResponse from "../database/response"
 import process = require("process");
 import { userCreate, userLogin} from "../controllers/userController";
 
+
+import exerciseRouter from "./exerciseTemplate";
+
 const router = Router();
 
 // Middleware to disable caching
@@ -51,8 +54,10 @@ router.get("/get-user/:name", (req:Request, res: Response) => {
 })
 
 router.post("/signup", userCreate)
-
 router.post("/login", userLogin);
+
+// register the exercise router
+router.use("/exercise", exerciseRouter);
 
 
 export default router;
