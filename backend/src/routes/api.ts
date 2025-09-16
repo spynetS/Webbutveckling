@@ -3,6 +3,7 @@ import { getHello } from "../controllers/hello";
 import User from "../models/User"
 import ApiResponse from "../database/response"
 import process = require("process");
+import { userCreate, userLogin} from "../controllers/userController";
 
 const router = Router();
 
@@ -19,7 +20,7 @@ router.get("/test", (req: Request, res: Response) => {
   }
   
   User.create([
-    { name: name, email: name+"@asd.com" },
+    { name: req.body.userName, email: name+"@asd.com" },
   ]).then(done=>{
     res.json(new ApiResponse({data:"added"}))
   }).catch((error:any) => {
@@ -30,6 +31,7 @@ router.get("/test", (req: Request, res: Response) => {
 
 router.get("/get-users", (req:Request, res: Response) => {
 	try {
+    
    User.find().then(users =>{
       res.json(new ApiResponse({data: users}));
    })
@@ -47,5 +49,10 @@ router.get("/get-user/:name", (req:Request, res: Response) => {
         res.json(new ApiResponse({status:'fail',data: error}));
    })
 })
+
+router.post("/signup", userCreate)
+
+router.post("/login", userLogin);
+
 
 export default router;
