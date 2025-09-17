@@ -33,6 +33,9 @@ export async function userLogin(req: Request, res: Response) {
       }
     });
 
+    // save the users id in our session
+    req.session.userId = user.id;
+
     // Success
     return res.json(new ApiResponse({ data: { message: "Logged in" } }));
   } catch (error) {
@@ -65,7 +68,7 @@ export async function userCreate(req: Request, res: Response) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await User.create({
+    let user: User = await User.create({
       name: userName,
       email: email,
       password: hashedPassword
