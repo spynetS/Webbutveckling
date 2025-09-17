@@ -1,14 +1,12 @@
 import { Router, Request, Response, NextFunction } from "express";
 import ApiResponse from "../database/response";
 import ExerciseTemplate from "../models/ExerciseTemplate"
+import { getExercise, create,deleteExercise } from "../controllers/exerciseTemplateController";
 
 const router = Router();
 
-router.get("/",(req: Request, res: Response) =>{
-	ExerciseTemplate.find().then(found=>{
-		res.json(new ApiResponse({data:found}))
-	})
-
-})
+router.get("/",getExercise)
+router.post("/",create);
+router.delete("/",deleteExercise);
 
 export default router;
