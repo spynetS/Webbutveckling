@@ -7,6 +7,7 @@ import { userCreate, userLogin} from "../controllers/userController";
 
 
 import exerciseRouter from "./exerciseTemplate";
+import setRouter from "./set";
 
 const router = Router();
 
@@ -56,8 +57,9 @@ router.get("/get-user/:name", (req:Request, res: Response) => {
 router.post("/signup", userCreate)
 router.post("/login", userLogin);
 
-// register the exercise router
+// register the api routes
 router.use("/exercise", exerciseRouter);
+router.use("/set", setRouter);
 
 
 export default router;
