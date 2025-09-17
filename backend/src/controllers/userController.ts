@@ -54,6 +54,14 @@ export async function userCreate(req: Request, res: Response) {
         data: "name, email, and password are required"
       }));
     }
+    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+
+    if(!emailRegex.test(req.body.email))
+    {
+      return res
+        .status(400)
+        .json(new ApiResponse({status: "fail", data: "Invalid email format"}));
+    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
