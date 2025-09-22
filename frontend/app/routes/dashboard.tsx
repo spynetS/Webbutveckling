@@ -1,6 +1,7 @@
 import { useEffect, useState} from 'react';
 import type { User } from '~/models/User';
 import LineChartComponent from "~/components/LineChartComponent"
+import NavBar from "~/components/NavBar"
 
 const Dashboard = () => {
 
@@ -65,9 +66,7 @@ const Dashboard = () => {
 					</button>
 				</div>
 			</div>
-
-
-
+			<NavBar/>
 		</main>
 	)
 }
