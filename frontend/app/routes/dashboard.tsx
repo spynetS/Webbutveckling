@@ -23,8 +23,21 @@ const Dashboard = () => {
 		})
 	}
 
+	const logWeight = () => {
+		fetch("http://localhost:3000/api/log-weight",{
+			credentials: 'include'
+		}).then(response=>{
+
+		}).catch(error=>{
+
+		})
+	}
+
 	return (
 		<main className='container mx-auto w-full h-screen gap-5 px-2 py-5'>
+
+
+
 			<div className='gap-5 grid grid-cols-2 grid-rows-2 w-full row-span-2 h-2/5'>
 				<div className="stats shadow bg-base-300">
 					<div className="stat">
@@ -61,7 +74,7 @@ const Dashboard = () => {
 					<button className='btn btn-lg btn-secondary'>
 						Log Excercise
 					</button>
-					<button className='btn btn-lg btn-secondary'>
+					<button onClick={logWeight} className='btn btn-lg btn-secondary'>
 						Log Weight
 					</button>
 				</div>

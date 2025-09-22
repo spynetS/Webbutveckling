@@ -79,3 +79,14 @@ export async function userCreate(req: Request, res: Response) {
     res.status(500).json(new ApiResponse({ status: "error", message: error.message }));
   }
 }
+
+
+export async function logWeight(req: Request, res: Response){
+  if(!req.session.userId) {
+    return res.json(new ApiResponse({status:"fail",data:"User not loged in"}))
+  }
+  let user: User = await User.findById(req.session.userId);
+
+  return res.json(new ApiResponse({data:user}));
+
+}
