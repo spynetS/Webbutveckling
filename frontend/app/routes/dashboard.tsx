@@ -10,6 +10,8 @@ const Log = (props:{show:boolean,setShow:(bool:boolean)=>{}}) => {
 	const dialogRef = useRef<HTMLDialogElement>(null)
 	const [value, setValue] = useState<string>("")
 
+	const [confirm, setConfirm] = useState<boolean>(false);
+
 	useEffect(()=>{
 		dialogRef.current?.showModal();
 		props.setShow(false);
@@ -26,7 +28,13 @@ const Log = (props:{show:boolean,setShow:(bool:boolean)=>{}}) => {
 		}).then(response =>{
 			response.json().then(val=>{
 				if(val.status==="success"){
-				setValue("");
+					setValue("");
+					setConfirm(true);
+					// timer that turn of the alrt after 2500ms
+					new Promise((resolve) => setTimeout(resolve, 2500)).then(resolve=>{
+						setConfirm(false);
+					});
+
 				}
 			})
 
@@ -36,21 +44,32 @@ const Log = (props:{show:boolean,setShow:(bool:boolean)=>{}}) => {
 	}
 
 	return (
-		<dialog ref={dialogRef} id="my_modal_5" className="modal modal-bottom sm:modal-middle">
-			<div className="modal-box">
-				<h3 className="font-bold text-lg">Log weight</h3>
-				<p className="py-4">Log your current weight</p>
-				<div className="modal-action">
-					<form method="dialog">
-						<input type="number" name="weight" value={value} onChange={(e)=>{setValue(e.target.value)}} className="input input-bordered" />
-						<div>
-							<button onClick={logWeight} className="btn btn-primary">Save</button>
-							<button onClick={()=>props.setShow(false)} className="btn">Close</button>
-						</div>
-					</form>
+		<div>
+			{confirm ? (
+				<div onClick={()=>setConfirm(false)} role="alert" className="absolute w-[90%] top-2 z-50 alert alert-success">
+					<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+					</svg>
+					<span>Your weight was loged!</span>
 				</div>
-			</div>
-		</dialog>
+			) : (null)}
+
+			<dialog ref={dialogRef} id="my_modal_5" className="modal modal-bottom sm:modal-middle">
+				<div className="modal-box">
+					<h3 className="font-bold text-lg">Log weight</h3>
+					<p className="py-4">Log your current weight</p>
+					<div className="modal-action">
+						<form method="dialog">
+							<input type="number" name="weight" value={value} onChange={(e)=>{setValue(e.target.value)}} className="input input-bordered" />
+							<div>
+								<button onClick={logWeight} className="btn btn-primary">Save</button>
+								<button onClick={()=>props.setShow(false)} className="btn">Close</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</dialog>
+		</div>
 	)
 }
 

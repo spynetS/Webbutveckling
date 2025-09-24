@@ -1,4 +1,4 @@
-import User from "../models/User"
+import User, {WeightLog} from "../models/User"
 import ApiResponse from "../database/response"
 import { Request, Response, } from "express";
 import bcrypt from "bcrypt";
@@ -89,10 +89,13 @@ export async function logWeight(req: Request, res: Response){
   }
   let user: User = await User.findById(req.session.userId);
 
-  user.weight = req.body.weight;
+  const log = await WeightLog.create({weight:Number.parseFloat(req.body.weight)});
+  user.weightLogs.push(log._id);
+
   user.save().then(()=>{
     res.json(new ApiResponse({data:user}));
   }).catch((error:any)=>{
     res.json(new ApiResponse({status:"error",message:error.message}));
   })
 }
+2

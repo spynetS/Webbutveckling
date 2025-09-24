@@ -1,10 +1,17 @@
 import { Schema, model, Document } from "mongoose";
 
+const weightLogSchema = new Schema({
+  weight: { type: Number, required: true },
+  date: { type: Date, default: Date.now }
+});
+
+export const WeightLog = model("WeightLog", weightLogSchema);
+
 // 1. Define an interface for TypeScript
 export interface IUser extends Document {
   name: string;
   email: string;
-  weight: number;
+  weightLogs: [Schema.Types.ObjectId];
   createdAt: Date;
   password: string;
 }
@@ -13,7 +20,7 @@ export interface IUser extends Document {
 const userSchema = new Schema<IUser>({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  weight: {type: Number, required: true, default: 0},
+  weightLogs: [{ type: Schema.Types.ObjectId, ref: "WeightLog" }],
   createdAt: { type: Date, default: Date.now },
   password: { type: String, required: true, unique: false},
 });
