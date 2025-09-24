@@ -57,7 +57,7 @@ router.get("/get-user/:name", (req:Request, res: Response) => {
 
 router.post("/signup", userCreate)
 router.post("/login", userLogin);
-router.get("/log-weight", logWeight);
+router.post("/log-weight", logWeight);
 
 // register the api routes
 router.use("/exercise", exerciseRouter);

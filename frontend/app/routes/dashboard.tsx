@@ -1,12 +1,66 @@
-import { useEffect, useState} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import type { User } from '~/models/User';
 import LineChartComponent from "~/components/LineChartComponent"
 import NavBar from "~/components/NavBar"
 
+// this component takes in a show boolean. when it changes the modal appears
+// and then the show boolean sets to false
+const Log = (props:{show:boolean,setShow:(bool:boolean)=>{}}) => {
+
+	const dialogRef = useRef<HTMLDialogElement>(null)
+	const [value, setValue] = useState<string>("")
+
+	useEffect(()=>{
+		dialogRef.current?.showModal();
+		props.setShow(false);
+	},[props.show])
+
+	const logWeight = () => {
+		fetch("http://localhost:3000/api/log-weight",{
+			credentials: 'include',
+			headers: {
+				"Content-Type": "application/json",
+			},
+			method: "POST",
+			body: JSON.stringify({weight: value})
+		}).then(response =>{
+			response.json().then(val=>{
+				if(val.status==="success"){
+				setValue("");
+				}
+			})
+
+		}).catch(error=>{
+
+		})
+	}
+
+	return (
+		<dialog ref={dialogRef} id="my_modal_5" className="modal modal-bottom sm:modal-middle">
+			<div className="modal-box">
+				<h3 className="font-bold text-lg">Log weight</h3>
+				<p className="py-4">Log your current weight</p>
+				<div className="modal-action">
+					<form method="dialog">
+						<input type="number" name="weight" value={value} onChange={(e)=>{setValue(e.target.value)}} className="input input-bordered" />
+						<div>
+							<button onClick={logWeight} className="btn btn-primary">Save</button>
+							<button onClick={()=>props.setShow(false)} className="btn">Close</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</dialog>
+	)
+}
+
 const Dashboard = () => {
+
 
 	const [user, setUser] = useState<User>();
 	const [search,setSearch] = useState<string>('');
+	const [show, setShow] = useState<boolean>(false);
+
 
 	useEffect(()=>{{
 		fetchData();
@@ -23,26 +77,19 @@ const Dashboard = () => {
 		})
 	}
 
-	const logWeight = () => {
-		fetch("http://localhost:3000/api/log-weight",{
-			credentials: 'include'
-		}).then(response=>{
 
-		}).catch(error=>{
-
-		})
-	}
 
 	return (
 		<main className='container mx-auto w-full h-screen gap-5 px-2 py-5'>
 
 
+			<Log show={show} setShow={setShow} />
 
 			<div className='gap-5 grid grid-cols-2 grid-rows-2 w-full row-span-2 h-2/5'>
 				<div className="stats shadow bg-base-300">
 					<div className="stat">
 						<div className="stat-title">Total Page Views</div>
-						<div className="stat-value">89,400</div>
+						2		<div className="stat-value">89,400</div>
 						<div className="stat-desc">21% more than</div>
 					</div>
 				</div>
@@ -74,7 +121,7 @@ const Dashboard = () => {
 					<button className='btn btn-lg btn-secondary'>
 						Log Excercise
 					</button>
-					<button onClick={logWeight} className='btn btn-lg btn-secondary'>
+					<button onClick={()=>{setShow(true)}} className='btn btn-lg btn-secondary'>
 						Log Weight
 					</button>
 				</div>

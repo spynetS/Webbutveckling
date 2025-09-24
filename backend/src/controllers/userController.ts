@@ -27,11 +27,13 @@ export async function userLogin(req: Request, res: Response) {
 
     // Plain-text comparison 
 
-    bcrypt.compare(password, user.password, function(err, result) {
-      if (!result) {
-        return res.status(401).json(new ApiResponse({ status: "fail", data: invalidMsg }));
-      }
-    });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res
+        .status(401)
+        .json(new ApiResponse({ status: "fail", data: "Invalid credentials" }));
+    }
 
     // save the users id in our session
     req.session.userId = user.id;
@@ -82,11 +84,15 @@ export async function userCreate(req: Request, res: Response) {
 
 
 export async function logWeight(req: Request, res: Response){
-  if(!req.session.userId) {
-    return res.json(new ApiResponse({status:"fail",data:"User not loged in"}))
+  if(!req.session.userId || !req.body.weight) {
+    return res.status(400).json(new ApiResponse({status:"fail",data:"User not loged in"}))
   }
   let user: User = await User.findById(req.session.userId);
 
-  return res.json(new ApiResponse({data:user}));
-
+  user.weight = req.body.weight;
+  user.save().then(()=>{
+    res.json(new ApiResponse({data:user}));
+  }).catch((error:any)=>{
+    res.json(new ApiResponse({status:"error",message:error.message}));
+  })
 }
