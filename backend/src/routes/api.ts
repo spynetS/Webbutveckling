@@ -3,7 +3,7 @@ import { getHello } from "../controllers/hello";
 import User from "../models/User"
 import ApiResponse from "../database/response"
 import process = require("process");
-import { userCreate, userLogin} from "../controllers/userController";
+import { userCreate, userLogin, logWeight} from "../controllers/userController";
 
 
 import exerciseRouter from "./exerciseTemplate";
@@ -57,6 +57,7 @@ router.get("/get-user/:name", (req:Request, res: Response) => {
 
 router.post("/signup", userCreate)
 router.post("/login", userLogin);
+router.post("/log-weight", logWeight);
 
 // register the api routes
 router.use("/exercise", exerciseRouter);
