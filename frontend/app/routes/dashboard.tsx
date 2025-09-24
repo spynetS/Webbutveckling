@@ -1,78 +1,151 @@
-import {useState} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import type { User } from '~/models/User';
+import LineChartComponent from "~/components/LineChartComponent"
+import Page from "~/components/page"
 
+// this component takes in a show boolean. when it changes the modal appears
+// and then the show boolean sets to false
+const Log = (props:{show:boolean,setShow:(bool:boolean)=>{}}) => {
 
-const Dashboard = () => {
+	const dialogRef = useRef<HTMLDialogElement>(null)
+	const [value, setValue] = useState<string>("")
 
-	const [users, setUsers] = useState<[]>();
-	const [search,setSearch] = useState<string>('');
+	const [confirm, setConfirm] = useState<boolean>(false);
 
-	const fetchData = () =>{
-		fetch("http://localhost:3000/api/get-user/"+search).then(response=>{
-		    if (!response.ok) throw new Error("Network response was not ok");
-			const data = response.json().then(data=>{
-				setUsers(data.data)
-			});			
+	useEffect(()=>{
+		if(props.show)
+			dialogRef.current?.showModal();
+		props.setShow(false);
+	},[props.show])
+
+	const logWeight = () => {
+		fetch("http://localhost:3000/api/log-weight",{
+			credentials: 'include',
+			headers: {
+				"Content-Type": "application/json",
+			},
+			method: "POST",
+			body: JSON.stringify({weight: value})
+		}).then(response =>{
+			response.json().then(val=>{
+				if(val.status==="success"){
+					setValue("");
+					setConfirm(true);
+					// timer that turn of the alrt after 2500ms
+					new Promise((resolve) => setTimeout(resolve, 2500)).then(resolve=>{
+						setConfirm(false);
+					});
+				}
+			})
+		}).catch(error=>{
+
 		})
 	}
 
 	return (
-		<main className='w-full h-screen grid grid-col-5 gap-5 px-2 py-5'>
-			<div className='gap-5 grid grid-cols-2 grid-rows-2 w-full row-span-2'>
-				<div className="rounded-xl bg-base-200 flex items-center justify-center">
-					<p  className='text-5xl'>45</p>
+		<div>
+			{confirm ? (
+				<div onClick={()=>setConfirm(false)} role="alert" className="absolute w-[90%] top-2 z-50 alert alert-success">
+					<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+					</svg>
+					<span>Your weight was loged!</span>
 				</div>
-				<div className="rounded-xl bg-base-300 row-span-2 flex items-center justify-center">
-					<p  className='text-5xl'>45</p>
+			) : (null)}
+
+			<dialog ref={dialogRef} id="my_modal_5" className="modal modal-bottom sm:modal-middle">
+				<div className="modal-box">
+					<h3 className="font-bold text-lg">Log weight</h3>
+					<p className="py-4">Log your current weight</p>
+					<div className="modal-action">
+						<form method="dialog">
+							<input type="number" name="weight" value={value} onChange={(e)=>{setValue(e.target.value)}} className="input input-bordered" />
+							<div>
+								<button onClick={logWeight} className="btn btn-primary">Save</button>
+								<button onClick={()=>props.setShow(false)} className="btn">Close</button>
+							</div>
+						</form>
+					</div>
 				</div>
-				<div className="rounded-xl bg-secondary flex items-center justify-center">
-					<p  className='text-5xl'>45</p>
+			</dialog>
+		</div>
+	)
+}
+
+const Dashboard = () => {
+
+
+	const [user, setUser] = useState<User>();
+	const [search,setSearch] = useState<string>('');
+	const [show, setShow] = useState<boolean>(false);
+
+
+	useEffect(()=>{{
+		fetchData();
+	}},[])
+
+	const fetchData = () =>{
+		fetch("http://localhost:3000/api/get-user/"+search,{
+			credentials: 'include'
+		}).then(response=>{
+		    if (!response.ok) throw new Error("Network response was not ok");
+			const data = response.json().then(data=>{
+				setUser(data.data)
+			});			
+		})
+	}
+
+
+
+	return (
+		<Page>
+
+
+			<Log show={show} setShow={setShow} />
+
+			<div className='gap-5 grid grid-cols-2 grid-rows-2 w-full row-span-2 h-2/5'>
+				<div className="stats shadow bg-base-300">
+					<div className="stat">
+						<div className="stat-title">Total Page Views</div>
+						2		<div className="stat-value">89,400</div>
+						<div className="stat-desc">21% more than</div>
+					</div>
+				</div>
+				<div className="stats shadow bg-base-200 row-span-2">
+					<div className="stat">
+						<div className="stat-title">Total Page Views</div>
+						<div className="stat-value">89,400</div>
+						<div className="stat-desc">21% more </div>
+					</div>
+				</div>
+				<div className="stats shadow bg-base-200">
+					<div className="stat">
+						<div className="stat-title">Total Page Views</div>
+						<div className="stat-value">89,400</div>
+						<div className="stat-desc">21% more than</div>
+					</div>
 				</div>
 			</div>
-			<div className="row-span-2">
-				<h2 className='text-3xl font-bold'>Weekly Stregth</h2>
-				<button className='btn btn-primary' onClick={fetchData} >Fetch</button>
-				<label className="input validator">
-				<svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-					<g
-					strokeLinejoin="round"
-					strokeLinecap="round"
-					strokeWidth="2.5"
-					fill="none"
-					stroke="currentColor"
-					>
-					<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-					<circle cx="12" cy="7" r="4"></circle>
-					</g>
-				</svg>
-				<input
-					type="text"
-					required
-					placeholder="Username"
-					pattern="[A-Za-z][A-Za-z0-9\-]*"
-					minlength="3"
-					maxlength="30"
-					value={search}
-					onChange={(e)=>{setSearch(e.target.value)}}
-					title="Only letters, numbers or dash"
-				/>
-				</label>
-				<p className="validator-hint">
-				Must be 3 to 30 characters
-				<br />containing only letters, numbers or dash
-				</p>
-				{users?.map(user=>(
-					<h1>{user.name}</h1>
-				))}
+			<div className="row-span-2 mt-7">
+				<h2 className='text-2xl font-semibold'>Weekly Stregth</h2>
 			</div>
-			<div className="flex flex-row items-end gap-2 w-full justify-around">
-				<button className='btn btn-lg btn-secondary'>
-					Log Excercise
-				</button>
-				<button className='btn btn-lg btn-secondary'>
-					Log Weight
-				</button>
+			<div className='flex flex-col justify-between h-3/7 mt-5'>
+				<div className="bg-base-200 flex h-full w-full items-center justify-center rounded-lg">
+					<LineChartComponent>
+					</LineChartComponent>
+				</div>
+
+				<div className="mt-5 flex flex-row items-end gap-2 w-full justify-around">
+					<button className='btn btn-lg btn-secondary'>
+						Log Excercise
+					</button>
+					<button onClick={()=>{setShow(true)}} className='btn btn-lg btn-secondary'>
+						Log Weight
+					</button>
+				</div>
 			</div>
-		</main>
+
+		</Page>
 	)
 }
 
