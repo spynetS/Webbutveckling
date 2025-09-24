@@ -130,7 +130,7 @@ const Dashboard = () => {
 				<h2 className='text-2xl font-semibold'>Weekly Stregth</h2>
 			</div>
 			<div className='flex flex-col justify-between h-3/7 mt-5'>
-				<div className="bg-base-200 flex h-full w-full rounded-lg">
+				<div className="bg-base-200 flex h-full w-full items-center justify-center rounded-lg">
 					<LineChartComponent>
 					</LineChartComponent>
 				</div>
