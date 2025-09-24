@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import type { User } from '~/models/User';
 import LineChartComponent from "~/components/LineChartComponent"
-import NavBar from "~/components/NavBar"
+import Page from "~/components/page"
 
 // this component takes in a show boolean. when it changes the modal appears
 // and then the show boolean sets to false
@@ -13,7 +13,8 @@ const Log = (props:{show:boolean,setShow:(bool:boolean)=>{}}) => {
 	const [confirm, setConfirm] = useState<boolean>(false);
 
 	useEffect(()=>{
-		dialogRef.current?.showModal();
+		if(props.show)
+			dialogRef.current?.showModal();
 		props.setShow(false);
 	},[props.show])
 
@@ -34,10 +35,8 @@ const Log = (props:{show:boolean,setShow:(bool:boolean)=>{}}) => {
 					new Promise((resolve) => setTimeout(resolve, 2500)).then(resolve=>{
 						setConfirm(false);
 					});
-
 				}
 			})
-
 		}).catch(error=>{
 
 		})
@@ -99,7 +98,7 @@ const Dashboard = () => {
 
 
 	return (
-		<main className='container mx-auto w-full h-screen gap-5 px-2 py-5'>
+		<Page>
 
 
 			<Log show={show} setShow={setShow} />
@@ -145,8 +144,8 @@ const Dashboard = () => {
 					</button>
 				</div>
 			</div>
-			<NavBar/>
-		</main>
+
+		</Page>
 	)
 }
 
