@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { Route } from "@react-router/dev/routes";
+import Page from "~/components/page"
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -19,7 +20,8 @@ export default function Profile() {
   };
 
   return (
-    <main className="w-full h-screen flex flex-col items-center pt-40">
+    <Page>
+    <div className="w-full h-screen flex flex-col items-center pt-40">
 
     {/* avatars, rounded corners or do we want fully rounded */}
 
@@ -79,6 +81,7 @@ export default function Profile() {
             <div className="stat-value">70kg, 21 </div>
         </div>
         </div>
-    </main>
+    </div>
+    </Page>
   );
 }
