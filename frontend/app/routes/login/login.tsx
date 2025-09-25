@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 
-const LOGIN_URL = "/login";
+const LOGIN_URL = "http://localhost:3000/api/login";
 const SIGNUP_URL = "https://example.com/signup"; // ← placeholder; change later to your real route
 
 const Login = () => {
@@ -18,6 +18,7 @@ const Login = () => {
     setLoading(true);
     try {
       const res = await fetch(LOGIN_URL, {
+        credentials: 'include',
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -93,7 +94,6 @@ const Login = () => {
               required
               placeholder="Password"
               autoComplete="current-password"
-              
               title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

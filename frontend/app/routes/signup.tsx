@@ -6,13 +6,6 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-function signup(){
-  fetch("/signup",{
-      email:email
-  })
-  .then(response=>{})
-}
-
 export default function Signup() {
 
   {/* UserName input */}
@@ -26,9 +19,9 @@ export default function Signup() {
 
   // ALFRED YOU LEGEND!!!!
   const handleSubmit = async (): Promise<void> => {
-    e.preventDefault();
+    
     try {
-      const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
+      const res = await fetch("http://localhost:3000/api/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -55,22 +48,22 @@ export default function Signup() {
         </p>
         <div className="mt-8 w-80 flex flex-col gap-3">
           {/* UserName */}
-          <label class="floating-label">
+          <label className="floating-label">
             <span>Your Name</span>
-            <input value={userName} onChange={(e)=>setuserName(e.target.value)} type="text" placeholder="UserName" class="input input-md" />
+            <input value={userName} onChange={(e)=>setuserName(e.target.value)} type="text" placeholder="UserName" className="input input-md" />
           </label>
           {/* Email */}
-          <label class="floating-label">
+          <label className="floating-label">
             <span>Your Email</span>
-            <input value={email} onChange={(e)=>setEmail(e.target.value)} type="text" placeholder="mail@site.com" class="input input-md" />
+            <input value={email} onChange={(e)=>setEmail(e.target.value)} type="text" placeholder="mail@site.com" className="input input-md" />
           </label>
           {/* Password */}
-          <label class="floating-label">
+          <label className="floating-label">
             <span>Your Name</span>
-            <input value={password} onChange={(e)=>setPassword(e.target.value)} type="password" placeholder="Password" class="input input-md" />
+            <input value={password} onChange={(e)=>setPassword(e.target.value)} type="password" placeholder="Password" className="input input-md" />
           </label>
           {/* Login button, how da fck do I connect it */}
-          <button class="btn btn-neutral">Sign up!</button>
+          <button className="btn btn-neutral" onClick={() => { handleSubmit()}}>Sign up!</button>
         </div>
         <p className="text-1xl font-cursive text-center mt-3 text-gray-500">
           Compete against your friends!
