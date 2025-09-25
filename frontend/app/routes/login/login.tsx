@@ -94,7 +94,6 @@ const Login = () => {
               required
               placeholder="Password"
               autoComplete="current-password"
-
               title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

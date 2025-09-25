@@ -6,4 +6,5 @@ export default [
   route("dashboard", "routes/dashboard.tsx"), // About at /about
   route("profile", "routes/profile.tsx"),
   route("login", "routes/login/login.tsx"),
+  route("exercise", "routes/exercise.tsx"),
 ] satisfies RouteConfig;
