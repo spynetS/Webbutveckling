@@ -2,7 +2,8 @@ import { useState } from "react";
 
 export default function Leaderboard() {
   const [filter, setFilter] = useState("Today");
-  const filters = ["Today", "This Week", "This Month", "All Time"];
+  // do we want this to have filters?
+  //const filters = ["Today", "This Week", "This Month", "All Time"];
 
   const players = [
     { name: "Test1", goal: "86", avatar: "https://i.pravatar.cc/50?u=test1" },
@@ -20,34 +21,11 @@ export default function Leaderboard() {
         {/* Title */}
         <h1 className="text-3xl font-bold text-black">Leaderboard</h1>
 
-        {/* Filter Button */}
-        <div className="dropdown">
-        <div
-            tabIndex="0"
-            role="button"
-            className="btn m-1 w-40 text-lg font-medium"
-        >
-            {filter}
-        </div>
-        <ul
-            tabIndex="0"
-            className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
-        >
-            {filters.map((f) => (
-            <li key={f}>
-                <a
-                onClick={() => setFilter(f)}
-                className={`flex justify-between items-center ${
-                    filter === f ? "font-bold text-blue-600" : ""
-                }`}
-                >
-                {f}
-                {filter === f && <span>✔</span>}
-                </a>
-            </li>
-            ))}
-        </ul>
-        </div>
+        {/* motivation */}
+        <p className="text-base text-gray-500 mt-6">
+          Keep it up! You’re almost at the top!
+        </p>
+
 
         {/* Headers */}
         <div className="flex justify-between font-bold text-black text-base border-b-2 pb-3">
@@ -96,10 +74,6 @@ export default function Leaderboard() {
         </div>
       </div>
 
-      {/* Footer */}
-      <p className="text-base text-gray-500 mt-6">
-        Keep it up! You’re almost at the top!
-      </p>
     </div>
   );
 }
