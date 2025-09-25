@@ -51,7 +51,6 @@ const exercise = () => {
   };
 
   return (
-    <Page>
     <div className="w-full h-screen flex flex-col gap-5 px-2 py-5">
       <div className="navbar bg-base-100 shadow-sm items-center">
         <a className="btn btn-ghost text-center mt-3 text-xl">Arrow</a>
@@ -136,7 +135,6 @@ const exercise = () => {
         </div>
       </div>
     </div>
-    </Page>
   );
 };
 

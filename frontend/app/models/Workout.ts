@@ -1,7 +1,7 @@
-import Exercise from "./Exercise"
+import type Exercise from "~/models/Exercise";
 
-export default interface Workout{
-	title:string,
-	weekday:string,
-	exercises: [Exercise]
-}
+export type Workout = {
+  title: string;
+  weekday: string;
+  exercises: Exercise[];
+};
