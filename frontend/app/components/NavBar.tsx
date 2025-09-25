@@ -21,13 +21,13 @@ export default function NavBar() {
 			<NavLink to="/dashboard" >
 				<CgHome size={24} />
 			</NavLink>
-			<NavLink to="/">
+			<NavLink to="/exercise">
 				<CgGym size={24} />
 			</NavLink>
-			<NavLink to="/">
+			<NavLink to="/leaderboard">
 				<MdOutlineLeaderboard size={24} />
 			</NavLink>
-			<NavLink to="/">
+			<NavLink to="/profile">
 				<CgProfile size={24} />
 			</NavLink>
 		</nav>

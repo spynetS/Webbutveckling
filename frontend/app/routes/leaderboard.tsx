@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Page from "~/components/page"
 
 export default function Leaderboard() {
   const [filter, setFilter] = useState("Today");
@@ -14,66 +15,68 @@ export default function Leaderboard() {
   ];
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-2xl shadow-lg p-8 text-center flex flex-col justify-between min-h-[400px]">
+    <Page>
+      <div className="max-w-md mx-auto bg-white rounded-2xl shadow-lg p-8 text-center flex flex-col justify-between min-h-[400px]">
 
-      <div className="space-y-6">
+        <div className="space-y-6">
 
-        {/* Title */}
-        <h1 className="text-3xl font-bold text-black">Leaderboard</h1>
+          {/* Title */}
+          <h1 className="text-3xl font-bold text-black">Leaderboard</h1>
 
-        {/* motivation */}
-        <p className="text-base text-gray-500 mt-6">
-          Keep it up! You’re almost at the top!
-        </p>
+          {/* motivation */}
+          <p className="text-base text-gray-500 mt-6">
+            Keep it up! You’re almost at the top!
+          </p>
 
 
-        {/* Headers */}
-        <div className="flex justify-between font-bold text-black text-base border-b-2 pb-3">
-          <span className="w-8"></span> {/* Im a lazy dude ok... */}
-          <span className="flex-1 text-left font-bold">Player</span>
-          <span className="min-w-[100px] text-left font-bold">Goal</span>
+          {/* Headers */}
+          <div className="flex justify-between font-bold text-black text-base border-b-2 pb-3">
+            <span className="w-8"></span> {/* Im a lazy dude ok... */}
+            <span className="flex-1 text-left font-bold">Player</span>
+            <span className="min-w-[100px] text-left font-bold">Goal</span>
+          </div>
+
+          {/* Players List */}
+          <div className="space-y-4 text-left">
+            {players.map((player, i) => {
+
+              {/* Banner color */}
+              let bg = "";
+              if (i === 0) bg = "bg-yellow-200";   // gold-ish
+              else if (i === 1) bg = "bg-gray-400"; // silver-ish
+              else if (i === 2) bg = "bg-orange-200"; // bronze-ish
+
+              return (
+                <div
+                  key={player.id}
+                  className={`flex justify-between items-center rounded-lg p-2 ${bg}`}
+                >
+                  {/* Rank */}
+                  <span className="w-8 text-gray-600 font-semibold text-lg flex items-center">
+                    {i + 1}
+                  </span>
+
+                  {/* Player info */}
+                  <div className="flex items-center gap-4 flex-1">
+                    <img
+                      src={player.avatar}
+                      alt={player.name}
+                      className="w-10 h-10 rounded-full"
+                    />
+                    <span className="font-semibold text-lg">{player.name}</span>
+                  </div>
+
+                  {/* Goal */}
+                  <div className="min-w-[100px] text-left font-semibold text-lg">
+                    {player.goal}%
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Players List */}
-        <div className="space-y-4 text-left">
-        {players.map((player, i) => {
-            
-            {/* Banner color */}
-            let bg = "";
-            if (i === 0) bg = "bg-yellow-200";   // gold-ish
-            else if (i === 1) bg = "bg-gray-400"; // silver-ish
-            else if (i === 2) bg = "bg-orange-200"; // bronze-ish
-
-            return (
-            <div
-                key={player.id}
-                className={`flex justify-between items-center rounded-lg p-2 ${bg}`}
-            >
-                {/* Rank */}
-                <span className="w-8 text-gray-600 font-semibold text-lg flex items-center">
-                {i + 1}
-                </span>
-
-                {/* Player info */}
-                <div className="flex items-center gap-4 flex-1">
-                <img
-                    src={player.avatar}
-                    alt={player.name}
-                    className="w-10 h-10 rounded-full"
-                />
-                <span className="font-semibold text-lg">{player.name}</span>
-                </div>
-
-                {/* Goal */}
-                <div className="min-w-[100px] text-left font-semibold text-lg">
-                {player.goal}%
-                </div>
-            </div>
-            );
-        })}
-        </div>
       </div>
-
-    </div>
+    </Page>
   );
 }
