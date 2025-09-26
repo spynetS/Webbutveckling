@@ -14,14 +14,18 @@
 
 
 
-
-
-import { useMemo, useState } from "react";
+import React, {useEffect, useMemo, useState } from "react";
 import Page from "~/components/page"
+import type {Workout as WorkoutModel} from "~/models/Workout"
+import type {Set} from "~/models/Set"
 
-const exercise = () => {
-  const [sets, setSets] = useState([{ reps: "", weight: "" }]);
+const Exercise = (props: { exercise: ExerciseModel, onBack: () => void, logExercise: (sets:Set[]) => void}) => {
+  const [sets, setSets] = useState<Set[]>([]);
   const [notes, setNotes] = useState("");
+
+  useEffect(()=>{
+    console.log(props.exercise)
+  },[]);
 
   const today = useMemo(
     () => new Intl.DateTimeFormat("en-US", { dateStyle: "long" }).format(new Date()),
@@ -37,32 +41,24 @@ const exercise = () => {
   const addSet = () => setSets((prev) => [...prev, { reps: "", weight: "" }]);
 
   const saveLog = () => {
-    const payload = {
-      date: new Date().toISOString(),
-      exercise: "Bench Press",
-      sets: sets.map((s) => ({
-        reps: s.reps === "" ? null : Number(s.reps),
-        weight: s.weight === "" ? null : Number(s.weight),
-      })),
-      notes,
-    };
-    console.log("Log saved:", payload);
-    alert("Bra jobbat Alfred✅");
+    sets.forEach(aSet=>{
+      aSet.template = props.exercise.id;
+      aSet.user = 0;
+    })
+    props.logExercise(sets);
   };
 
   return (
     <div className="w-full h-screen flex flex-col gap-5 px-2 py-5">
-      <div className="navbar bg-base-100 shadow-sm items-center">
-        <a className="btn btn-ghost text-center mt-3 text-xl">Arrow</a>
-        <a className="text-1xl font-bold text-center mt-3 items-center">
-          Compete agaisnt your friends
-        </a>
-      </div>
 
       <p className="text-sm text-base-content/70">{today}</p>
-      <p className="text-5xl font-bold text-center mt-3">Choosen exercise</p>
+      <div>
+        <a onClick={()=>props.onBack()} className="btn btn-ghost text-center text-xl">Back</a>
+        <p className="text-2xl font-bold text-center mt-2">{props.exercise?.title}</p>
+      </div>
 
-      <div className="card bg-base-100 w-96 shadow-sm items-center">
+
+      <div className="card bg-base-100 w-fit shadow-sm items-center">
         <figure>
           <img
             src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
@@ -75,7 +71,7 @@ const exercise = () => {
         <table className="table">
           <thead>
             <tr>
-            
+
               <th>Set</th>
               <th>Rep</th>
               <th>Weight</th>
@@ -138,4 +134,4 @@ const exercise = () => {
   );
 };
 
-export default exercise;
+export default Exercise;
