@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import Page from "~/components/page"
 
 export default function Leaderboard() {
-  const [filter, setFilter] = useState("Today");
+  //const [filter, setFilter] = useState("Today");
   // do we want this to have filters?
   //const filters = ["Today", "This Week", "This Month", "All Time"];
 

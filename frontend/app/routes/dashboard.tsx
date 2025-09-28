@@ -75,8 +75,8 @@ const Log = (props:{show:boolean,setShow:(bool:boolean)=>void}) => {
 const Dashboard = () => {
 
 
-	const [user, setUser] = useState<User>();
-	const [search,setSearch] = useState<string>('');
+	const [_user, setUser] = useState<User>();
+	const [search,_setSearch] = useState<string>('');
 	const [show, setShow] = useState<boolean>(false);
 
 

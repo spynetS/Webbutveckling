@@ -9,7 +9,7 @@ export default function Signup() {
   {/* Password input */}
   const [password, setPassword] = useState<string>("");
   {/* Response from the server */}
-  const [response, setResponse] = useState<any>(null);
+  const [response, setResponse] = useState<unknown>(null);
 
   // ALFRED YOU LEGEND!!!!
   const handleSubmit = async (): Promise<void> => {

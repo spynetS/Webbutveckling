@@ -23,7 +23,7 @@ const Card = (props: { workout: WorkoutModel; begin: () => void }) => {
 };
 
 const Workout = () => {
-  const [workouts, setWorkouts] = useState<WorkoutModel[]>([
+  const [workouts, _setWorkouts] = useState<WorkoutModel[]>([
     {
       title: "Chest",
       weekday: "Monday",
