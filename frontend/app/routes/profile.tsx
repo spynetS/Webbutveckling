@@ -1,13 +1,6 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import type { Route } from "@react-router/dev/routes";
 import Page from "~/components/page"
-
-export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "New React Router App" },
-    { name: "description", content: "Dashboard to React Router!" },
-  ];
-}
 
 export default function Profile() {
   const [response, setResponse] = useState<any>(null);
@@ -76,7 +69,7 @@ export default function Profile() {
             <div className="stat-value">4200</div>
         </div>
 
-        <div class="stat">
+        <div className="stat">
             <div className="stat-title">Weight, Age</div>
             <div className="stat-value">70kg, 21 </div>
         </div>

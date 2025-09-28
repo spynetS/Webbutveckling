@@ -1,7 +1,4 @@
-//import React from 'React';
-
-
-import { useState } from "react";
+import React, { useState } from "react";
 
 const LOGIN_URL = "http://localhost:3000/api/login";
 const SIGNUP_URL = "https://example.com/signup"; // ← placeholder; change later to your real route

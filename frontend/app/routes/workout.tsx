@@ -12,7 +12,7 @@ const Card = (props: { workout: WorkoutModel; begin: () => void }) => {
 				<div className="justify-end card-actions">
 					<button
 						className="btn btn-primary"
-						onClick={(e) => props.begin()}
+						onClick={() => props.begin()}
 					>
 						Begin
 					</button>
