@@ -40,6 +40,10 @@ const Workout = () => {
 				{
 					title:"benchpress",
 					description:""
+				},
+				{
+					title:"benchpress2",
+					description:""
 				}
 			],
     },
