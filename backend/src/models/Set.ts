@@ -2,9 +2,9 @@ import { Schema, model, Document } from "mongoose";
 
 // 1. Define an interface for TypeScript
 export interface ISet extends Document {
-	reps: Number;
-	weight: Number;
-	duration: Number;
+	reps: number;
+	weight: number;
+	duration: number;
 
 	user: Schema.Types.ObjectId;
 	template: Schema.Types.ObjectId;

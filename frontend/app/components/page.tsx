@@ -1,6 +1,7 @@
 import NavBar from "~/components/NavBar"
+import React, { type ReactElement } from "react"
 
-const Page = (props:{children:any}) => {
+const Page = (props:{children:ReactElement}) => {
 
 	return (
 		<main className="w-full h-screen gap-5 px-2 py-5 flex md:flex-row flex-col-reverse ">

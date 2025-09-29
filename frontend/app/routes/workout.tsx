@@ -11,10 +11,11 @@ const Card = (props: { workout: WorkoutModel; setSelectedExercise: (exercise:any
 				<h2 className="card-title">{props.workout.title}</h2>
 				<p>{props.workout.weekday}</p>
 				<div className="justify-end card-actions">
+
 					{props.workout.exercises.map(exercise=>(
 						<button
 							className="btn btn-primary"
-							onClick={(e) => props.setSelectedExercise(exercise)}
+							onClick={() => props.setSelectedExercise(exercise)}
 						>
 							Begin {exercise.title}
 						</button>
@@ -28,7 +29,7 @@ const Card = (props: { workout: WorkoutModel; setSelectedExercise: (exercise:any
 
 
 const Workout = () => {
-  const [workouts, setWorkouts] = useState<WorkoutModel[]>([
+  const [workouts, _setWorkouts] = useState<WorkoutModel[]>([
     {
       title: "Chest",
       weekday: "Monday",

@@ -5,7 +5,7 @@ import Page from "~/components/page"
 
 // this component takes in a show boolean. when it changes the modal appears
 // and then the show boolean sets to false
-const Log = (props:{show:boolean,setShow:(bool:boolean)=>{}}) => {
+const Log = (props:{show:boolean,setShow:(bool:boolean)=>void}) => {
 
 	const dialogRef = useRef<HTMLDialogElement>(null)
 	const [value, setValue] = useState<string>("")
@@ -32,12 +32,12 @@ const Log = (props:{show:boolean,setShow:(bool:boolean)=>{}}) => {
 					setValue("");
 					setConfirm(true);
 					// timer that turn of the alrt after 2500ms
-					new Promise((resolve) => setTimeout(resolve, 2500)).then(resolve=>{
+					new Promise((resolve) => setTimeout(resolve, 2500)).then(()=>{
 						setConfirm(false);
 					});
 				}
 			})
-		}).catch(error=>{
+		}).catch(()=>{
 
 		})
 	}
@@ -75,8 +75,8 @@ const Log = (props:{show:boolean,setShow:(bool:boolean)=>{}}) => {
 const Dashboard = () => {
 
 
-	const [user, setUser] = useState<User>();
-	const [search,setSearch] = useState<string>('');
+	const [_user, setUser] = useState<User>();
+	const [search,_setSearch] = useState<string>('');
 	const [show, setShow] = useState<boolean>(false);
 
 
@@ -89,9 +89,9 @@ const Dashboard = () => {
 			credentials: 'include'
 		}).then(response=>{
 		    if (!response.ok) throw new Error("Network response was not ok");
-			const data = response.json().then(data=>{
+			response.json().then(data=>{
 				setUser(data.data)
-			});			
+			});
 		})
 	}
 

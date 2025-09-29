@@ -1,5 +1,4 @@
 import { Router } from "express";
-import ApiResponse from "../database/response";
 import { getSet, createSet, deleteSet } from "../controllers/setController";
 
 const router = Router();

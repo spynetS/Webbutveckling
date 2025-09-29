@@ -1,8 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { getHello } from "../controllers/hello";
 import User from "../models/User"
 import ApiResponse from "../database/response"
-import process = require("process");
 import { userCreate, userLogin, logWeight} from "../controllers/userController";
 
 
@@ -25,10 +23,10 @@ router.get("/test", (req: Request, res: Response) => {
 
     User.create([
         { name: req.body.userName, email: name+"@asd.com" },
-    ]).then(done=>{
+    ]).then(()=>{
         res.json(new ApiResponse({data:"added"}))
-    }).catch((error:any) => {
-        res.json(new ApiResponse({status:"fail",data:error}))
+    }).catch((error:Error) => {
+        res.json(new ApiResponse({status:"fail",data:error.message}))
     });
 
 })
@@ -40,7 +38,7 @@ router.get("/get-user", (req:Request, res: Response) => {
         User.findById(req.session.userId).then(users =>{
             res.json(new ApiResponse({data: users}));
         })
-    } catch (err: any) {
+    } catch (err: Error) {
         res.status(500).json(new ApiResponse({status:"error",message:err}));
     }
 })
@@ -50,7 +48,7 @@ router.get("/get-user/:name", (req:Request, res: Response) => {
     const name = req.params.name;
     User.find({name}).then(users =>{
         res.json(new ApiResponse({data: users}));
-    }).catch((error:any)=>{
+    }).catch((error:Error)=>{
         res.json(new ApiResponse({status:'fail',data: error}));
     })
 })

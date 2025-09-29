@@ -1,19 +1,11 @@
-import { useState } from "react";
-import type { Route } from "@react-router/dev/routes";
+import React, { useState } from "react";
 import Page from "~/components/page"
 
-export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "New React Router App" },
-    { name: "description", content: "Dashboard to React Router!" },
-  ];
-}
-
 export default function Profile() {
-  const [response, setResponse] = useState<any>(null);
+  const [_response, setResponse] = useState<unknown>(null);
 
   // ALFRED YOU LEGEND!!!!
-  const handleSubmit = async (): Promise<void> => {
+  const _handleSubmit = async (): Promise<void> => {
     // Do something here later
     console.log("Submitted!");
     setResponse({ success: true });
@@ -76,7 +68,7 @@ export default function Profile() {
             <div className="stat-value">4200</div>
         </div>
 
-        <div class="stat">
+        <div className="stat">
             <div className="stat-title">Weight, Age</div>
             <div className="stat-value">70kg, 21 </div>
         </div>

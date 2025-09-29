@@ -14,7 +14,10 @@
 
 
 
-import React, {useEffect, useMemo, useState } from "react";
+
+
+import React, { useMemo, useState } from "react";
+
 import Page from "~/components/page"
 import type {Workout as WorkoutModel} from "~/models/Workout"
 import type {Set} from "~/models/Set"
@@ -49,6 +52,7 @@ const Exercise = (props: { exercise: ExerciseModel, onBack: () => void, logExerc
   };
 
   return (
+    <Page>
     <div className="w-full h-screen flex flex-col gap-5 px-2 py-5">
 
       <p className="text-sm text-base-content/70">{today}</p>
@@ -131,6 +135,7 @@ const Exercise = (props: { exercise: ExerciseModel, onBack: () => void, logExerc
         </div>
       </div>
     </div>
+    </Page>
   );
 };
 
