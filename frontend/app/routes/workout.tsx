@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Page from "~/components/page";
 import type { Workout as WorkoutModel } from "~/models/Workout";
 import Exercise from "~/components/exercise"
 import type { Set } from "~/models/Set"
+import type Exercise from "~/models/Exercise";
+import type Exercise from "~/models/Exercise";
 
-const Card = (props: { workout: WorkoutModel; setSelectedExercise: (exercise:any) => void }) => {
+const Card = (props: { workout: WorkoutModel; setSelectedExercise: (exercise:Exercise) => void }) => {
 	return (
 		<div className="card bg-base-100 card-sm shadow-sm">
 			<div className="card-body">
@@ -12,8 +14,9 @@ const Card = (props: { workout: WorkoutModel; setSelectedExercise: (exercise:any
 				<p>{props.workout.weekday}</p>
 				<div className="justify-end card-actions">
 
-					{props.workout.exercises.map(exercise=>(
+					{props.workout.exercises.map((exercise,index)=>(
 						<button
+							key={index}
 							className="btn btn-primary"
 							onClick={() => props.setSelectedExercise(exercise)}
 						>
@@ -41,15 +44,15 @@ const Workout = () => {
 			],
     },
   ]);
-  const [workout, setWorkout] = useState<WorkoutModel | undefined>();
-	const [exercise, setExercise] = useState<any>();
+  const [_workout, _setWorkout] = useState<WorkoutModel | undefined>();
+	const [exercise, setExercise] = useState<Exercise>();
 
 	const logExercise = (sets:Set[]) => {
 		fetch("http://localhost:3000/api/set/",{
 			credentials:"include",
 			method:"post",
 			body:JSON.stringify(sets)
-		}).then(resposne=>{
+		}).then(_resposne=>{
 
 		})
 	}

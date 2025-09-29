@@ -19,7 +19,6 @@
 import React, { useMemo, useState } from "react";
 
 import Page from "~/components/page"
-import type {Workout as WorkoutModel} from "~/models/Workout"
 import type {Set} from "~/models/Set"
 
 const Exercise = (props: { exercise: ExerciseModel, onBack: () => void, logExercise: (sets:Set[]) => void}) => {
