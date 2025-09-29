@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import type { User } from '~/models/User';
 import LineChartComponent from "~/components/LineChartComponent"
 import Page from "~/components/page"
