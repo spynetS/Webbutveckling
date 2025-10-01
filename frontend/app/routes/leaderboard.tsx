@@ -21,7 +21,7 @@ export default function Leaderboard() {
     .filter((p) => friends.includes(p.id))
     .sort((a, b) => {
       if (b.score === a.score) {
-        return b.goal - a.goal; // tie-breaker by goal %
+        return Number(b.goal) - Number(a.goal); // ensure numeric comparison
       }
       return b.score - a.score;
     });
@@ -42,7 +42,7 @@ return (
         <div className="flex justify-between font-bold text-black text-base border-b-2 pb-3">
           <span className="w-8"></span>
           <span className="flex-1 text-left">Player</span>
-          <span className="min-w-[100px] text-left">Goal</span>
+          <span className="min-w-[65px] text-left">Goal</span>
           <span className="min-w-[90px] text-left">Score</span>
         </div>
 
@@ -69,19 +69,19 @@ return (
                 <div className="flex items-center gap-4 flex-1">
                   <img
                     src={player.avatar}
-                    alt={player.name}
+                    alt={player.id}
                     className="w-10 h-10 rounded-full"
                   />
-                  <span className="font-semibold text-lg">{player.name}</span>
+                  <span className="font-semibold text-lg">{player.id}</span>
                 </div>
 
                 {/* Goal */}
-                <div className="min-w-[100px] text-left font-semibold text-lg">
+                <div className="min-w-[75px] text-left font-semibold text-lg">
                   {player.goal}%
                 </div>
 
                 {/* Score */}
-                <div className="min-w-[80px] text-left font-semibold text-lg">
+                <div className="min-w-[70px] text-left font-semibold text-lg">
                   {player.score}
                 </div>
               </div>
