@@ -97,18 +97,17 @@ const Workout = () => {
 							<p>
 								Exercises
 							</p>
-
-							<select onChange={(e)=>setSelectedExercises(prev=>[...prev,e.target.value])} defaultValue="Pick an exercise" className="select">
+							<select onChange={(e)=>setSelectedExercises(prev=>[...prev,JSON.parse(e.target.value)])} defaultValue="Pick an exercise" className="select">
 								<option >Pick a color</option>
 								{exercises.map(val=>(
-									<option value={val._id}>
+									<option value={JSON.stringify(val)}>
 										{val.title}
 									</option>
 								))}
 							</select>
 
 							{selectedExercises.map(val=>(
-								<p>{val}</p>
+								<p>{val.title}</p>
 							))}
 
 						</div>
