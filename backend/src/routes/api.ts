@@ -2,7 +2,7 @@ import { Router, Request, Response, NextFunction } from "express";
 import User from "../models/User"
 import ApiResponse from "../database/response"
 import { userCreate, userLogin, logWeight} from "../controllers/userController";
-
+import { setWeightGoal, getWeightGoalProgress } from "../controllers/weightcontroller";
 
 import exerciseRouter from "./exerciseTemplate";
 import setRouter from "./set";
@@ -57,6 +57,8 @@ router.get("/get-user/:name", (req:Request, res: Response) => {
 router.post("/signup", userCreate)
 router.post("/login", userLogin);
 router.post("/log-weight", logWeight);
+router.post("/set-weight-goal", setWeightGoal);
+router.get("/weight-goal-progress", getWeightGoalProgress);
 
 // register the api routes
 router.use("/exercise", exerciseRouter);
