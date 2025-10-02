@@ -1,11 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router";
 import Page from "~/components/page"
+import type {User} from "~/models/User";
+
 
 export default function Profile() {
   const [_response, setResponse] = useState<unknown>(null);
 
-  // ALFRED YOU LEGEND!!!!
+  const [user, setUser] = useState<User>(null);
+
+  useEffect(()=>{
+    fetch("http://localhost:3000/api/get-user",{
+      credentials:'include'
+    }).then(response=>{
+      response.json().then(res=>{
+        setUser(res.data)
+      })
+    })
+  },[])
+
   const _handleSubmit = async (): Promise<void> => {
     // Do something here later
     console.log("Submitted!");
@@ -14,7 +27,7 @@ export default function Profile() {
 
   return (
     <Page>
-      <div className="w-full h-screen flex flex-col items-center pt-40">
+      <div className="w-full overflow-scroll flex flex-col items-center">
 
         {/* avatars, rounded corners or do we want fully rounded */}
 
@@ -29,8 +42,8 @@ export default function Profile() {
 
         {/* Username */}
 
-        <p id="test" className="text-5xl font-bold w-64 text-center">
-          2        Username
+        <p id="test" className="text-3xl font-bold w-64 text-center">
+          {user?.name}
         </p>
 
         {/* joined Fitness Duel at ??? */}
@@ -61,7 +74,7 @@ export default function Profile() {
         <div className="stats stats-vertical lg:stats-horizontal shadow">
           <div className="stat">
             <div className="stat-title">Friends</div>
-            <div className="stat-value">31K</div>
+
             <Link to="/friends" className='btn btn-primary'>
               Manage friends
             </Link>

@@ -32,7 +32,7 @@ const friends = () => {
 
                      <div className="navbar bg-base-100 shadow-sm">
                         <div className="flex items-center justify-center w-full gap-2 mt-3">
-                            <p className="text-lg font-bold">This will be your code</p>
+                            <p className="text-lg font-bold">#34ksil3</p>
                             
                             <button
                             className="btn btn-ghost p-2"
@@ -75,7 +75,7 @@ const friends = () => {
                     <div className="flex flex-col items-center gap-4">
 
                         <div>
-                            <button className="text-3xl btn btn-neutral">Add Friend</button>
+                            <button className="text-2xl btn btn-neutral">Add Friend</button>
                         </div>
 
                         <div>

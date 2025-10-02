@@ -3,6 +3,7 @@ import type { User } from '~/models/User';
 import LineChartComponent from "~/components/LineChartComponent"
 import Page from "~/components/page"
 import Popup from "~/components/popup"
+import { Link } from 'react-router';
 
 const Dashboard = () => {
 
@@ -57,45 +58,45 @@ const Dashboard = () => {
 
 			<Popup
 				show={show}
-				setShow={setShow}
-				setAlert={()=>setAlert(false)}
-				alert={alert}
-				alertText="Your weight was logged"
-				heading="Log your weight"
-				description="Here you can log your weight"
-				onSave={logWeight}
-				inputs={(
-					<div>
-						<input className="input input-bordered" value={weight} onChange={e=>setWeight(e.target.value)} />
-					</div>
-				)}
+					 setShow={setShow}
+					 setAlert={()=>setAlert(false)}
+					 alert={alert}
+					 alertText="Your weight was logged"
+					 heading="Log your weight"
+					 description="Here you can log your weight"
+					 onSave={logWeight}
+					 inputs={(
+						 <div>
+							 <input className="input input-bordered" value={weight} onChange={e=>setWeight(e.target.value)} />
+						 </div>
+					 )}
 			/>
 
 			<div className='gap-5 grid grid-cols-2 grid-rows-2 w-full row-span-2 h-2/5'>
 				<div className="stats shadow bg-base-300">
 					<div className="stat">
-						<div className="stat-title">Total Page Views</div>
-						2		<div className="stat-value">89,400</div>
+						<div className="stat-title">Total sessions</div>
+						<div className="stat-value">4200</div>
 						<div className="stat-desc">21% more than</div>
 					</div>
 				</div>
 				<div className="stats shadow bg-base-200 row-span-2">
 					<div className="stat">
-						<div className="stat-title">Total Page Views</div>
-						<div className="stat-value">89,400</div>
-						<div className="stat-desc">21% more </div>
+						<div className="stat-title">Next workout</div>
+						<div className="text-xl stat-value">Upper body</div>
+						<div className="stat-desc"></div>
 					</div>
 				</div>
 				<div className="stats shadow bg-base-200">
 					<div className="stat">
-						<div className="stat-title">Total Page Views</div>
-						<div className="stat-value">89,400</div>
-						<div className="stat-desc">21% more than</div>
+						<div className="stat-title">Stregnth gained</div>
+						<div className="stat-value">30%</div>
+						<div className="stat-desc">21% more </div>
 					</div>
 				</div>
 			</div>
 			<div className="row-span-2 mt-7">
-				<h2 className='text-2xl font-semibold'>Weekly Stregth</h2>
+				<h2 className='text-2xl font-semibold'>Weekly Strength</h2>
 			</div>
 			<div className='flex flex-col justify-between h-3/7 mt-5'>
 				<div className="bg-base-200 flex h-full w-full items-center justify-center rounded-lg">
@@ -104,9 +105,9 @@ const Dashboard = () => {
 				</div>
 
 				<div className="mt-5 flex flex-row items-end gap-2 w-full justify-around">
-					<button className='btn btn-lg btn-secondary'>
+					<Link to="/workout" className='btn btn-lg btn-secondary'>
 						Log Excercise
-					</button>
+					</Link>
 					<button onClick={()=>{setShow(true)}} className='btn btn-lg btn-secondary'>
 						Log Weight
 					</button>

@@ -12,7 +12,7 @@ const Card = (props: { workout: WorkoutModel; setSelectedExercise: (exercise:Exe
 			<div className="card-body">
 				<h2 className="card-title">{props.workout.title}</h2>
 				<p>{props.workout.weekday}</p>
-				<div className="justify-end card-actions">
+				<div className="justify-end card-action flex flex-col gap-2">
 
 					{props.workout.exercises.map((exercise,index)=>(
 						<button
@@ -42,7 +42,7 @@ const Workout = () => {
 					description:""
 				},
 				{
-					title:"benchpress2",
+					title:"squats",
 					description:""
 				}
 			],
