@@ -6,6 +6,7 @@ import { userCreate, userLogin, logWeight} from "../controllers/userController";
 
 import exerciseRouter from "./exerciseTemplate";
 import setRouter from "./set";
+import workoutRouter from "./workout"
 
 const router = Router();
 
@@ -60,6 +61,7 @@ router.post("/log-weight", logWeight);
 // register the api routes
 router.use("/exercise", exerciseRouter);
 router.use("/set", setRouter);
+router.use("/workout",workoutRouter)
 
 
 export default router;

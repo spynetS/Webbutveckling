@@ -1,22 +1,22 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { User } from '~/models/User';
 import LineChartComponent from "~/components/LineChartComponent"
 import Page from "~/components/page"
+import Popup from "~/components/popup"
 
-// this component takes in a show boolean. when it changes the modal appears
-// and then the show boolean sets to false
-const Log = (props:{show:boolean,setShow:(bool:boolean)=>void}) => {
+const Dashboard = () => {
 
-	const dialogRef = useRef<HTMLDialogElement>(null)
-	const [value, setValue] = useState<string>("")
 
-	const [confirm, setConfirm] = useState<boolean>(false);
+	const [_user, setUser] = useState<User>();
+	const [search,_setSearch] = useState<string>('');
+	const [show, setShow] = useState<boolean>(false);
+	const [alert, setAlert] = useState<boolean>(false);
+	const [weight, setWeight] = useState<string>('');
 
-	useEffect(()=>{
-		if(props.show)
-			dialogRef.current?.showModal();
-		props.setShow(false);
-	},[props.show])
+
+	useEffect(()=>{{
+		fetchData();
+	}},[])
 
 	const logWeight = () => {
 		fetch("http://localhost:3000/api/log-weight",{
@@ -25,16 +25,12 @@ const Log = (props:{show:boolean,setShow:(bool:boolean)=>void}) => {
 				"Content-Type": "application/json",
 			},
 			method: "POST",
-			body: JSON.stringify({weight: value})
+			body: JSON.stringify({weight: weight})
 		}).then(response =>{
 			response.json().then(val=>{
 				if(val.status==="success"){
-					setValue("");
-					setConfirm(true);
-					// timer that turn of the alrt after 2500ms
-					new Promise((resolve) => setTimeout(resolve, 2500)).then(()=>{
-						setConfirm(false);
-					});
+					setWeight("");
+					setAlert(true)
 				}
 			})
 		}).catch(()=>{
@@ -42,47 +38,6 @@ const Log = (props:{show:boolean,setShow:(bool:boolean)=>void}) => {
 		})
 	}
 
-	return (
-		<div>
-			{confirm ? (
-				<div onClick={()=>setConfirm(false)} role="alert" className="absolute w-[90%] top-2 z-50 alert alert-success">
-					<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-					</svg>
-					<span>Your weight was loged!</span>
-				</div>
-			) : (null)}
-
-			<dialog ref={dialogRef} id="my_modal_5" className="modal modal-bottom sm:modal-middle">
-				<div className="modal-box">
-					<h3 className="font-bold text-lg">Log weight</h3>
-					<p className="py-4">Log your current weight</p>
-					<div className="modal-action">
-						<form method="dialog">
-							<input type="number" name="weight" value={value} onChange={(e)=>{setValue(e.target.value)}} className="input input-bordered" />
-							<div>
-								<button onClick={logWeight} className="btn btn-primary">Save</button>
-								<button onClick={()=>props.setShow(false)} className="btn">Close</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</dialog>
-		</div>
-	)
-}
-
-const Dashboard = () => {
-
-
-	const [_user, setUser] = useState<User>();
-	const [search,_setSearch] = useState<string>('');
-	const [show, setShow] = useState<boolean>(false);
-
-
-	useEffect(()=>{{
-		fetchData();
-	}},[])
 
 	const fetchData = () =>{
 		fetch("http://localhost:3000/api/get-user/"+search,{
@@ -100,8 +55,21 @@ const Dashboard = () => {
 	return (
 		<Page>
 
-
-			<Log show={show} setShow={setShow} />
+			<Popup
+				show={show}
+				setShow={setShow}
+				setAlert={()=>setAlert(false)}
+				alert={alert}
+				alertText="Your weight was logged"
+				heading="Log your weight"
+				description="Here you can log your weight"
+				onSave={logWeight}
+				inputs={(
+					<div>
+						<input className="input input-bordered" value={weight} onChange={e=>setWeight(e.target.value)} />
+					</div>
+				)}
+			/>
 
 			<div className='gap-5 grid grid-cols-2 grid-rows-2 w-full row-span-2 h-2/5'>
 				<div className="stats shadow bg-base-300">
