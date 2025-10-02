@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router";
 import Page from "~/components/page"
 
 export default function Profile() {
@@ -13,67 +14,71 @@ export default function Profile() {
 
   return (
     <Page>
-    <div className="w-full h-screen flex flex-col items-center pt-40">
+      <div className="w-full h-screen flex flex-col items-center pt-40">
 
-    {/* avatars, rounded corners or do we want fully rounded */}
+        {/* avatars, rounded corners or do we want fully rounded */}
 
         <div className="flex flex-col items-center gap-8">
-            <div className="avatar">
-                <div className="w-24 rounded-full">
-                <img src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp" />
-                </div>
+          <div className="avatar">
+            <div className="w-24 rounded-full">
+              <img src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp" />
             </div>
+          </div>
         </div>
 
 
-      {/* Username */}
-      
+        {/* Username */}
+
         <p id="test" className="text-5xl font-bold w-64 text-center">
-            Username
+          2        Username
         </p>
 
-      {/* joined Fitness Duel at ??? */}
+        {/* joined Fitness Duel at ??? */}
 
-      <p id="joindate" className="text-xs font-cursive w-64 text-center mb-2">
-        September 18, 2025
-      </p>
+        <p id="joindate" className="text-xs font-cursive w-64 text-center mb-2">
+          September 18, 2025
+        </p>
 
-      {/* joined Fitness Duel at ??? */}
+        {/* joined Fitness Duel at ??? */}
 
-      <button className="btn btn-xs mb-4">edit profile</button>
+        <button className="btn btn-xs mb-4">edit profile</button>
 
-      {/* LEVEL */}
+        {/* LEVEL */}
 
         <p className="text-3xl font-bold w-64 text-center mb-2">
-            Level
+          Level
         </p>
         <div
-            className="radial-progress text-primary mb-4 font-bold"
-            style={{ "--value": 70 } as React.CSSProperties}
-            >
-            23
+          className="radial-progress text-primary mb-4 font-bold"
+          style={{ "--value": 70 } as React.CSSProperties}
+        >
+          23
         </div>
 
 
-      {/* Bio for your profile */}
+        {/* Bio for your profile */}
 
         <div className="stats stats-vertical lg:stats-horizontal shadow">
-        <div className="stat">
+          <div className="stat">
             <div className="stat-title">Friends</div>
             <div className="stat-value">31K</div>
-        </div>
+            <Link to="/friends" className='btn btn-primary'>
+              Manage friends
+            </Link>
 
-        <div className="stat">
+          </div>
+
+          <div className="stat">
             <div className="stat-title">Sessions</div>
             <div className="stat-value">4200</div>
-        </div>
+          </div>
 
-        <div className="stat">
+          <div className="stat">
             <div className="stat-title">Weight, Age</div>
             <div className="stat-value">70kg, 21 </div>
+          </div>
         </div>
-        </div>
-    </div>
+      </div>
     </Page>
   );
 }
