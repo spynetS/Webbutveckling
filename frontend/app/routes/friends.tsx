@@ -7,13 +7,13 @@
 
 /* pharagraph list of all your friends that are online or ofline */
 
+
 /* A button to add friends with title "Add Friend"*Xy/
 
 
 /*A pharapragh where you can paste your friends code then add them as friends Xy*/
 
-
-
+import React from "react";
 
 const friends = () => {
             return (
