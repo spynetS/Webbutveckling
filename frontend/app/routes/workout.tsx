@@ -65,7 +65,7 @@ const Workout = () => {
 		})
 	}
 
-	const createWorkout = () => {
+	const _createWorkout = () => {
 
 	}
 
@@ -99,15 +99,15 @@ const Workout = () => {
 							</p>
 							<select onChange={(e)=>setSelectedExercises(prev=>[...prev,JSON.parse(e.target.value)])} defaultValue="Pick an exercise" className="select">
 								<option >Pick a color</option>
-								{exercises.map(val=>(
-									<option value={JSON.stringify(val)}>
+								{exercises.map((val, index)=>(
+									<option key={index} value={JSON.stringify(val)}>
 										{val.title}
 									</option>
 								))}
 							</select>
 
-							{selectedExercises.map(val=>(
-								<p>{val.title}</p>
+							{selectedExercises.map((val,index)=>(
+								<p key={index}>{val.title}</p>
 							))}
 
 						</div>
