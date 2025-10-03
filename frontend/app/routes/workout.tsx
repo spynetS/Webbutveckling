@@ -94,6 +94,7 @@ const WorkoutPopup = (props: {
   }
 
   const createWorkout = () => {
+    console.log(muscleGroups)
     fetch("http://localhost:3000/api/workout", {
       credentials: 'include',
       method: "POST",
@@ -158,6 +159,7 @@ const WorkoutPopup = (props: {
             {mucles.map((mucle,index)=>(
               <input key={index} className="btn" type="checkbox" value={mucle} onChange={toggleMuscleGroup} aria-label={mucle}/>
             ))}
+            <p>{muscleGroups.join(',')}</p>
           </div>
         </div>
         <div>
