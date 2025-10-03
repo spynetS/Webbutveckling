@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { getSet, createSet, deleteSet } from "../controllers/setController";
+import { getSets, createSet, deleteSet } from "../controllers/setController";
 
 const router = Router();
 
-router.get("/",getSet)
-router.post("/",createSet)
-router.delete("/",deleteSet)
+router.get("/", getSets);
+router.post("/", createSet);
+router.delete("/", deleteSet);
 
 export default router;

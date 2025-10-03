@@ -18,7 +18,8 @@
 
 import React, { useMemo, useState, useEffect } from "react";
 
-import type {Set} from "~/models/Set"
+import type { Set } from "~/models/Set"
+import type { Exercise as ExerciseModel } from "~/models/Exercise"
 
 const Exercise = (props: { exercise: ExerciseModel, onBack: () => void, logExercise: (sets:Set[]) => void}) => {
   const [sets, setSets] = useState<Set[]>([]);
@@ -34,17 +35,26 @@ const Exercise = (props: { exercise: ExerciseModel, onBack: () => void, logExerc
   );
 
 
-  const onEdit = (i, field, raw) => {
-    const val = raw.replace(/[^\d.]/g, "").replace(/^(\d*\.\d*).*$/, "$1");
-    setSets((prev) => prev.map((r, idx) => (idx === i ? { ...r, [field]: val } : r)));
-  };
+  const onEdit = (i: number, field: string, raw: string) => {
+    // Allow only digits and at most one decimal point
+    let val = raw.replace(/[^\d.]/g, "");           // remove non-digit/non-dot chars
+    const parts = val.split(".");
+    if (parts.length > 2) {
+      val = parts[0] + "." + parts.slice(1).join(""); // keep only first decimal
+    }
 
-  const addSet = () => setSets((prev) => [...prev, { reps: "", weight: "" }]);
+    setSets((prev) =>
+      prev.map((r, idx) => (idx === i ? { ...r, [field]: val } : r))
+    );
+  };
+  const addSet = () => setSets((prev) => [...prev, { template:props.exercise._id, user:props.exercise.creator, duration:0, reps: 0, weight: 0 }]);
 
   const saveLog = () => {
-    sets.forEach(aSet=>{
-      aSet.template = props.exercise.id;
-      aSet.user = 0;
+    sets.forEach(set=>{
+      set.reps = parseFloat(set.reps);
+      set.weight = parseFloat(set.weight);
+      set.duration = parseFloat(set.duration);
+      return set;
     })
     props.logExercise(sets);
   };

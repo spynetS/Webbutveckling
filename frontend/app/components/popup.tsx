@@ -22,7 +22,8 @@ const Popup = (props:Props) => {
 	useEffect(()=>{
 		if(props.show)
 			dialogRef.current?.showModal();
-		props.setShow(false);
+		else
+			dialogRef.current?.close();
 	},[props.show])
 
 
@@ -41,14 +42,13 @@ const Popup = (props:Props) => {
 				<div className="modal-box">
 					<h3 className="font-bold text-lg">{props.heading}</h3>
 					<p className="py-4">{props.description}</p>
+					{props.inputs}
 					<div className="modal-action">
-						<form method="dialog">
-							{props.inputs}
-							<div>
-								<button onClick={()=>props.onSave()} className="btn btn-primary">Save</button>
-								<button onClick={()=>props.setShow(false)} className="btn">Close</button>
-							</div>
-						</form>
+						<div>
+							<button onClick={()=>props.onSave()} className="btn btn-primary">Save</button>
+							<button onClick={()=>props.setShow(false)} className="btn">Close</button>
+						</div>
+
 					</div>
 				</div>
 			</dialog>

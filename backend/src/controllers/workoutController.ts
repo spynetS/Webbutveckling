@@ -2,31 +2,67 @@ import type e from "express";
 import Workout from "../models/workout";
 import ApiResponse from "../database/response";
 
-export async function getWorkout(req: e.Request, res: e.Response){
-	Workout.find().then(found=>{
-		res.json(new ApiResponse({data:found}))
-	}).catch(error=>{
-		res.json(new ApiResponse({status:"error",message:error.message}))
-	})
+import User from "../models/User";
+
+export async function getWorkout(req: e.Request, res: e.Response) {
+  Workout.find()
+    .populate("exercises") // replace ObjectIds in exercises with the actual Exercise documents
+    .populate("user", "name email") // optionally select only certain fields from user
+    .then((found) => {
+      res.json(new ApiResponse({ data: found }));
+    })
+    .catch((error) => {
+      res.json(new ApiResponse({ status: "error", message: error.message }));
+    });
 }
 
-export async function createWorkout(req:e.Request, res: e.Response){
-	Workout.create(req.body).then(status=>{
-	    res.json(new ApiResponse({data:status}))
-	}).catch(err=>{
-		res.json(new ApiResponse({status:"error",message:err.message}))
-	})
+export async function createWorkout(req: e.Request, res: e.Response) {
+  // Ensure body exists
+  if (!req.body) {
+    return res.json(
+      new ApiResponse({ status: "fail", data: "Request body missing" }),
+    );
+  }
+
+  const body = req.body;
+
+  if (!req.session.userId)
+    return res.json(
+      new ApiResponse({ status: "fail", data: "Must log in first" }),
+    );
+
+  const user = await User.findById(req.session.userId);
+  if (!user)
+    return res.json(
+      new ApiResponse({ status: "fail", data: "User not found" }),
+    );
+
+  body.user = user._id; // now safe
+
+  console.log(body);
+
+  Workout.create(body)
+    .then((status) => {
+      res.json(new ApiResponse({ data: status }));
+    })
+    .catch((err) => {
+      res.json(new ApiResponse({ status: "error", message: err.message }));
+    });
 }
 
-export async function deleteWorkout(req:e.Request, res: e.Response){
-	if(!("id" in req.body)){
-		res.json(new ApiResponse({status:"error",message:"No id was provided!"}));
-		return;
-	}
-	const workout: Workout = Workout.findById(req.body.id);
-	Workout.deleteOne(workout).then(status=>{
-		res.json(new ApiResponse({data:status}))
-	}).catch(error=>{
-		res.json(new ApiResponse({status:"error",message:error.message}))
-	})
+export async function deleteWorkout(req: e.Request, res: e.Response) {
+  if (!("id" in req.body)) {
+    res.json(
+      new ApiResponse({ status: "error", message: "No id was provided!" }),
+    );
+    return;
+  }
+  const workout: Workout = Workout.findById(req.body.id);
+  Workout.deleteOne(workout)
+    .then((status) => {
+      res.json(new ApiResponse({ data: status }));
+    })
+    .catch((error) => {
+      res.json(new ApiResponse({ status: "error", message: error.message }));
+    });
 }
