@@ -3,6 +3,7 @@ import cors from "cors";
 import apiRouter from "./routes/api";
 
 import { init, DATABASE_URI } from "./database/database";
+
 import session from "express-session";
 import MongoStore from "connect-mongo";
 
@@ -35,7 +36,11 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://127.0.0.1:5173"], // allowed origins
+    origin: [
+      "http://localhost:5173",
+      "http://127.0.0.1:5173",
+      "http://192.168.1.170:38045",
+    ], // allowed origins
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, // allow cookies
   }),
