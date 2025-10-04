@@ -33,8 +33,10 @@ export default function Profile() {
         </div>
       </div>
 
-      {/* Add margin to push content below the avatar */}
-      <div className="mt-2 flex flex-col items-center gap-4 w-full">
+      {/* Margin to push content below the avatar */}
+      <div className="mt-2 flex flex-col items-center w-full">
+
+        <button className="btn btn-xs text-blue-800 font-bold">edit profile</button>
 
         {/* Username */}
         <p id="test" className="text-5xl font-bold w-64 text-center">
@@ -46,14 +48,12 @@ export default function Profile() {
           September 18, 2025
         </p>
 
-        <button className="btn btn-xs text-blue-800">edit profile</button>
-
         {/* LEVEL */}
-        <p className="text-3xl font-bold w-64 text-center mb-2">
+        <p className="text-3xl font-bold w-64 text-center mb-1">
           Level
         </p>
         <div
-          className="radial-progress text-primary mb-4 font-bold"
+          className="radial-progress text-primary font-bold"
           style={{ "--value": 70 } as React.CSSProperties}
         >
           23
