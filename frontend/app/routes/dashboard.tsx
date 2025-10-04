@@ -5,6 +5,10 @@ import Page from "~/components/page"
 import Popup from "~/components/popup"
 import { Link } from 'react-router';
 
+type Stats = {
+	sessions:number;
+}
+
 const Dashboard = () => {
 
 
@@ -14,6 +18,9 @@ const Dashboard = () => {
 	const [alert, setAlert] = useState<boolean>(false);
 	const [weight, setWeight] = useState<string>('');
 
+
+	//stats
+	const [stats,setStats] = useState<Stats>()
 
 	useEffect(()=>{{
 		fetchData();
@@ -49,6 +56,18 @@ const Dashboard = () => {
 				setUser(data.data)
 			});
 		})
+
+		fetch("http://localhost:3000/api/stats",{
+			credentials: 'include'
+		}).then(response=>{
+		    if (!response.ok) throw new Error("Network response was not ok");
+			response.json().then(data=>{
+				setStats(data.data)
+			});
+		})
+
+
+
 	}
 
 
@@ -58,25 +77,25 @@ const Dashboard = () => {
 
 			<Popup
 				show={show}
-					 setShow={setShow}
-					 setAlert={()=>setAlert(false)}
-					 alert={alert}
-					 alertText="Your weight was logged"
-					 heading="Log your weight"
-					 description="Here you can log your weight"
-					 onSave={logWeight}
-					 inputs={(
-						 <div>
-							 <input className="input input-bordered" value={weight} onChange={e=>setWeight(e.target.value)} />
-						 </div>
-					 )}
+				setShow={setShow}
+				setAlert={()=>setAlert(false)}
+				alert={alert}
+				alertText="Your weight was logged"
+				heading="Log your weight"
+				description="Here you can log your weight"
+				onSave={logWeight}
+				inputs={(
+					<div>
+						<input className="input input-bordered" value={weight} onChange={e=>setWeight(e.target.value)} />
+					</div>
+				)}
 			/>
 
 			<div className='gap-5 grid grid-cols-2 grid-rows-2 w-full row-span-2 h-2/5'>
 				<div className="stats shadow bg-base-300">
 					<div className="stat">
 						<div className="stat-title">Total sessions</div>
-						<div className="stat-value">4200</div>
+						<div className="stat-value">{stats?.sessions}</div>
 						<div className="stat-desc">21% more than</div>
 					</div>
 				</div>
