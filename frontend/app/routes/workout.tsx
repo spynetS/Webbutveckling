@@ -32,7 +32,7 @@ const Card = (props: {
   }
 
   return (
-    <div className="card bg-base-200 card-sm shadow-sm">
+    <div className="card bg-base-200 card-sm shadow-sm w-full md:w-1/5">
       <div className="card-body">
         <div className="flex flex-row justify-between">
           <h2 className="card-title">{props.workout.title}</h2>
@@ -91,7 +91,10 @@ const Workout = () => {
 
   },[])
 
+
   const workout_page = () =>{
+    const weekdays = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+
     return(
       <>
         <div className="flex flex-col gap-2">
@@ -100,15 +103,17 @@ const Workout = () => {
             <a onClick={()=>setTab(1)} role="tab"  className={`tab ${tab == 1 ? "tab-active" : ""}`}>Exercises</a>
           </div>
           <h1 className="text-3xl font-bold">Workouts</h1>
-          {workouts.map((workout, i) => (
-            <Card
-              key={i}
-              workout={workout}
-              setSelectedExercise={setExercise}
-              deleted={workout=>setWorkouts(prev => prev.filter(w => w._id !== workout._id))}
-              edit={setEditWorkout}
-            />
-          ))}
+          <div className="w-full flex flex-col md:flex-row md:flex-wrap gap-3">
+            {workouts.map((workout, i) => (
+              <Card
+                key={i}
+                workout={workout}
+                setSelectedExercise={setExercise}
+                deleted={workout=>setWorkouts(prev => prev.filter(w => w._id !== workout._id))}
+                edit={setEditWorkout}
+              />
+            ))}
+          </div>
         </div>
 
         <div className='flex flex-row justify-between'>
