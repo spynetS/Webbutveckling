@@ -10,5 +10,4 @@ export default [
   //route("exercise", "routes/exercise.tsx"),
   route("workout", "routes/workout.tsx"),
   route("friends", "routes/friends.tsx"),
-  route("create-exercise", "routes/createExercise.tsx"),
 ] satisfies RouteConfig;
