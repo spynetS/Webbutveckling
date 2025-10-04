@@ -66,3 +66,48 @@ export async function deleteWorkout(req: e.Request, res: e.Response) {
       res.json(new ApiResponse({ status: "error", message: error.message }));
     });
 }
+
+export async function updateWorkout(req: e.Request, res: e.Response) {
+  try {
+    // Ensure body exists
+    if (!req.body) {
+      return res.json(
+        new ApiResponse({ status: "fail", data: "Request body missing" }),
+      );
+    }
+
+    const { id } = req.params; // e.g. /api/workouts/:id
+    const body = req.body;
+
+    if (!req.session.userId)
+      return res.json(
+        new ApiResponse({ status: "fail", data: "Must log in first" }),
+      );
+
+    const user = await User.findById(req.session.userId);
+    if (!user)
+      return res.json(
+        new ApiResponse({ status: "fail", data: "User not found" }),
+      );
+
+    // Find workout by ID and ensure it belongs to this user
+    const workout = await Workout.findOne({ _id: id, user: user._id });
+    if (!workout)
+      return res.json(
+        new ApiResponse({ status: "fail", data: "Workout not found" }),
+      );
+
+    // Update allowed fields only
+    Object.assign(workout, body);
+
+    await workout.save();
+
+    const updatedWorkout = await Workout.findById(id)
+      .populate("exercises")
+      .populate("user", "name email");
+
+    res.json(new ApiResponse({ data: updatedWorkout }));
+  } catch (err: any) {
+    res.json(new ApiResponse({ status: "error", message: err.message }));
+  }
+}

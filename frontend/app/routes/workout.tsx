@@ -12,6 +12,7 @@ const Card = (props: {
   workout: WorkoutModel;
   setSelectedExercise: (exercise:ExerciseModel) => void,
   deleted: (workout:WorkoutModel) => void
+  edit: (workout:WorkoutModel) => void
 }) => {
 
   const deleteWorkout = () =>{
@@ -36,9 +37,14 @@ const Card = (props: {
       <div className="card-body">
         <div className="flex flex-row justify-between">
           <h2 className="card-title">{props.workout.title}</h2>
-          <button onClick={deleteWorkout} className="btn btn-error btn-xs" >
-            delete
-          </button>
+          <div>
+            <button onClick={()=>props.edit(props.workout)} className="btn btn-xs" >
+              edit
+            </button>
+            <button onClick={deleteWorkout} className="btn btn-error btn-xs" >
+              delete
+            </button>
+          </div>
         </div>
 
         <p>{props.workout.weekday}</p>
@@ -64,36 +70,13 @@ const Workout = () => {
   const [workouts, setWorkouts] = useState<WorkoutModel[]>([]);
   const [exercise, setExercise] = useState<ExerciseModel>();
   const [show, setShow] = useState<boolean>(false);
-  const [exercises, setExercises] = useState<ExerciseModel[]>();
   const [showExercise, setShowExercise] = useState<boolean>(false);
-
-
-
-  const logExercise = (sets:Set[]) => {
-
-    sets.forEach(set=>{
-      console.log(JSON.stringify(set))
-      fetch("http://localhost:3000/api/set/",{
-        credentials:"include",
-        method:"POST",
-        headers: { "Content-Type": "application/json" },
-        body:JSON.stringify(set)
-      }).then(_resposne=>{
-      })
-    })
-  }
-
+  const [editWorkout, setEditWorkout] = useState<WorkoutModel>();
 
 
   useEffect(()=>{
-    fetch("http://localhost:3000/api/exercise",{
 
-    }).then(response => {
-      response.json().then(res=>{
-        setExercises(res.data)
-      })
 
-    })
     fetch("http://localhost:3000/api/workout",{
 
     }).then(response => {
@@ -108,12 +91,12 @@ const Workout = () => {
 
   return (
     <Page>
-
       <WorkoutPopup
-        exercises={exercises}
         setWorkouts={setWorkouts}
         show={show}
         setShow={setShow}
+        workout={editWorkout}
+        setWorkout={setEditWorkout}
       />
 
     <ExercisePopup
@@ -123,10 +106,10 @@ const Workout = () => {
 
 
       {exercise !== undefined ? (
-        <Exercise logExercise={logExercise} exercise={exercise} onBack={()=>setExercise(undefined)} ></Exercise>
+        <Exercise exercise={exercise} onBack={()=>setExercise(undefined)} />
       ) : (
         <div className="flex flex-col h-full justify-between">
-          <div>
+          <div className="flex flex-col gap-2">
             <h1 className="text-3xl font-bold">Workouts</h1>
             {workouts.map((workout, i) => (
               <Card
@@ -134,6 +117,7 @@ const Workout = () => {
                 workout={workout}
                 setSelectedExercise={setExercise}
                 deleted={workout=>setWorkouts(prev => prev.filter(w => w._id !== workout._id))}
+                edit={setEditWorkout}
               />
             ))}
           </div>

@@ -21,7 +21,7 @@ import React, { useMemo, useState, useEffect } from "react";
 import type { Set } from "~/models/Set"
 import type { Exercise as ExerciseModel } from "~/models/Exercise"
 
-const Exercise = (props: { exercise: ExerciseModel, onBack: () => void, logExercise: (sets:Set[]) => void}) => {
+const Exercise = (props: { exercise: ExerciseModel, onBack: () => void}) => {
   const [sets, setSets] = useState<Set[]>([]);
   const [notes, setNotes] = useState("");
 
@@ -33,6 +33,22 @@ const Exercise = (props: { exercise: ExerciseModel, onBack: () => void, logExerc
     () => new Intl.DateTimeFormat("en-US", { dateStyle: "long" }).format(new Date()),
     []
   );
+
+
+  const logExercise = (sets:Set[]) => {
+
+    sets.forEach(set=>{
+      console.log(JSON.stringify(set))
+      fetch("http://localhost:3000/api/set/",{
+        credentials:"include",
+        method:"POST",
+        headers: { "Content-Type": "application/json" },
+        body:JSON.stringify(set)
+      }).then(_resposne=>{
+      })
+    })
+  }
+
 
 
   const onEdit = (i: number, field: string, raw: string) => {
@@ -56,7 +72,7 @@ const Exercise = (props: { exercise: ExerciseModel, onBack: () => void, logExerc
       set.duration = parseFloat(set.duration);
       return set;
     })
-    props.logExercise(sets);
+    logExercise(sets);
   };
 
   return (
