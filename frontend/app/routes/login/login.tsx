@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import { Link } from "react-router";
 
 const LOGIN_URL = "http://localhost:3000/api/login";
-const SIGNUP_URL = "https://example.com/signup"; // ← placeholder; change later to your real route
+const SIGNUP_URL = "/signup"; // ← placeholder; change later to your real route
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -103,10 +104,9 @@ const Login = () => {
           </button>
         </form>
 
-        {/* Sign up Button → placeholder link */}
-        <a className="btn mt-2" href={SIGNUP_URL} target="_blank" rel="noopener noreferrer">
+        <Link className="btn mt-2" to='/signup'>
           Sign up
-        </a>
+        </Link>
       </div>
 
       <p className="text-1xl font cursive text-center mt-3 text-gray-500">
