@@ -1,4 +1,4 @@
-import React, { useState, useEffect, type ChangeEvent } from "react";
+import React, { useState, type ChangeEvent } from "react";
 import Popup from "~/components/popup";
 
 
@@ -38,11 +38,7 @@ const ExercisePopup = (props:{
         muscleGroups:muscleGroups,
         exerciseType:type
       })
-    }).then(response=>{
-        response.json().then(res=>{
-
-        })
-      })
+    })
   }
 
   return (

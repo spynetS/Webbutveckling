@@ -1,8 +1,7 @@
-import React, { useState, useEffect, type ChangeEvent } from "react";
+import React, { useState, useEffect } from "react";
 import Page from "~/components/page";
 import type { Workout as WorkoutModel } from "~/models/Workout";
 import Exercise from "~/components/exercise"
-import type { Set } from "~/models/Set"
 import type { Exercise as ExerciseModel }  from "~/models/Exercise";
 
 import WorkoutPopup from "~/components/WorkoutPopup"

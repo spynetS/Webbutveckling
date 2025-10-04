@@ -14,7 +14,7 @@ export async function create(req: e.Request, res: e.Response) {
     if (!req.session.userId)
       return res.json(new ApiResponse({ status: "fail", data: "Login" }));
 
-    let body = req.body;
+    const body = req.body;
     const user = await User.findById(req.session.userId);
 
     if (!user) {
@@ -25,7 +25,7 @@ export async function create(req: e.Request, res: e.Response) {
 
     const newExercise = await ExerciseTemplate.create(body);
     res.json(new ApiResponse({ data: newExercise }));
-  } catch (err: any) {
+  } catch (err: Error) {
     res.json(new ApiResponse({ status: "error", message: err.message }));
   }
 }

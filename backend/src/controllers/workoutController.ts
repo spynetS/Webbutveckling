@@ -107,7 +107,7 @@ export async function updateWorkout(req: e.Request, res: e.Response) {
       .populate("user", "name email");
 
     res.json(new ApiResponse({ data: updatedWorkout }));
-  } catch (err: any) {
+  } catch (err: Error) {
     res.json(new ApiResponse({ status: "error", message: err.message }));
   }
 }

@@ -13,26 +13,12 @@ const WorkoutPopup = (props: {
 	setWorkout:(workout:WorkoutModel) => void
 }) =>{
 
-	const mucles = ['Chest', "Legs", "Arms", "Back"];
 	const weekdays = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
 
 	const [selectedExercises, setSelectedExercises] = useState < unknown[] > ([]);
 	const [newWorkoutTitle, setNewWorkoutTitle] = useState < string > ();
 	const [weekday, setWeekday] = useState<string>("");
 	const [exercises, setExercises] = useState<ExerciseModel[]>();
-
-	const handleChange = (event) => {
-		setType(event.target.getAttribute("aria-label")); // get the aria-label
-	};
-
-	const toggleMuscleGroup = (e: ChangeEvent<HTMLInputElement>) => {
-		const muscle = e.target.getAttribute("aria-label")!
-		if (e.target.checked) {
-			setMuscleGroups((prev) => [...prev, muscle]);
-		} else {
-			setMuscleGroups((prev) => prev.filter((m) => m !== muscle));
-		}
-	};
 
 	const toggleWeekday = (e: ChangeEvent<HTMLInputElement>) => {
 		setWeekday(e.target.getAttribute("aria-label")?.toString());
