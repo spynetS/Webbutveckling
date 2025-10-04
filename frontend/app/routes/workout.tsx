@@ -33,7 +33,7 @@ const Card = (props: {
   }
 
   return (
-    <div className="card bg-base-100 card-sm shadow-sm">
+    <div className="card bg-base-200 card-sm shadow-sm">
       <div className="card-body">
         <div className="flex flex-row justify-between">
           <h2 className="card-title">{props.workout.title}</h2>
@@ -53,7 +53,7 @@ const Card = (props: {
           {props.workout.exercises.map((exercise,index)=>(
             <button
               key={index}
-              className="btn btn-primary"
+              className="btn btn-sm btn-primary"
               onClick={() => props.setSelectedExercise(exercise)}
             >
               Begin {exercise.title}
