@@ -1,6 +1,7 @@
 import * as e from "express";
 import ExerciseTemplate from "../models/ExerciseTemplate";
 import ApiResponse from "../database/response";
+import User from "../models/User";
 
 export async function getExercise(req: e.Request, res: e.Response) {
   ExerciseTemplate.find().then((found) => {
@@ -10,7 +11,19 @@ export async function getExercise(req: e.Request, res: e.Response) {
 
 export async function create(req: e.Request, res: e.Response) {
   try {
-    const newExercise = await ExerciseTemplate.create(req.body);
+    if (!req.session.userId)
+      return res.json(new ApiResponse({ status: "fail", data: "Login" }));
+
+    let body = req.body;
+    const user = await User.findById(req.session.userId);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    body.creator = user._id;
+
+    const newExercise = await ExerciseTemplate.create(body);
     res.json(new ApiResponse({ data: newExercise }));
   } catch (err: any) {
     res.json(new ApiResponse({ status: "error", message: err.message }));
