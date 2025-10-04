@@ -180,7 +180,7 @@ const WorkoutPopup = (props: {
               <button className="cursor-pointer hover:text-primary text-base w-fit">
                 Edit
               </button>
-              <IoMdAdd className="cursor-pointer hover:text-primary text-xl w-fit"/>
+              <IoMdAdd onClick={()=>setSelectedExercises(prev=>prev.filter(w=>w._id !== val._id))} className="cursor-pointer hover:text-primary text-xl w-fit"/>
             </div>
           </div>))
         }
