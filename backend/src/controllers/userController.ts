@@ -43,7 +43,7 @@ export async function userLogin(req: Request, res: Response) {
   } catch (error) {
     return res
       .status(500)
-      .json(new ApiResponse({ status: "error", data: "Something went wrong." }));
+      .json(new ApiResponse({ status: "error", messag: error.message }));
   }
 }
 
@@ -59,7 +59,7 @@ export async function userCreate(req: Request, res: Response) {
         data: "name, email, and password are required"
       }));
     }
-    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    const emailRegex = /^[\w-]+@([\w-]+)+[\w-]{2,4}$/;
 
     if(!emailRegex.test(req.body.email))
     {
@@ -70,14 +70,14 @@ export async function userCreate(req: Request, res: Response) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    let user: User = await User.create({
+    await User.create({
       name: userName,
       email: email,
       password: hashedPassword
     });
 
     res.status(201).json(new ApiResponse({ data: "User added successfully" }));
-  } catch (error: any) {
+  } catch (error: Error) {
     res.status(500).json(new ApiResponse({ status: "error", message: error.message }));
   }
 }
@@ -87,15 +87,14 @@ export async function logWeight(req: Request, res: Response){
   if(!req.session.userId || !req.body.weight) {
     return res.status(400).json(new ApiResponse({status:"fail",data:"User not loged in"}))
   }
-  let user: User = await User.findById(req.session.userId);
+  const user: User = await User.findById(req.session.userId);
 
   const log = await WeightLog.create({weight:Number.parseFloat(req.body.weight)});
   user.weightLogs.push(log._id);
 
   user.save().then(()=>{
     res.json(new ApiResponse({data:user}));
-  }).catch((error:any)=>{
+  }).catch((error:Error)=>{
     res.json(new ApiResponse({status:"error",message:error.message}));
   })
 }
-2

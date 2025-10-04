@@ -16,6 +16,8 @@ npm install
 npm run dev
 #+end_src
 
+The backend, currently, expects a mongodb server to run on `localhost:27017` with username:`root` and password:`example`
+
 * Standards
 We are using the (JSend)[https://github.com/omniti-labs/jsend] standard for the json results from the backend
 

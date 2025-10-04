@@ -1,10 +1,4 @@
-import { useState } from "react";
-export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "New React Router App" },
-    { name: "description", content: "Dashboard to React Router!" },
-  ];
-}
+import React, { useState } from "react";
 
 export default function Signup() {
 
@@ -15,7 +9,7 @@ export default function Signup() {
   {/* Password input */}
   const [password, setPassword] = useState<string>("");
   {/* Response from the server */}
-  const [response, setResponse] = useState<any>(null);
+  const [response, setResponse] = useState<unknown>(null);
 
   // ALFRED YOU LEGEND!!!!
   const handleSubmit = async (): Promise<void> => {
@@ -30,7 +24,7 @@ export default function Signup() {
       });
       const data = await res.json();
       setResponse(data);
-    } catch (error) {
+    } catch (error:Error) {
       console.error("Error:", error);
       setResponse({ error: "Request failed" });
     }
@@ -38,7 +32,7 @@ export default function Signup() {
   return (
     <main className='w-full h-screen flex flex-col items-center pt-40'>
       <div className="mb-8">
-          // for the image logo :D
+        for the image logo :D
       </div>
         <p id="test" className="text-5xl font-bold w-64 text-center">
             FitnessDual
@@ -64,6 +58,7 @@ export default function Signup() {
           </label>
           {/* Login button, how da fck do I connect it */}
           <button className="btn btn-neutral" onClick={() => { handleSubmit()}}>Sign up!</button>
+          <p>{response}</p>
         </div>
         <p className="text-1xl font-cursive text-center mt-3 text-gray-500">
           Compete against your friends!

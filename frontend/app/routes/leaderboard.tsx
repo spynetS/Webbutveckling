@@ -1,4 +1,5 @@
-import { useState } from "react";
+import React from "react";
+import Page from "~/components/page"
 
 export default function Leaderboard() {
   //const [filter, setFilter] = useState("Today");
@@ -27,16 +28,18 @@ export default function Leaderboard() {
     });
 
 return (
+  <Page>
     <div className="max-w-md mx-auto bg-white rounded-2xl shadow-lg p-8 text-center flex flex-col justify-between min-h-[400px]">
       <div className="space-y-6">
         
         {/* Title */}
         <h1 className="text-3xl font-bold text-black">Friends Leaderboard</h1>
 
-        {/* motivation */}
-        <p className="text-base text-gray-500 mt-6">
-          Keep it up! You’re almost at the top!
-        </p>
+
+          {/* motivation */}
+          <p className="text-base text-gray-500 mt-6">
+            Keep it up! You’re almost at the top!
+          </p>
 
         {/* Headers */}
         <div className="flex justify-between font-bold text-black text-base border-b-2 pb-3">
@@ -90,5 +93,6 @@ return (
         </div>
       </div>
     </div>
+  </Page>
   );
 }
