@@ -93,7 +93,6 @@ const Workout = () => {
 
 
   const workout_page = () =>{
-    const weekdays = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
 
     return(
       <>
@@ -138,8 +137,8 @@ const Workout = () => {
             <a onClick={()=>setTab(1)} role="tab"  className={`tab ${tab == 1 ? "tab-active" : ""}`}>Exercises</a>
           </div>
           <h1 className="text-3xl font-bold">Exercise</h1>
-          {sets.map(aset=>(
-            <div className="bg-base-200 p-3 rounded-lg flex flex-row justify-between">
+          {sets.map((aset,index)=>(
+            <div key={index} className="bg-base-200 p-3 rounded-lg flex flex-row justify-between">
               <p className="font-semibold">{aset.template.title}</p>
               <div className="flex flex-row gap-2 items-center">
                 <p>{aset.reps} x {aset.weight}kgs</p>
