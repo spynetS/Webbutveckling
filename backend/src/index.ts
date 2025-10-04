@@ -2,8 +2,10 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import apiRouter from "./routes/api";
 
-import { init } from "./database/database";
+import { init, DATABASE_URI } from "./database/database";
+
 import session from "express-session";
+import MongoStore from "connect-mongo";
 
 const app = express();
 const port = 3000;
@@ -15,13 +17,17 @@ init();
 // TODO make a .env file for the secret
 app.use(
   session({
-    secret: "your-secret-key", // change this to a secure secret
+    secret: "your-secret-key",
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: DATABASE_URI, // your MongoDB connection
+      ttl: 14 * 24 * 60 * 60, // session expiration in seconds (14 days)
+    }),
     cookie: {
-      secure: false, // true only if using HTTPS
-      httpOnly: true, // keeps it safer from JS access
-      sameSite: "lax", // allow cross-site cookies
+      secure: false, // true if using HTTPS
+      httpOnly: true,
+      sameSite: "lax",
     },
   }),
 );
