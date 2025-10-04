@@ -3,7 +3,7 @@ import Page from "~/components/page";
 import type { Workout as WorkoutModel } from "~/models/Workout";
 import Exercise from "~/components/exercise"
 import type { Exercise as ExerciseModel }  from "~/models/Exercise";
-
+import { MdDelete } from "react-icons/md";
 import WorkoutPopup from "~/components/WorkoutPopup"
 import ExercisePopup from "~/components/ExercisePopup"
 
@@ -71,69 +71,117 @@ const Workout = () => {
   const [show, setShow] = useState<boolean>(false);
   const [showExercise, setShowExercise] = useState<boolean>(false);
   const [editWorkout, setEditWorkout] = useState<WorkoutModel>();
+  const [sets,setSets] = useState<Set[]>([]);
 
+  const [tab,setTab] = useState<number>(0);
 
   useEffect(()=>{
 
+    fetch("http://localhost:3000/api/set").then(response => {
+      response.json().then(res=>{
+        setSets(res.data)
+      })
+    })
 
-    fetch("http://localhost:3000/api/workout",{
-
-    }).then(response => {
+    fetch("http://localhost:3000/api/workout").then(response => {
       response.json().then(res=>{
         setWorkouts(res.data)
       })
-
     })
 
   },[])
 
-
-  return (
-    <Page>
-      <WorkoutPopup
-        setWorkouts={setWorkouts}
-        show={show}
-        setShow={setShow}
-        workout={editWorkout}
-        setWorkout={setEditWorkout}
-      />
-
-    <ExercisePopup
-      show={showExercise}
-      setShow={setShowExercise}
-    />
-
-
-      {exercise !== undefined ? (
-        <Exercise exercise={exercise} onBack={()=>setExercise(undefined)} />
-      ) : (
-        <div className="flex flex-col h-full justify-between">
-          <div className="flex flex-col gap-2">
-            <h1 className="text-3xl font-bold">Workouts</h1>
-            {workouts.map((workout, i) => (
-              <Card
-                key={i}
-                workout={workout}
-                setSelectedExercise={setExercise}
-                deleted={workout=>setWorkouts(prev => prev.filter(w => w._id !== workout._id))}
-                edit={setEditWorkout}
-              />
-            ))}
+  const workout_page = () =>{
+    return(
+      <>
+        <div className="flex flex-col gap-2">
+          <div role="tablist" className="tabs tabs-box grid grid-cols-2">
+            <a onClick={()=>setTab(0)} role="tab" className={`tab ${tab == 0 ? "tab-active" : ""}`}>Workouts</a>
+            <a onClick={()=>setTab(1)} role="tab"  className={`tab ${tab == 1 ? "tab-active" : ""}`}>Exercises</a>
           </div>
-          <div className='flex flex-row justify-between'>
-            <button onClick={()=>setShowExercise(true)} className='btn btn-primary rounded-full p-5' >
-              Add new exercise
-            </button>
-            <button onClick={()=>setShow(true)} className='btn btn-primary rounded-full p-5' >
-              Add new workout
-            </button>
-          </div>
-
+          <h1 className="text-3xl font-bold">Workouts</h1>
+          {workouts.map((workout, i) => (
+            <Card
+              key={i}
+              workout={workout}
+              setSelectedExercise={setExercise}
+              deleted={workout=>setWorkouts(prev => prev.filter(w => w._id !== workout._id))}
+              edit={setEditWorkout}
+            />
+          ))}
         </div>
 
-      )}
-    </Page>
-  );
-};
+        <div className='flex flex-row justify-between'>
+          <button onClick={()=>setShowExercise(true)} className='btn btn-primary rounded-full p-5' >
+            Add new exercise
+          </button>
+
+          <button onClick={()=>setShow(true)} className='btn btn-primary rounded-full p-5' >
+            Add new workout
+          </button>
+        </div>
+      </>
+    )
+  }
+
+  const exercise_page = () =>{
+    return(
+      <>
+        <div className="flex flex-col gap-2">
+          <div role="tablist" className="tabs tabs-box grid grid-cols-2">
+            <a onClick={()=>setTab(0)} role="tab" className={`tab ${tab == 0 ? "tab-active" : ""}`}>Workouts</a>
+            <a onClick={()=>setTab(1)} role="tab"  className={`tab ${tab == 1 ? "tab-active" : ""}`}>Exercises</a>
+          </div>
+          <h1 className="text-3xl font-bold">Exercise</h1>
+          {sets.map(aset=>(
+            <div className="bg-base-200 p-3 rounded-lg flex flex-row justify-between">
+              <p className="font-semibold">{aset.template.title}</p>
+              <div className="flex flex-row gap-2 items-center">
+                <p>{aset.reps} x {aset.weight}kgs</p>
+                <MdDelete />
+              </div>
+
+
+            </div>
+          ))}
+        </div>
+
+        <div className='flex flex-row justify-between'>
+          <button onClick={null} className='btn btn-primary rounded-full p-5' >
+            Log exercise
+          </button>
+        </div>
+      </>
+    )
+  }
+
+
+    return (
+      <Page>
+        <WorkoutPopup
+          setWorkouts={setWorkouts}
+          show={show}
+          setShow={setShow}
+          workout={editWorkout}
+          setWorkout={setEditWorkout}
+        />
+
+        <ExercisePopup
+          show={showExercise}
+          setShow={setShowExercise}
+        />
+
+
+        {exercise !== undefined ? (
+          <Exercise exercise={exercise} onBack={()=>setExercise(undefined)} />
+        ) : (
+          <div className="flex flex-col h-full justify-between">
+            { tab == 0 ? workout_page() : exercise_page() }
+          </div>
+
+        )}
+      </Page>
+    );
+  };
 
 export default Workout;

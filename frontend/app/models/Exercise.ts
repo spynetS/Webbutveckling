@@ -1,6 +1,6 @@
 import type { Model } from "~/models/Model";
 
-type Set = Model & {
+export type Set = Model & {
   reps: number;
   weight: number;
 };
