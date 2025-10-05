@@ -1,22 +1,30 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { User } from '~/models/User';
 import LineChartComponent from "~/components/LineChartComponent"
 import Page from "~/components/page"
+import Popup from "~/components/popup"
+import { Link } from 'react-router';
 
-// this component takes in a show boolean. when it changes the modal appears
-// and then the show boolean sets to false
-const Log = (props:{show:boolean,setShow:(bool:boolean)=>void}) => {
+type Stats = {
+	sessions:number;
+}
 
-	const dialogRef = useRef<HTMLDialogElement>(null)
-	const [value, setValue] = useState<string>("")
+const Dashboard = () => {
 
-	const [confirm, setConfirm] = useState<boolean>(false);
 
-	useEffect(()=>{
-		if(props.show)
-			dialogRef.current?.showModal();
-		props.setShow(false);
-	},[props.show])
+	const [user, setUser] = useState<User>();
+	const [search,_setSearch] = useState<string>('');
+	const [show, setShow] = useState<boolean>(false);
+	const [alert, setAlert] = useState<boolean>(false);
+	const [weight, setWeight] = useState<string>('');
+	const [graphTab, setGraphTab] = useState<number>(0);
+
+	//stats
+	const [stats,setStats] = useState<Stats>()
+
+	useEffect(()=>{{
+		fetchData();
+	}},[])
 
 	const logWeight = () => {
 		fetch("http://localhost:3000/api/log-weight",{
@@ -25,16 +33,13 @@ const Log = (props:{show:boolean,setShow:(bool:boolean)=>void}) => {
 				"Content-Type": "application/json",
 			},
 			method: "POST",
-			body: JSON.stringify({weight: value})
+			body: JSON.stringify({weight: weight})
 		}).then(response =>{
 			response.json().then(val=>{
 				if(val.status==="success"){
-					setValue("");
-					setConfirm(true);
-					// timer that turn of the alrt after 2500ms
-					new Promise((resolve) => setTimeout(resolve, 2500)).then(()=>{
-						setConfirm(false);
-					});
+					setWeight("");
+					setAlert(true)
+					fetchData();
 				}
 			})
 		}).catch(()=>{
@@ -42,47 +47,6 @@ const Log = (props:{show:boolean,setShow:(bool:boolean)=>void}) => {
 		})
 	}
 
-	return (
-		<div>
-			{confirm ? (
-				<div onClick={()=>setConfirm(false)} role="alert" className="absolute w-[90%] top-2 z-50 alert alert-success">
-					<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-					</svg>
-					<span>Your weight was loged!</span>
-				</div>
-			) : (null)}
-
-			<dialog ref={dialogRef} id="my_modal_5" className="modal modal-bottom sm:modal-middle">
-				<div className="modal-box">
-					<h3 className="font-bold text-lg">Log weight</h3>
-					<p className="py-4">Log your current weight</p>
-					<div className="modal-action">
-						<form method="dialog">
-							<input type="number" name="weight" value={value} onChange={(e)=>{setValue(e.target.value)}} className="input input-bordered" />
-							<div>
-								<button onClick={logWeight} className="btn btn-primary">Save</button>
-								<button onClick={()=>props.setShow(false)} className="btn">Close</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</dialog>
-		</div>
-	)
-}
-
-const Dashboard = () => {
-
-
-	const [_user, setUser] = useState<User>();
-	const [search,_setSearch] = useState<string>('');
-	const [show, setShow] = useState<boolean>(false);
-
-
-	useEffect(()=>{{
-		fetchData();
-	}},[])
 
 	const fetchData = () =>{
 		fetch("http://localhost:3000/api/get-user/"+search,{
@@ -93,6 +57,15 @@ const Dashboard = () => {
 				setUser(data.data)
 			});
 		})
+
+		fetch("http://localhost:3000/api/stats",{
+			credentials: 'include'
+		}).then(response=>{
+		    if (!response.ok) throw new Error("Network response was not ok");
+			response.json().then(data=>{
+				setStats(data.data)
+			});
+		})
 	}
 
 
@@ -100,45 +73,75 @@ const Dashboard = () => {
 	return (
 		<Page>
 
-
-			<Log show={show} setShow={setShow} />
+			<Popup
+				show={show}
+				setShow={setShow}
+				setAlert={()=>setAlert(false)}
+				alert={alert}
+				alertText="Your weight was logged"
+				heading="Log your weight"
+				description="Here you can log your weight"
+				onSave={logWeight}
+				inputs={(
+					<div>
+						<input className="input input-bordered" placeholder={user?.weightLogs[user?.weightLogs.length - 1].weight} value={weight} onChange={e=>setWeight(e.target.value)} />
+					</div>
+				)}
+			/>
 
 			<div className='gap-5 grid grid-cols-2 grid-rows-2 w-full row-span-2 h-2/5'>
 				<div className="stats shadow bg-base-300">
 					<div className="stat">
-						<div className="stat-title">Total Page Views</div>
-						2		<div className="stat-value">89,400</div>
+						<div className="stat-title">Total sessions</div>
+						<div className="stat-value">{stats?.sessions}</div>
 						<div className="stat-desc">21% more than</div>
 					</div>
 				</div>
 				<div className="stats shadow bg-base-200 row-span-2">
 					<div className="stat">
-						<div className="stat-title">Total Page Views</div>
-						<div className="stat-value">89,400</div>
-						<div className="stat-desc">21% more </div>
+						<div className="stat-title">Next workout</div>
+						<div className="text-xl stat-value">Upper body</div>
+						<div className="stat-desc"></div>
 					</div>
 				</div>
 				<div className="stats shadow bg-base-200">
 					<div className="stat">
-						<div className="stat-title">Total Page Views</div>
-						<div className="stat-value">89,400</div>
-						<div className="stat-desc">21% more than</div>
+						<div className="stat-title">Weight goal ({user?.weightGoal}kgs)</div>
+						<div className="stat-value">{stats?.weightProgress}%</div>
+						<div className="stat-desc">21% more </div>
 					</div>
 				</div>
 			</div>
 			<div className="row-span-2 mt-7">
-				<h2 className='text-2xl font-semibold'>Weekly Stregth</h2>
+				<h2 className='text-xl font-semibold'>Weekly {graphTab == 0 ? "Weight" : "Strength"}</h2>
 			</div>
-			<div className='flex flex-col justify-between h-3/7 mt-5'>
+			<div className='flex flex-col justify-between h-3/7 mt-2'>
+				<div role="tablist" className="tabs tabs-box w-full grid grid-cols-2">
+					<a role="tab" onClick={()=>setGraphTab(0)} className={`tab ${graphTab == 0 ? "tab-active" : ""}`}>Weight</a>
+					<a role="tab" onClick={()=>setGraphTab(1)} className={`tab ${graphTab == 1 ? "tab-active" : ""}`} >Strength</a>
+				</div>
 				<div className="bg-base-200 flex h-full w-full items-center justify-center rounded-lg">
-					<LineChartComponent>
-					</LineChartComponent>
+					{graphTab == 0 ? (
+						<LineChartComponent
+							title="Weight over time"
+							label="Weight"
+							labels={user?.weightLogs.map(log => log.date)}
+							data={user?.weightLogs.map(log=>log.weight)} />
+
+					):
+					 (<LineChartComponent
+						  title="Strength over time"
+						  label="Strength"
+						  labels={user?.weightLogs.map(log => log.date)}
+						  data={user?.weightLogs.map(log=>log.weight)} />
+					)}
+
 				</div>
 
 				<div className="mt-5 flex flex-row items-end gap-2 w-full justify-around">
-					<button className='btn btn-lg btn-secondary'>
+					<Link to="/workout" className='btn btn-lg btn-secondary'>
 						Log Excercise
-					</button>
+					</Link>
 					<button onClick={()=>{setShow(true)}} className='btn btn-lg btn-secondary'>
 						Log Weight
 					</button>

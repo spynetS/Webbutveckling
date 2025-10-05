@@ -4,6 +4,8 @@ import { Schema, model, Document } from "mongoose";
 export interface IExerciseTemplate extends Document {
   title: string;
   description: string;
+  muscleGroups: string[];
+  exerciseType: string;
   creator: Schema.Types.ObjectId;
   createdAt: Date;
 }
@@ -12,11 +14,16 @@ export interface IExerciseTemplate extends Document {
 const exerciseTemplateSchema = new Schema<IExerciseTemplate>({
   title: { type: String, required: true },
   description: { type: String },
-  creator: {type: Schema.Types.ObjectId, required: true},
+  muscleGroups: [{ type: String }],
+  exerciseType: { type: String },
+  creator: { type: Schema.Types.ObjectId, required: true, ref: "User" },
   createdAt: { type: Date, default: Date.now },
 });
 
 // 3. Create the model
-const ExerciseTemplate = model<IExerciseTemplate>("ExerciseTemplate", exerciseTemplateSchema);
+const ExerciseTemplate = model<IExerciseTemplate>(
+  "ExerciseTemplate",
+  exerciseTemplateSchema,
+);
 
 export default ExerciseTemplate;

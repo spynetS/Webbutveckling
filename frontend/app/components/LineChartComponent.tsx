@@ -15,44 +15,50 @@ import 'chartjs-adapter-date-fns';
 
 ChartJS.register(LineElement, PointElement, LinearScale, TimeScale, Title, Tooltip, Legend);
 
-const data = {
-  labels: [
-    new Date('2025-09-01'),
-    new Date('2025-09-02'),
-    new Date('2025-09-03'),
-    new Date('2025-09-04'),
-    new Date('2025-09-05'),
-  ],
-  datasets: [
-    {
-      label: 'Strength',
-      data: [12, 19, 15, 22, 18],
-      borderColor: 'rgba(75,192,192,1)',
-      backgroundColor: 'rgba(75,192,192,0.2)',
-      tension: 0.4,
-    },
-  ],
-};
+const LineChartComponent: React.FC = (
+  props:
+  {
+    labels:unknown[],
+    data:number[],
+    label:string,
+    title:string,
 
-const options = {
-  responsive: true,
-  plugins: {
-    legend: { position: 'top' },
-    title: { display: true, text: 'Strength over time' },
-  },
-  scales: {
-    x: {
-      type: 'time',
-      time: { unit: 'day', tooltipFormat: 'PPP' },
-      title: { display: true, text: 'Date' },
-    },
-    y: {
-      beginAtZero: true,
-      title: { display: true, text: 'Strength' },
-    },
-  },
-};
+  }) => {
+  const data = {
+    labels: props.labels,
+    datasets: [
+      {
+        label:props.label,
+        data: props.data,
+        borderColor: 'rgba(75,192,192,1)',
+        backgroundColor: 'rgba(75,192,192,0.2)',
+        tension: 0.4,
+      },
+    ],
+  };
 
-const LineChartComponent: React.FC = () => <Line data={data} options={options} />;
+    const options = {
+      responsive: true,
+      plugins: {
+        legend: { position: 'top' },
+        title: { display: true, text: props.title },
+      },
+      scales: {
+        x: {
+          type: 'time',
+          time: { unit: 'day', tooltipFormat: 'PPP' },
+          title: { display: true, text: 'Date' },
+        },
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: props.label },
+        },
+      },
+    };
+
+    return(
+      <Line data={data} options={options} />
+    )
+  }
 
 export default LineChartComponent;

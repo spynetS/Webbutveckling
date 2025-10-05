@@ -16,12 +16,18 @@
 
 
 
-import React, { useMemo, useState } from "react";
-import Page from "~/components/page"
+import React, { useMemo, useState, useEffect } from "react";
 
-const exercise = () => {
-  const [sets, setSets] = useState([{ reps: "", weight: "" }]);
+import type { Set } from "~/models/Set"
+import type { Exercise as ExerciseModel } from "~/models/Exercise"
+
+const Exercise = (props: { exercise: ExerciseModel, onBack: () => void}) => {
+  const [sets, setSets] = useState<Set[]>([]);
   const [notes, setNotes] = useState("");
+
+  useEffect(()=>{
+    console.log(props.exercise)
+  },[]);
 
   const today = useMemo(
     () => new Intl.DateTimeFormat("en-US", { dateStyle: "long" }).format(new Date()),
@@ -29,41 +35,57 @@ const exercise = () => {
   );
 
 
-  const onEdit = (i, field, raw) => {
-    const val = raw.replace(/[^\d.]/g, "").replace(/^(\d*\.\d*).*$/, "$1");
-    setSets((prev) => prev.map((r, idx) => (idx === i ? { ...r, [field]: val } : r)));
-  };
+  const logExercise = (sets:Set[]) => {
 
-  const addSet = () => setSets((prev) => [...prev, { reps: "", weight: "" }]);
+    sets.forEach(set=>{
+      console.log(JSON.stringify(set))
+      fetch("http://localhost:3000/api/set/",{
+        credentials:"include",
+        method:"POST",
+        headers: { "Content-Type": "application/json" },
+        body:JSON.stringify(set)
+      }).then(_resposne=>{
+      })
+    })
+  }
+
+
+
+  const onEdit = (i: number, field: string, raw: string) => {
+    // Allow only digits and at most one decimal point
+    let val = raw.replace(/[^\d.]/g, "");           // remove non-digit/non-dot chars
+    const parts = val.split(".");
+    if (parts.length > 2) {
+      val = parts[0] + "." + parts.slice(1).join(""); // keep only first decimal
+    }
+
+    setSets((prev) =>
+      prev.map((r, idx) => (idx === i ? { ...r, [field]: val } : r))
+    );
+  };
+  const addSet = () => setSets((prev) => [...prev, { template:props.exercise._id, user:props.exercise.creator, duration:0, reps: 0, weight: 0 }]);
 
   const saveLog = () => {
-    const payload = {
-      date: new Date().toISOString(),
-      exercise: "Bench Press",
-      sets: sets.map((s) => ({
-        reps: s.reps === "" ? null : Number(s.reps),
-        weight: s.weight === "" ? null : Number(s.weight),
-      })),
-      notes,
-    };
-    console.log("Log saved:", payload);
-    alert("Bra jobbat Alfred✅");
+    sets.forEach(set=>{
+      set.reps = parseFloat(set.reps);
+      set.weight = parseFloat(set.weight);
+      set.duration = parseFloat(set.duration);
+      return set;
+    })
+    logExercise(sets);
   };
 
   return (
-    <Page>
     <div className="w-full h-screen flex flex-col gap-5 px-2 py-5">
-      <div className="navbar bg-base-100 shadow-sm items-center">
-        <a className="btn btn-ghost text-center mt-3 text-xl">Arrow</a>
-        <a className="text-1xl font-bold text-center mt-3 items-center">
-          Compete agaisnt your friends
-        </a>
-      </div>
 
       <p className="text-sm text-base-content/70">{today}</p>
-      <p className="text-5xl font-bold text-center mt-3">Choosen exercise</p>
+      <div>
+        <a onClick={()=>props.onBack()} className="btn btn-ghost text-center text-xl">Back</a>
+        <p className="text-2xl font-bold text-center mt-2">{props.exercise?.title}</p>
+      </div>
 
-      <div className="card bg-base-100 w-96 shadow-sm items-center">
+
+      <div className="card bg-base-100 w-fit shadow-sm items-center">
         <figure>
           <img
             src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
@@ -76,7 +98,7 @@ const exercise = () => {
         <table className="table">
           <thead>
             <tr>
-            
+
               <th>Set</th>
               <th>Rep</th>
               <th>Weight</th>
@@ -136,8 +158,7 @@ const exercise = () => {
         </div>
       </div>
     </div>
-    </Page>
   );
 };
 
-export default exercise;
+export default Exercise;
