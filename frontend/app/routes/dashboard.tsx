@@ -39,6 +39,7 @@ const Dashboard = () => {
 				if(val.status==="success"){
 					setWeight("");
 					setAlert(true)
+					fetchData();
 				}
 			})
 		}).catch(()=>{
@@ -112,9 +113,9 @@ const Dashboard = () => {
 				</div>
 			</div>
 			<div className="row-span-2 mt-7">
-				<h2 className='text-2xl font-semibold'>Weekly Strength</h2>
+				<h2 className='text-xl font-semibold'>Weekly {graphTab == 0 ? "Weight" : "Strength"}</h2>
 			</div>
-			<div className='flex flex-col justify-between h-3/7 mt-5'>
+			<div className='flex flex-col justify-between h-3/7 mt-2'>
 				<div role="tablist" className="tabs tabs-box w-full grid grid-cols-2">
 					<a role="tab" onClick={()=>setGraphTab(0)} className={`tab ${graphTab == 0 ? "tab-active" : ""}`}>Weight</a>
 					<a role="tab" onClick={()=>setGraphTab(1)} className={`tab ${graphTab == 1 ? "tab-active" : ""}`} >Strength</a>
