@@ -12,12 +12,12 @@ type Stats = {
 const Dashboard = () => {
 
 
-	const [_user, setUser] = useState<User>();
+	const [user, setUser] = useState<User>();
 	const [search,_setSearch] = useState<string>('');
 	const [show, setShow] = useState<boolean>(false);
 	const [alert, setAlert] = useState<boolean>(false);
 	const [weight, setWeight] = useState<string>('');
-
+	const [graphTab, setGraphTab] = useState<number>(0);
 
 	//stats
 	const [stats,setStats] = useState<Stats>()
@@ -39,6 +39,7 @@ const Dashboard = () => {
 				if(val.status==="success"){
 					setWeight("");
 					setAlert(true)
+					fetchData();
 				}
 			})
 		}).catch(()=>{
@@ -65,9 +66,6 @@ const Dashboard = () => {
 				setStats(data.data)
 			});
 		})
-
-
-
 	}
 
 
@@ -86,7 +84,7 @@ const Dashboard = () => {
 				onSave={logWeight}
 				inputs={(
 					<div>
-						<input className="input input-bordered" value={weight} onChange={e=>setWeight(e.target.value)} />
+						<input className="input input-bordered" placeholder={user?.weightLogs[user?.weightLogs.length - 1].weight} value={weight} onChange={e=>setWeight(e.target.value)} />
 					</div>
 				)}
 			/>
@@ -108,19 +106,36 @@ const Dashboard = () => {
 				</div>
 				<div className="stats shadow bg-base-200">
 					<div className="stat">
-						<div className="stat-title">Stregnth gained</div>
-						<div className="stat-value">30%</div>
+						<div className="stat-title">Weight goal ({user?.weightGoal}kgs)</div>
+						<div className="stat-value">{stats?.weightProgress}%</div>
 						<div className="stat-desc">21% more </div>
 					</div>
 				</div>
 			</div>
 			<div className="row-span-2 mt-7">
-				<h2 className='text-2xl font-semibold'>Weekly Strength</h2>
+				<h2 className='text-xl font-semibold'>Weekly {graphTab == 0 ? "Weight" : "Strength"}</h2>
 			</div>
-			<div className='flex flex-col justify-between h-3/7 mt-5'>
+			<div className='flex flex-col justify-between h-3/7 mt-2'>
+				<div role="tablist" className="tabs tabs-box w-full grid grid-cols-2">
+					<a role="tab" onClick={()=>setGraphTab(0)} className={`tab ${graphTab == 0 ? "tab-active" : ""}`}>Weight</a>
+					<a role="tab" onClick={()=>setGraphTab(1)} className={`tab ${graphTab == 1 ? "tab-active" : ""}`} >Strength</a>
+				</div>
 				<div className="bg-base-200 flex h-full w-full items-center justify-center rounded-lg">
-					<LineChartComponent>
-					</LineChartComponent>
+					{graphTab == 0 ? (
+						<LineChartComponent
+							title="Weight over time"
+							label="Weight"
+							labels={user?.weightLogs.map(log => log.date)}
+							data={user?.weightLogs.map(log=>log.weight)} />
+
+					):
+					 (<LineChartComponent
+						  title="Strength over time"
+						  label="Strength"
+						  labels={user?.weightLogs.map(log => log.date)}
+						  data={user?.weightLogs.map(log=>log.weight)} />
+					)}
+
 				</div>
 
 				<div className="mt-5 flex flex-row items-end gap-2 w-full justify-around">
