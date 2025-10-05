@@ -49,9 +49,11 @@ router.get("/get-user", (req: Request, res: Response) => {
   try {
     console.log(req.session.userId);
 
-    User.findById(req.session.userId).then((users) => {
-      res.json(new ApiResponse({ data: users }));
-    });
+    User.findById(req.session.userId)
+      .populate("weightLogs")
+      .then((users) => {
+        res.json(new ApiResponse({ data: users }));
+      });
   } catch (err: Error) {
     res.status(500).json(new ApiResponse({ status: "error", message: err }));
   }

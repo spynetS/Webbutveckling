@@ -8,6 +8,7 @@ export default function Profile() {
   const [_response, setResponse] = useState<unknown>(null);
 
   const [user, setUser] = useState<User>(null);
+  const [weightGoal, setWeightGoal] = useState<string>("");
 
   useEffect(()=>{
     fetch("http://localhost:3000/api/get-user",{
@@ -18,6 +19,17 @@ export default function Profile() {
       })
     })
   },[])
+
+  const setGoal = () => {
+    fetch("http://localhost:3000/api/set-weight-goal",{
+      credentials:'include',
+      headers:{"Content-Type":"application/json"},
+      method:'post',
+      body:JSON.stringify({
+        weightGoal:parseFloat(weightGoal)
+      })
+    })
+  }
 
   const _handleSubmit = async (): Promise<void> => {
     // Do something here later
@@ -89,6 +101,10 @@ export default function Profile() {
           <div className="stat">
             <div className="stat-title">Weight, Age</div>
             <div className="stat-value">70kg, 21 </div>
+            <input className="input input-md input-bordered" placeholder="Weight goal" value={weightGoal} onChange={e=>setWeightGoal(e.target.value)}  />
+            <button onClick={setGoal} className="btn btn-md btn-primary">
+              Save
+            </button>
           </div>
         </div>
       </div>

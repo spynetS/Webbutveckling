@@ -22,7 +22,7 @@ export async function getTotalSessions(userId?: string) {
 }
 
 export async function getWeightProgress(userId: number) {
-  const user = await User.findById(userId);
+  const user = await User.findById(userId).populate("weightLogs");
   if (
     !user ||
     !user.weightGoal ||
@@ -37,6 +37,8 @@ export async function getWeightProgress(userId: number) {
   const currentWeight = user.weightLogs[user.weightLogs.length - 1].weight;
   const goalWeight = user.weightGoal;
 
+  console.log(goalWeight);
+
   // calculate progress
   const totalChangeNeeded = Math.abs(goalWeight - startWeight);
   const changeSoFar = Math.abs(currentWeight - startWeight);
@@ -44,5 +46,6 @@ export async function getWeightProgress(userId: number) {
     totalChangeNeeded === 0
       ? 0
       : Math.min((changeSoFar / totalChangeNeeded) * 100, 100);
+  console.log(progress);
   return progress;
 }

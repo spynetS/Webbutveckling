@@ -14,11 +14,10 @@ export async function setWeightGoal(req: Request, res: Response) {
       );
     }
 
-    const user = await User.findByIdAndUpdate(
-      userId,
-      { weightGoal },
-      { new: true },
-    );
+    let user: User = await User.findById(userId);
+    user.weightGoal = weightGoal;
+    await user.save();
+
     res.json(new ApiResponse({ data: user }));
   } catch (error: any) {
     res
@@ -29,7 +28,7 @@ export async function setWeightGoal(req: Request, res: Response) {
 
 export async function getWeightGoalProgress(req: Request, res: Response) {
   try {
-    const progress = await stats.getWeightProgress();
+    const progress = await stats.getWeightProgress(req.session.userId);
     res.json(new ApiResponse({ data: { progress: Math.round(progress) } }));
   } catch (error: any) {
     res

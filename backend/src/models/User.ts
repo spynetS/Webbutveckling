@@ -12,6 +12,7 @@ export interface IUser extends Document {
   name: string;
   email: string;
   weightLogs: [Schema.Types.ObjectId];
+  weightGoal: number;
   createdAt: Date;
   password: string;
 }
@@ -21,6 +22,7 @@ const userSchema = new Schema<IUser>({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   weightLogs: [{ type: Schema.Types.ObjectId, ref: "WeightLog" }],
+  weightGoal: { type: Number },
   createdAt: { type: Date, default: Date.now },
   password: { type: String, required: true, unique: false },
 });

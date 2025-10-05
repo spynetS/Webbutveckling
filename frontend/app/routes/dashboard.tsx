@@ -12,7 +12,7 @@ type Stats = {
 const Dashboard = () => {
 
 
-	const [_user, setUser] = useState<User>();
+	const [user, setUser] = useState<User>();
 	const [search,_setSearch] = useState<string>('');
 	const [show, setShow] = useState<boolean>(false);
 	const [alert, setAlert] = useState<boolean>(false);
@@ -65,9 +65,6 @@ const Dashboard = () => {
 				setStats(data.data)
 			});
 		})
-
-
-
 	}
 
 
@@ -86,7 +83,7 @@ const Dashboard = () => {
 				onSave={logWeight}
 				inputs={(
 					<div>
-						<input className="input input-bordered" value={weight} onChange={e=>setWeight(e.target.value)} />
+						<input className="input input-bordered" placeholder={user?.weightLogs[user?.weightLogs.length - 1].weight} value={weight} onChange={e=>setWeight(e.target.value)} />
 					</div>
 				)}
 			/>
@@ -108,8 +105,8 @@ const Dashboard = () => {
 				</div>
 				<div className="stats shadow bg-base-200">
 					<div className="stat">
-						<div className="stat-title">Stregnth gained</div>
-						<div className="stat-value">30%</div>
+						<div className="stat-title">Weight goal ({user?.weightGoal}kgs)</div>
+						<div className="stat-value">{stats?.weightProgress}%</div>
 						<div className="stat-desc">21% more </div>
 					</div>
 				</div>
