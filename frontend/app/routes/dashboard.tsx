@@ -17,7 +17,7 @@ const Dashboard = () => {
 	const [show, setShow] = useState<boolean>(false);
 	const [alert, setAlert] = useState<boolean>(false);
 	const [weight, setWeight] = useState<string>('');
-
+	const [graphTab, setGraphTab] = useState<number>(0);
 
 	//stats
 	const [stats,setStats] = useState<Stats>()
@@ -115,9 +115,26 @@ const Dashboard = () => {
 				<h2 className='text-2xl font-semibold'>Weekly Strength</h2>
 			</div>
 			<div className='flex flex-col justify-between h-3/7 mt-5'>
+				<div role="tablist" className="tabs tabs-box w-full grid grid-cols-2">
+					<a role="tab" onClick={()=>setGraphTab(0)} className={`tab ${graphTab == 0 ? "tab-active" : ""}`}>Weight</a>
+					<a role="tab" onClick={()=>setGraphTab(1)} className={`tab ${graphTab == 1 ? "tab-active" : ""}`} >Strength</a>
+				</div>
 				<div className="bg-base-200 flex h-full w-full items-center justify-center rounded-lg">
-					<LineChartComponent>
-					</LineChartComponent>
+					{graphTab == 0 ? (
+						<LineChartComponent
+							title="Weight over time"
+							label="Weight"
+							labels={user?.weightLogs.map(log => log.date)}
+							data={user?.weightLogs.map(log=>log.weight)} />
+
+					):
+					 (<LineChartComponent
+						  title="Strength over time"
+						  label="Strength"
+						  labels={user?.weightLogs.map(log => log.date)}
+						  data={user?.weightLogs.map(log=>log.weight)} />
+					)}
+
 				</div>
 
 				<div className="mt-5 flex flex-row items-end gap-2 w-full justify-around">

@@ -34,25 +34,52 @@ const data = {
   ],
 };
 
-const options = {
-  responsive: true,
-  plugins: {
-    legend: { position: 'top' },
-    title: { display: true, text: 'Strength over time' },
-  },
-  scales: {
-    x: {
-      type: 'time',
-      time: { unit: 'day', tooltipFormat: 'PPP' },
-      title: { display: true, text: 'Date' },
-    },
-    y: {
-      beginAtZero: true,
-      title: { display: true, text: 'Strength' },
-    },
-  },
-};
 
-const LineChartComponent: React.FC = () => <Line data={data} options={options} />;
+
+const LineChartComponent: React.FC = (
+  props:
+  {
+    labels:any[],
+    data:number[],
+    label:string,
+    title:string,
+
+  }) => {
+  const data = {
+    labels: props.labels,
+    datasets: [
+      {
+        label:props.label,
+        data: props.data,
+        borderColor: 'rgba(75,192,192,1)',
+        backgroundColor: 'rgba(75,192,192,0.2)',
+        tension: 0.4,
+      },
+    ],
+  };
+
+    const options = {
+      responsive: true,
+      plugins: {
+        legend: { position: 'top' },
+        title: { display: true, text: props.title },
+      },
+      scales: {
+        x: {
+          type: 'time',
+          time: { unit: 'day', tooltipFormat: 'PPP' },
+          title: { display: true, text: 'Date' },
+        },
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: props.label },
+        },
+      },
+    };
+
+    return(
+      <Line data={data} options={options} />
+    )
+  }
 
 export default LineChartComponent;
