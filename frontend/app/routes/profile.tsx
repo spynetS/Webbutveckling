@@ -39,7 +39,7 @@ export default function Profile() {
 
   return (
     <Page>
-      <main className="w-full h-screen flex flex-col items-center pt-0">
+      <div className="w-full h-screen flex flex-col items-center pt-0">
 
         {/* Banner and Avatar, HOLY FCK STYLING IS ANNOYING */}
         <div className="relative w-full flex justify-center mb-0">
@@ -76,40 +76,31 @@ export default function Profile() {
           </p>
           <div
             className="radial-progress text-primary font-bold"
-              style={{ "--value": 70 } as React.CSSProperties}
-              >
-              23
+            style={{ "--value": 70 } as React.CSSProperties}
+          >
+            23
+          </div>
+
+          {/* Bio for your profile */}
+
+          <div className="stats stats-vertical lg:stats-horizontal shadow">
+            <div className="stat">
+              <div className="stat-title">Friends</div>
+
+              <Link to="/friends" className='btn btn-primary'>
+                Manage friends
+              </Link>
+
             </div>
 
-              {/* Bio for your profile */}
-
-              <div className="stats stats-vertical lg:stats-horizontal shadow">
-                <div className="stat">
-                  <div className="stat-title">Friends</div>
-
-                  <Link to="/friends" className='btn btn-primary'>
-                    Manage friends
-                  </Link>
-
-                </div>
-
-                <div className="stat">
-                  <div className="stat-title">Weight, Age</div>
-                  <div className="stat-value">70kg, 21 </div>
-                </div>
-              </div>
+            <div className="stat">
+              <div className="stat-title">Weight, Age</div>
+              <div className="stat-value">70kg, 21 </div>
+              <input className="input input-md input-bordered" placeholder="Weight goal" value={weightGoal} onChange={e=>setWeightGoal(e.target.value)}  />
+              <button onClick={setGoal} className="btn btn-md btn-primary">
+                Save
+              </button>
             </div>
-
-      </main>
-
-
-          <div className="stat">
-            <div className="stat-title">Weight, Age</div>
-            <div className="stat-value">70kg, 21 </div>
-            <input className="input input-md input-bordered" placeholder="Weight goal" value={weightGoal} onChange={e=>setWeightGoal(e.target.value)}  />
-            <button onClick={setGoal} className="btn btn-md btn-primary">
-              Save
-            </button>
           </div>
         </div>
       </div>
