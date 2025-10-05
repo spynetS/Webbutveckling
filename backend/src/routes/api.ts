@@ -7,6 +7,10 @@ import { userCreate, userLogin, logWeight} from "../controllers/userController";
 import exerciseRouter from "./exerciseTemplate";
 import setRouter from "./set";
 
+
+import { getNotifications } from "../controllers/notificationsController";
+
+
 const router = Router();
 
 // Middleware to disable caching
@@ -60,6 +64,12 @@ router.post("/log-weight", logWeight);
 // register the api routes
 router.use("/exercise", exerciseRouter);
 router.use("/set", setRouter);
+
+
+import friendsRoutes from "./friends";
+router.use("/friends", friendsRoutes);
+
+router.get("/notifications", getNotifications);
 
 
 export default router;
