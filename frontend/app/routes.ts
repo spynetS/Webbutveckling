@@ -9,6 +9,5 @@ export default [
   route("leaderboard", "routes/leaderboard.tsx"),
   //route("exercise", "routes/exercise.tsx"),
   route("workout", "routes/workout.tsx"),
-  route("friends", "routes/friends.tsx")
-
+  route("friends", "routes/friends.tsx"),
 ] satisfies RouteConfig;

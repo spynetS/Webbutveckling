@@ -2,7 +2,7 @@ import { Schema, model, Document } from "mongoose";
 
 const weightLogSchema = new Schema({
   weight: { type: Number, required: true },
-  date: { type: Date, default: Date.now }
+  date: { type: Date, default: Date.now },
 });
 
 export const WeightLog = model("WeightLog", weightLogSchema);
@@ -22,7 +22,7 @@ const userSchema = new Schema<IUser>({
   email: { type: String, required: true, unique: true },
   weightLogs: [{ type: Schema.Types.ObjectId, ref: "WeightLog" }],
   createdAt: { type: Date, default: Date.now },
-  password: { type: String, required: true, unique: false},
+  password: { type: String, required: true, unique: false },
 });
 
 // 3. Create the model
