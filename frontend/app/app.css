@@ -1,5 +1,7 @@
 @import "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui"{
+    themes: all;
+}
 @plugin "daisyui/theme" {
   name: "fitnesstheme";
   default: true; /* set as default */

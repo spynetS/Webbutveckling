@@ -1,5 +1,7 @@
 export type User = {
-	name     : string;
-	email    : string;
-	password : string;
-}
+  name: string;
+  email: string;
+  password: string;
+  weightGoal: number;
+  weightLogs: number[];
+};
