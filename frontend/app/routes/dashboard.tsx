@@ -5,8 +5,22 @@ import Page from "~/components/page"
 import Popup from "~/components/popup"
 import { Link } from 'react-router';
 
+type StrengthPoint = {
+	date: Date;
+	strength:number;
+}
+
+type StrengthProgress = {
+	muscleGroup:string;
+	strengthPoints:StrengthPoint[]
+	progress:number;
+}
+
 type Stats = {
 	sessions:number;
+	weightProgress:number;
+	strengthProgress:StrengthProgress[];
+
 }
 
 const Dashboard = () => {
@@ -19,8 +33,10 @@ const Dashboard = () => {
 	const [weight, setWeight] = useState<string>('');
 	const [graphTab, setGraphTab] = useState<number>(0);
 
+
 	//stats
 	const [stats,setStats] = useState<Stats>()
+	const [graphStrength, setGraphStrength] = useState<unknown>();
 
 	useEffect(()=>{{
 		fetchData();
@@ -62,8 +78,29 @@ const Dashboard = () => {
 			credentials: 'include'
 		}).then(response=>{
 		    if (!response.ok) throw new Error("Network response was not ok");
-			response.json().then(data=>{
-				setStats(data.data)
+			response.json().then(data =>{
+				const _stats: Stats = data.data
+				setStats(_stats)
+
+				let datas: Data[] = [];
+
+				// First, find the max number of points
+				const maxPoints = Math.max(
+					..._stats?.strengthProgress.map(progress => progress.strengthPoints?.length || 0)
+				);
+
+				_stats?.strengthProgress.forEach(progress => {
+					datas.push({
+						data: progress.strengthPoints?.map(point => point.strength) || [],
+						labels: Array.from({ length: maxPoints }, (_, i) => i + 1), // [1, 2, 3, ...maxPoints]
+						label: progress.muscleGroup,
+						title: "",
+					});
+				});
+
+				console.log(datas)
+				setGraphStrength(datas)
+
 			});
 		})
 	}
@@ -123,17 +160,16 @@ const Dashboard = () => {
 				<div className="bg-base-200 flex h-full w-full items-center justify-center rounded-lg">
 					{graphTab == 0 ? (
 						<LineChartComponent
-							title="Weight over time"
-							label="Weight"
-							labels={user?.weightLogs.map(log => log.date)}
-							data={user?.weightLogs.map(log=>log.weight)} />
+							datas={[{
+								labels:user?.weightLogs.map(log=>log.date),
+								data:user?.weightLogs.map(log=>log.weight),
+								label:"Weight",
+								title:"Weight over time"
+							}]} />
 
 					):
 					 (<LineChartComponent
-						  title="Strength over time"
-						  label="Strength"
-						  labels={user?.weightLogs.map(log => log.date)}
-						  data={user?.weightLogs.map(log=>log.weight)} />
+						  datas={graphStrength} />
 					)}
 
 				</div>
