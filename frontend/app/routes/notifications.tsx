@@ -35,7 +35,7 @@ export default function Notifications() {
             setError(json.message || "Failed to load notifications");
           }
         }
-      } catch (e: any) {
+      } catch (e: Error) {
         if (!cancelled) setError(e?.message || "Failed to load notifications");
       } finally {
         if (!cancelled) setLoading(false);

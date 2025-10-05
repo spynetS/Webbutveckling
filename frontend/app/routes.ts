@@ -10,10 +10,6 @@ export default [
   //route("exercise", "routes/exercise.tsx"),
   route("workout", "routes/workout.tsx"),
   route("friends", "routes/friends.tsx"),
-<<<<<<< HEAD
   route("notifications", "routes/notifications.tsx")
 
 ] satisfies RouteConfig;
-=======
-] satisfies RouteConfig;
->>>>>>> origin
