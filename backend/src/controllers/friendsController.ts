@@ -6,7 +6,7 @@ function getUserId(req: Request): string | undefined {
   return req.session.userId;
 }
 
-function makeCode(): string {
+export function makeCode(): string {
   const hex = crypto.randomBytes(4).toString("hex").toUpperCase(); // 8 hex chars
   return `FD-${hex.slice(0, 4)}-${hex.slice(4, 8)}`;
 }

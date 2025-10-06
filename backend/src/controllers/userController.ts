@@ -2,6 +2,7 @@ import User, {WeightLog} from "../models/User"
 import ApiResponse from "../database/response"
 import { Request, Response, } from "express";
 import bcrypt from "bcrypt";
+import friendsController = require("./friendsController");
 
 
 
@@ -73,7 +74,8 @@ export async function userCreate(req: Request, res: Response) {
     await User.create({
       name: userName,
       email: email,
-      password: hashedPassword
+      password: hashedPassword,
+      friendCode: friendsController.makeCode()
     });
 
     res.status(201).json(new ApiResponse({ data: "User added successfully" }));

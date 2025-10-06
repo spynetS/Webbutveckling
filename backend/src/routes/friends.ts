@@ -6,7 +6,7 @@ const router = Router();
 // If you have auth middleware, add it here, e.g.:
 // router.use(requireAuth);
 
-router.get("/friends", getFriends);
-router.post("/friends", addFriend);
+router.get("/", getFriends);
+router.post("/", addFriend);
 
 export default router;

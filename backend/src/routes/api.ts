@@ -55,6 +55,7 @@ router.get("/get-user", (req: Request, res: Response) => {
 
     User.findById(req.session.userId)
       .populate("weightLogs")
+      .populate("friends")
       .then((users) => {
         res.json(new ApiResponse({ data: users }));
       });

@@ -26,7 +26,7 @@ export default function Notifications() {
 
     (async () => {
       try {
-        const res = await fetch("/api/notifications", { credentials: "include" });
+        const res = await fetch("http://localhost:3000/api/notifications", { credentials: "include" });
         const json: ApiResponse<Notification[]> = await res.json();
         if (!cancelled) {
           if (res.ok) {
