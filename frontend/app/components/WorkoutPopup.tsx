@@ -157,7 +157,8 @@ const WorkoutPopup = (props: {
 																	  }> {
 																		  val.title
 																	  } </option>))
-						} </select>
+						}
+					</select>
 					<button className="btn btn-md btn-ghost w-fit">
 						Create Exercise
 					</button>

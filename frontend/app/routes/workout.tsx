@@ -3,12 +3,12 @@ import Page from "~/components/page";
 import type { Workout as WorkoutModel } from "~/models/Workout";
 import Exercise from "~/components/exercise"
 import type { Exercise as ExerciseModel }  from "~/models/Exercise";
-import { MdDelete } from "react-icons/md";
 import WorkoutPopup from "~/components/WorkoutPopup"
 import ExercisePopup from "~/components/ExercisePopup"
+import ExercisePage from "~/components/ExercisePage";
 
 const Card = (props: {
-  workout: WorkoutModel;
+    workout: WorkoutModel;
   setSelectedExercise: (exercise:ExerciseModel) => void,
   deleted: (workout:WorkoutModel) => void
   edit: (workout:WorkoutModel) => void
@@ -71,20 +71,12 @@ const Workout = () => {
   const [show, setShow] = useState<boolean>(false);
   const [showExercise, setShowExercise] = useState<boolean>(false);
   const [editWorkout, setEditWorkout] = useState<WorkoutModel>();
-  const [sets,setSets] = useState<Set[]>([]);
 
   const [tab,setTab] = useState<number>(0);
 
   const [weekday, setWeekday] = useState<string>("all");
 
   useEffect(()=>{
-
-    fetch("http://localhost:3000/api/set").then(response => {
-      response.json().then(res=>{
-        setSets(res.data)
-      })
-    })
-
     fetch("http://localhost:3000/api/workout").then(response => {
       response.json().then(res=>{
         setWorkouts(res.data)
@@ -109,8 +101,8 @@ const Workout = () => {
                     <h1 className="text-3xl font-bold">Workouts</h1>
                     <select onChange={e=>setWeekday(e.target.value)} defaultValue="Pick a color" className="select select-sm">
                         <option value="all" defaultChecked>All</option>
-                        {weekdays.map(weekday => (
-                            <option value={weekday} >{weekday}</option>
+                        {weekdays.map((weekday,index) => (
+                          <option key={index} value={weekday} >{weekday}</option>
                         ))}
                     </select>
                     <div className="w-full flex flex-col md:flex-row md:flex-wrap gap-3">
@@ -139,36 +131,7 @@ const Workout = () => {
         )
     }
 
-  const exercise_page = () =>{
-    return(
-      <>
-        <div className="flex flex-col gap-2">
-          <div role="tablist" className="tabs tabs-box grid grid-cols-2">
-            <a onClick={()=>setTab(0)} role="tab" className={`tab ${tab == 0 ? "tab-active" : ""}`}>Workouts</a>
-            <a onClick={()=>setTab(1)} role="tab"  className={`tab ${tab == 1 ? "tab-active" : ""}`}>Exercises</a>
-          </div>
-          <h1 className="text-3xl font-bold">Exercise</h1>
-          {sets.map((aset,index)=>(
-            <div key={index} className="bg-base-200 p-3 rounded-lg flex flex-row justify-between">
-              <p className="font-semibold">{aset.template.title}</p>
-              <div className="flex flex-row gap-2 items-center">
-                <p>{aset.reps} x {aset.weight}kgs</p>
-                <MdDelete />
-              </div>
 
-
-            </div>
-          ))}
-        </div>
-
-        <div className='flex flex-row justify-between'>
-          <button onClick={null} className='btn btn-primary rounded-full p-5' >
-            Log exercise
-          </button>
-        </div>
-      </>
-    )
-  }
 
 
     return (
@@ -191,7 +154,7 @@ const Workout = () => {
           <Exercise exercise={exercise} onBack={()=>setExercise(undefined)} />
         ) : (
           <div className="flex flex-col h-full justify-between">
-            { tab == 0 ? workout_page() : exercise_page() }
+            {tab == 0 ? workout_page() : <ExercisePage doExercise={(exercise) => setExercise(exercise)} setTab={setTab} tab={tab} /> }
           </div>
 
         )}
