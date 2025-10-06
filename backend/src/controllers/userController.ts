@@ -59,7 +59,7 @@ export async function userCreate(req: Request, res: Response) {
         data: "name, email, and password are required"
       }));
     }
-    const emailRegex = /^[\w-]+@([\w-]+)+[\w-]{2,4}$/;
+    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
     if(!emailRegex.test(req.body.email))
     {

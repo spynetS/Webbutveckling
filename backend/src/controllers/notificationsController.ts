@@ -90,7 +90,7 @@ export async function getNotifications(req: Request, res: Response) {
     }
 
     return res.json(new ApiResponse({ data: notifications }));
-  } catch (err: any) {
+  } catch (err: error) {
     console.error(err);
     return res
       .status(500)

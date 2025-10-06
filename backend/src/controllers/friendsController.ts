@@ -1,11 +1,9 @@
 import { Request, Response } from "express";
 import crypto from "crypto";
 import User from "../models/User";
-import "../models/user.friends"; // <-- ensure schema/type augmentation is applied
 
-// Replace this with your real auth (session/JWT).
 function getUserId(req: Request): string | undefined {
-  return (req as any).user?.id || (req as any).userId || (req.headers["x-user-id"] as string | undefined);
+  return req.session.userId;
 }
 
 function makeCode(): string {
