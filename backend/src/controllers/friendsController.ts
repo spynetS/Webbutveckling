@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import crypto from "crypto";
 import User from "../models/User";
+import mongoose from "mongoose";
+import Set from "../models/Set"
 
 function getUserId(req: Request): string | undefined {
   return req.session.userId;
@@ -28,19 +30,39 @@ export async function getFriends(req: Request, res: Response) {
     await me.save();
   }
 
+  function startOfToday() {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  return d;
+  }
+  function endOfToday() {
+  const d = new Date();
+  d.setHours(23, 59, 59, 999);
+  return d;
+  }
+
+  const start = startOfToday();
+  const end = endOfToday();
+
   const populated = await me.populate("friends", "name email friendCode");
-  const friends = (populated.friends as any[]).map((f) => ({
+  const friends = await Promise.all ((populated.friends as any[]).map(async (f) => ({
     _id: String(f._id),
     name: f.name,
     email: f.email,
     friendCode: f.friendCode,
-  }));
+    lastTrainedAt: (await Set.findOne({
+        user: new mongoose.Types.ObjectId(f._id),
+        createdAt: { $gte: start, $lte: end },
+      }).lean())?.createdAt
+  })));
 
   return res.json({
     friendCode: me.friendCode, // handy for the page header
     friends,
   });
 }
+
+
 
 /**
  * POST /api/friends

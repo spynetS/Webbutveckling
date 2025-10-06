@@ -31,65 +31,46 @@ export async function getNotifications(req: Request, res: Response) {
 
     // 1) Did the user train today? (any Set logged today)
     // If you track workouts elsewhere, replace Set with your model and date field.
-    const trainedToday = !!(await Set.findOne({
-      user: new Types.ObjectId(userId),
+    const trainedToday = async (id:number) => { return !!(await Set.findOne({
+      user: new Types.ObjectId(id),
       createdAt: { $gte: start, $lte: end },
     }).lean());
-
-    // 2) Which friends trained today?
-    // We collect friend IDs from both directions (user->friend and friend->user).
-    const [a, b] = await Promise.all([
-      User.find({ userId: userId }).lean(),
-      User.find({ friendId: userId }).lean(),
-    ]);
-
-    const friendIds = Array.from(
-      new Set<string>([
-        ...a.map((f: any) => f.friendId?.toString()),
-        ...b.map((f: any) => f.userId?.toString()),
-      ].filter(Boolean) as string[])
-    );
-
-    console.log (friendIds);
-
-    let friendNames: string[] = [];
-    if (friendIds.length > 0) {
-      const trainedFriendRows = await Set.aggregate([
-        {
-          $match: {
-            userId: { $in: friendIds.map((id) => new Types.ObjectId(id)) },
-            createdAt: { $gte: start, $lte: end },
-          },
-        },
-        { $group: { _id: "$userId" } },
-      ]);
-
-      const trainedFriendIds = trainedFriendRows.map((r) => r._id);
-      if (trainedFriendIds.length) {
-        const friends = await User.find(
-          { _id: { $in: trainedFriendIds } },
-          { name: 1 }
-        ).lean();
-        friendNames = friends.map((f: any) => f.name).filter(Boolean);
-      }
-    }
+  }
 
     // 3) Build notifications list
     const notifications: { id: string; message: string; kind?: "info" | "warning" | "success" }[] = [];
 
-    if (!trainedToday) {
+
+    const user: User = await User.findById(userId).populate("friends");
+    console.log(user)
+
+    await user.friends.forEach(async (friend: User) => {
+      if(await trainedToday(friend._id)){
+        const shown = friend.name;
+        notifications.push({
+          id: "friends-trained",
+          message: `${shown} has trained—you should do that too!`,
+          kind: "success",
+        });
+        console.log(notifications)
+      }
+      })
+    
+
+
+    if (!(await trainedToday(userId))) {
       notifications.push({ id: "should-train", message: "You should train today.", kind: "info" });
       notifications.push({ id: "not-trained", message: "You haven’t trained today.", kind: "warning" });
 
-      if (friendNames.length) {
-        const shown = friendNames.slice(0, 3).join(", ");
-        const extra = friendNames.length > 3 ? ` and ${friendNames.length - 3} others` : "";
-        notifications.push({
-          id: "friends-trained",
-          message: `${shown}${extra} has trained—you should do that too!`,
-          kind: "success",
-        });
-      }
+      ///if (friendNames.length) {
+       /// const shown = friendNames.slice(0, 3).join(", ");
+        //const extra = friendNames.length > 3 ? ` and ${friendNames.length - 3} others` : "";
+        //notifications.push({
+         // id: "friends-trained",
+          // message: `${shown}${extra} has trained—you should do that too!`,
+          //kind: "success",
+       // });
+      // }
     }
 
     return res.json(new ApiResponse({ data: notifications }));
