@@ -83,6 +83,7 @@ export async function userCreate(req: Request, res: Response) {
 }
 
 
+
 export async function logWeight(req: Request, res: Response){
   if(!req.session.userId || !req.body.weight) {
     return res.status(400).json(new ApiResponse({status:"fail",data:"User not loged in"}))
