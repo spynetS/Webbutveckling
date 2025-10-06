@@ -2,20 +2,22 @@ import { Schema, model, Document } from "mongoose";
 
 // 1. Define an interface for TypeScript
 export interface IWorkout extends Document {
-	title: string;
-	exercises: Schema.Types.ObjectId[];
+  title: string;
+  exercises: Schema.Types.ObjectId[];
+  weekday: string;
 
-	user: Schema.Types.ObjectId;
-	createdAt: Date;
+  user: Schema.Types.ObjectId;
+  createdAt: Date;
 }
 
 // 2. Define the schema
 const workoutSchema = new Schema<IWorkout>({
-	title: { type: String, required: true },
-	exercises: [{ type: Schema.Types.ObjectId, ref: "Exercise" }],
+  title: { type: String, required: true },
+  exercises: [{ type: Schema.Types.ObjectId, ref: "ExerciseTemplate" }],
+  weekday: { type: String, required: true },
 
-	user: {type: Schema.Types.ObjectId, required: true},
-	createdAt: { type: Date, default: Date.now },
+  user: { type: Schema.Types.ObjectId, required: true, ref: "User" },
+  createdAt: { type: Date, default: Date.now },
 });
 
 // 3. Create the model

@@ -1,10 +1,12 @@
-interface Set {
+import type { Model } from "~/models/Model";
+
+export type Set = Model & {
   reps: number;
   weight: number;
-}
+};
 
-export default interface Exercise {
+export type Exercise = Model & {
   title: string;
   description: string;
   sets: Set[];
-}
+};
