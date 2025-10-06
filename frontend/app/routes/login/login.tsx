@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Link } from "react-router";
 
 const LOGIN_URL = "http://localhost:3000/api/login";
-const SIGNUP_URL = "/signup"; // ← placeholder; change later to your real route
 
 const Login = () => {
   const [email, setEmail] = useState("");
