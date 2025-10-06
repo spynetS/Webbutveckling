@@ -19,7 +19,7 @@ import workoutRouter from "./workout";
 
 
 import { getNotifications } from "../controllers/notificationsController";
-
+import { lbFriends } from "../controllers/leaderboardController";
 
 const router = Router();
 
@@ -93,6 +93,6 @@ import friendsRoutes from "./friends";
 router.use("/friends", friendsRoutes);
 
 router.get("/notifications", getNotifications);
-
+router.get("/leaderboard/friends", lbFriends);
 
 export default router;

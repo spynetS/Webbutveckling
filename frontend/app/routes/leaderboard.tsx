@@ -2,30 +2,14 @@ import React from "react";
 import Page from "~/components/page"
 
 export default function Leaderboard() {
-  //const [filter, setFilter] = useState("Today");
-  // do we want this to have filters?
-  //const filters = ["Today", "This Week", "This Month", "All Time"];
 
-  const players = [
-    { id: "test1", goal: "86", score: 2, avatar: "https://i.pravatar.cc/50?u=test1" },
-    { id: "test2", goal: "56", score: 1, avatar: "https://i.pravatar.cc/50?u=test2" },
-    { id: "test3", goal: "23", score: 3, avatar: "https://i.pravatar.cc/50?u=test3" },
-    { id: "test4", goal: "78", score: 0, avatar: "https://i.pravatar.cc/50?u=test4" },
-    { id: "test5", goal: "11", score: 4, avatar: "https://i.pravatar.cc/50?u=test5" },
-    { id: "test6", goal: "34", score: 3, avatar: "https://i.pravatar.cc/50?u=test6" },
-    { id: "test7", goal: "45", score: 8, avatar: "https://i.pravatar.cc/50?u=test6" },
-  ];
+  const [friendPlayers, setFriendPlayers] = React.useState([]);
 
-  // fake friendlist for now
-  const friends = ["test1", "test3", "test4", "test7"];
-  const friendPlayers = players
-    .filter((p) => friends.includes(p.id))
-    .sort((a, b) => {
-      if (b.score === a.score) {
-        return Number(b.goal) - Number(a.goal); // ensure numeric comparison
-      }
-      return b.score - a.score;
-    });
+  React.useEffect(() => {
+    fetch("/api/leaderboard/friends")
+      .then((res) => res.json())
+      .then((data) => setFriendPlayers(data.data || []));
+  }, []);
 
 return (
   <Page>
@@ -60,7 +44,7 @@ return (
 
             return (
               <div
-                key={player.id}
+                key={player._id}
                 className={`flex justify-between items-center rounded-lg p-2 ${bg}`}
               >
                 {/* Rank */}
@@ -72,15 +56,15 @@ return (
                 <div className="flex items-center gap-4 flex-1">
                   <img
                     src={player.avatar}
-                    alt={player.id}
+                    alt={player.name}
                     className="w-10 h-10 rounded-full"
                   />
-                  <span className="font-semibold text-lg">{player.id}</span>
+                  <span className="font-semibold text-lg">{player.name}</span>
                 </div>
 
                 {/* Goal */}
                 <div className="min-w-[75px] text-left font-semibold text-lg">
-                  {player.goal}%
+                  {player.weightGoal}%
                 </div>
 
                 {/* Score */}
