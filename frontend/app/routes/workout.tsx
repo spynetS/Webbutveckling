@@ -32,36 +32,36 @@ const Card = (props: {
   }
 
   return (
-    <div className="card bg-base-200 card-sm shadow-sm w-full md:w-1/5">
-      <div className="card-body">
-        <div className="flex flex-row justify-between">
-          <h2 className="card-title">{props.workout.title}</h2>
-          <div>
-            <button onClick={()=>props.edit(props.workout)} className="btn btn-xs" >
-              edit
-            </button>
-            <button onClick={deleteWorkout} className="btn btn-error btn-xs" >
-              delete
-            </button>
-          </div>
-        </div>
+        <div className="card bg-base-200 card-sm shadow-sm w-full md:w-1/5">
+            <div className="card-body">
+                <div className="flex flex-row justify-between">
+                    <h2 className="card-title">{props.workout.title}</h2>
+                    <div>
+                        <button onClick={() => props.edit(props.workout)} className="btn btn-xs" >
+                            edit
+                        </button>
+                        <button onClick={deleteWorkout} className="btn btn-error btn-xs" >
+                            delete
+                        </button>
+                    </div>
+                </div>
 
-        <p>{props.workout.weekday}</p>
-        <div className="justify-end card-action flex flex-col gap-2">
+                <p>{props.workout.weekday}</p>
+                <div className="card-action flex flex-col text-left">
 
-          {props.workout.exercises.map((exercise,index)=>(
-            <button
-              key={index}
-              className="btn btn-sm btn-primary"
-              onClick={() => props.setSelectedExercise(exercise)}
-            >
-              Begin {exercise.title}
-            </button>
-          ))}
+                    {props.workout.exercises.map((exercise, index) => (
+                        <p
+                            key={index}
+                            className=" text-lg cursor-pointer btn-link "
+                            onClick={() => props.setSelectedExercise(exercise)}
+                        >
+                            {exercise.title}
+                        </p>
+                    ))}
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 
@@ -74,6 +74,8 @@ const Workout = () => {
   const [sets,setSets] = useState<Set[]>([]);
 
   const [tab,setTab] = useState<number>(0);
+
+  const [weekday, setWeekday] = useState<string>("all");
 
   useEffect(()=>{
 
@@ -94,39 +96,48 @@ const Workout = () => {
 
   const workout_page = () =>{
 
+    const weekdays = ['Monday', "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday","Sunday"]
+
     return(
-      <>
-        <div className="flex flex-col gap-2">
-          <div role="tablist" className="tabs tabs-box grid grid-cols-2">
-            <a onClick={()=>setTab(0)} role="tab" className={`tab ${tab == 0 ? "tab-active" : ""}`}>Workouts</a>
-            <a onClick={()=>setTab(1)} role="tab"  className={`tab ${tab == 1 ? "tab-active" : ""}`}>Exercises</a>
-          </div>
-          <h1 className="text-3xl font-bold">Workouts</h1>
-          <div className="w-full flex flex-col md:flex-row md:flex-wrap gap-3">
-            {workouts.map((workout, i) => (
-              <Card
-                key={i}
-                workout={workout}
-                setSelectedExercise={setExercise}
-                deleted={workout=>setWorkouts(prev => prev.filter(w => w._id !== workout._id))}
-                edit={setEditWorkout}
-              />
-            ))}
-          </div>
-        </div>
+            <>
+                <div className="flex flex-col gap-2">
+                    <div role="tablist" className="tabs tabs-box grid grid-cols-2">
+                        <a onClick={() => setTab(0)} role="tab" className={`tab ${tab == 0 ? "tab-active" : ""}`}>Workouts</a>
+                        <a onClick={() => setTab(1)} role="tab" className={`tab ${tab == 1 ? "tab-active" : ""}`}>Exercises</a>
+                    </div>
 
-        <div className='flex flex-row justify-between'>
-          <button onClick={()=>setShowExercise(true)} className='btn btn-primary rounded-full p-5' >
-            Add new exercise
-          </button>
+                    <h1 className="text-3xl font-bold">Workouts</h1>
+                    <select onChange={e=>setWeekday(e.target.value)} defaultValue="Pick a color" className="select select-sm">
+                        <option value="all" defaultChecked>All</option>
+                        {weekdays.map(weekday => (
+                            <option value={weekday} >{weekday}</option>
+                        ))}
+                    </select>
+                    <div className="w-full flex flex-col md:flex-row md:flex-wrap gap-3">
+                        {workouts.filter(workout=>weekday == "all" || workout.weekday === weekday).map((workout, i) => (
+                            <Card
+                                key={i}
+                                workout={workout}
+                                setSelectedExercise={setExercise}
+                                deleted={workout => setWorkouts(prev => prev.filter(w => w._id !== workout._id))}
+                                edit={setEditWorkout}
+                            />
+                        ))}
+                    </div>
+                </div>
 
-          <button onClick={()=>setShow(true)} className='btn btn-primary rounded-full p-5' >
-            Add new workout
-          </button>
-        </div>
-      </>
-    )
-  }
+                <div className='flex flex-row justify-between'>
+                    <button onClick={() => setShowExercise(true)} className='btn btn-primary rounded-full p-5' >
+                        Add new exercise
+                    </button>
+
+                    <button onClick={() => setShow(true)} className='btn btn-primary rounded-full p-5' >
+                        Add new workout
+                    </button>
+                </div>
+            </>
+        )
+    }
 
   const exercise_page = () =>{
     return(
