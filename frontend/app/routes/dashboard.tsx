@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import type { User } from '~/models/User';
-import LineChartComponent from "~/components/LineChartComponent"
-import Page from "~/components/page"
-import Popup from "~/components/popup"
-import { Link } from 'react-router';
+import React, { useEffect, useState } from "react";
+import type { User } from "~/models/User";
+import LineChartComponent from "~/components/LineChartComponent";
+import Page from "~/components/page";
+import Popup from "~/components/popup";
+import { Link } from "react-router";
 
 type StrengthPoint = {
 	date: Date;
@@ -21,48 +21,47 @@ type Stats = {
 	weightProgress:number;
 	strengthProgress:StrengthProgress[];
 
-}
+};
 
 const Dashboard = () => {
+  const [user, setUser] = useState<User>();
+  const [search, _setSearch] = useState<string>("");
+  const [show, setShow] = useState<boolean>(false);
+  const [alert, setAlert] = useState<boolean>(false);
+  const [weight, setWeight] = useState<string>("");
+  const [graphTab, setGraphTab] = useState<number>(0);
 
-
-	const [user, setUser] = useState<User>();
-	const [search,_setSearch] = useState<string>('');
-	const [show, setShow] = useState<boolean>(false);
-	const [alert, setAlert] = useState<boolean>(false);
-	const [weight, setWeight] = useState<string>('');
-	const [graphTab, setGraphTab] = useState<number>(0);
+  useEffect(() => {
+    {
+      fetchData();
+    }
+  }, []);
 
 
 	//stats
 	const [stats,setStats] = useState<Stats>()
 	const [graphStrength, setGraphStrength] = useState<unknown>();
 
-	useEffect(()=>{{
-		fetchData();
-	}},[])
-
-	const logWeight = () => {
-		fetch("http://localhost:3000/api/log-weight",{
-			credentials: 'include',
-			headers: {
-				"Content-Type": "application/json",
-			},
-			method: "POST",
-			body: JSON.stringify({weight: weight})
-		}).then(response =>{
-			response.json().then(val=>{
-				if(val.status==="success"){
-					setWeight("");
-					setAlert(true)
-					fetchData();
-				}
-			})
-		}).catch(()=>{
-
-		})
-	}
-
+  const logWeight = () => {
+    fetch("http://localhost:3000/api/log-weight", {
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({ weight: weight }),
+    })
+      .then((response) => {
+        response.json().then((val) => {
+          if (val.status === "success") {
+            setWeight("");
+            setAlert(true);
+            fetchData();
+          }
+        });
+      })
+      .catch(() => {});
+  };
 
 	const fetchData = () =>{
 		fetch("http://localhost:3000/api/get-user/"+search,{
