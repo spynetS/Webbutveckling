@@ -3,6 +3,7 @@ import ApiResponse from "../database/response";
 import { Request, Response } from "express";
 import stats from "../database/stats";
 
+// TODO change so this function adds a new 'weight goal' to the users goals array
 export async function setWeightGoal(req: Request, res: Response) {
   try {
     const userId = req.session.userId;
@@ -26,6 +27,7 @@ export async function setWeightGoal(req: Request, res: Response) {
   }
 }
 
+// TODO change so we filter to get the new weight goal and return the progress of that goal
 export async function getWeightGoalProgress(req: Request, res: Response) {
   try {
     const progress = await stats.getWeightProgress(req.session.userId);
