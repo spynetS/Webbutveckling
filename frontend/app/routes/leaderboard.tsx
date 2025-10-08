@@ -6,7 +6,9 @@ export default function Leaderboard() {
   const [friendPlayers, setFriendPlayers] = React.useState([]);
 
   React.useEffect(() => {
-    fetch("/api/leaderboard/friends")
+    fetch("http://localhost:3000/api/leaderboard/friends",{
+      credentials:"include"
+    })
       .then((res) => res.json())
       .then((data) => setFriendPlayers(data.data || []));
   }, []);
@@ -64,7 +66,7 @@ return (
 
                 {/* Goal */}
                 <div className="min-w-[75px] text-left font-semibold text-lg">
-                  {player.weightGoal}%
+                  {player.percent}%
                 </div>
 
                 {/* Score */}

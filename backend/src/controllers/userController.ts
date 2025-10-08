@@ -94,7 +94,7 @@ export async function logWeight(req: Request, res: Response){
 
   const log = await WeightLog.create({weight:Number.parseFloat(req.body.weight)});
   user.weightLogs.push(log._id);
-
+  
   user.save().then(()=>{
     res.json(new ApiResponse({data:user}));
   }).catch((error:Error)=>{
