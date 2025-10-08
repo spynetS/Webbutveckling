@@ -26,15 +26,14 @@ export default function Notifications() {
 
     (async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/notifications", { credentials: "include" });
-        const json: ApiResponse<Notification[]> = await res.json();
-        if (!cancelled) {
-          if (res.ok) {
-            setItems(Array.isArray(json.data) ? json.data : []);
-          } else {
-            setError(json.message || "Failed to load notifications");
-          }
+        const res = await apiFetch("/api/notifications");
+        const json: ApiResponse<Notification[]> = res;
+        if (res.status==="success") {
+          setItems(Array.isArray(json.data) ? json.data : []);
+        } else {
+          setError(json.message || "Failed to load notifications");
         }
+
       } catch (e: Error) {
         if (!cancelled) setError(e?.message || "Failed to load notifications");
       } finally {

@@ -3,6 +3,7 @@ import { MdDelete } from "react-icons/md";
 import Popup from "~/components/popup";
 import type { Set } from "~/models/Set"
 import type { Exercise as ExerciseModel } from "~/models/Exercise";
+import { apiFetch } from "~/api";
 
 
 const ExercisePage = (props: {
@@ -18,19 +19,30 @@ const ExercisePage = (props: {
 
 
 	useEffect(() => {
-		fetch("http://localhost:3000/api/set").then(response => {
-			response.json().then(res => {
-				setSets(res.data)
-			})
-		 })
-
-		fetch("http://localhost:3000/api/exercise").then(response => {
-			response.json().then(res=>{
-				setExercises(res.data)
-			})
-		})
+		fetchData()
 
 	}, [])
+
+	const fetchData = () => {
+		apiFetch("/api/set").then(res => {
+			setSets(res.data)
+		 })
+
+		apiFetch("/api/exercise").then(res => {
+			setExercises(res.data)
+		})
+	}
+
+	const remove = (aSet: Set) => {
+		apiFetch("/api/set",{
+			method:"delete",
+			body:JSON.stringify({
+				id:aSet._id
+			})
+		}).then(_response=>{
+			fetchData();
+		})
+	}
 
 	return (
 		<>
@@ -46,7 +58,7 @@ const ExercisePage = (props: {
 						<p className="font-semibold">{aset.template.title}</p>
 						<div className="flex flex-row gap-2 items-center">
 							<p>{aset.reps} x {aset.weight}kgs</p>
-							<MdDelete />
+							<MdDelete onClick={()=>remove(aset)} />
 						</div>
 
 

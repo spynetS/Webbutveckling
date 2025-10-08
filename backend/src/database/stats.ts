@@ -56,8 +56,8 @@ function calculateStrength(reps: number, weight: number): number {
 
 export async function getStrengthProgress(userId: number, _muscleGroup: string) {
   const muscles = ["Chest", "Legs", "Arms", "Back"];
-  const user: User = User.findById(userId);
-  const sets = await Set.find({user:user}).populate("template");
+
+  const sets = await Set.find({user:new mongoose.Types.ObjectId(userId)}).populate("template");
 
   const response = [];
 

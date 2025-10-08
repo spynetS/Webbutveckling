@@ -6,6 +6,7 @@ import type { Exercise as ExerciseModel }  from "~/models/Exercise";
 import WorkoutPopup from "~/components/WorkoutPopup"
 import ExercisePopup from "~/components/ExercisePopup"
 import ExercisePage from "~/components/ExercisePage";
+import { apiFetch } from "~/api";
 
 const Card = (props: {
     workout: WorkoutModel;
@@ -15,20 +16,17 @@ const Card = (props: {
 }) => {
 
   const deleteWorkout = () =>{
-    fetch("http://localhost:3000/api/workout",{
-      credentials:'include',
+    apiFetch("/api/workout",{
       method:"DELETE",
-      headers: { "Content-Type": "application/json" },
       body:JSON.stringify({
         id:props.workout._id
       })
     }).then(response=>{
-      response.json().then(res=>{
-        if(res.status=="success"){
+      if(response.status=="success"){
           props.deleted(props.workout)
         }
-      })
     })
+
   }
 
   return (
@@ -77,10 +75,8 @@ const Workout = () => {
   const [weekday, setWeekday] = useState<string>("all");
 
   useEffect(()=>{
-    fetch("http://localhost:3000/api/workout").then(response => {
-      response.json().then(res=>{
+    apiFetch("/api/workout").then(res => {
         setWorkouts(res.data)
-      })
     })
 
   },[])

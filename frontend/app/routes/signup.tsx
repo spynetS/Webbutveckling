@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import { apiFetch } from "~/api";
+
 export default function Signup() {
 
   {/* UserName input */}
@@ -15,14 +17,11 @@ export default function Signup() {
   const handleSubmit = async (): Promise<void> => {
     
     try {
-      const res = await fetch("http://localhost:3000/api/signup", {
+      const res = await apiFetch("/api/signup", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({ userName, email, password }),
       });
-      const data = await res.json();
+      const data = res;
       setResponse(data);
     } catch (error:Error) {
       console.error("Error:", error);

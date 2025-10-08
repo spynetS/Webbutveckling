@@ -3,10 +3,13 @@ import cors from "cors";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import apiRouter from "./routes/api";
-import { init, DATABASE_URI } from "./database/database";
+import { init } from "./database/database";
+
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // Middleware
 if (process.env.NODE_ENV === "test") {
@@ -21,7 +24,7 @@ if (process.env.NODE_ENV === "test") {
       resave: false,
       saveUninitialized: false,
       store: MongoStore.create({
-        mongoUrl: DATABASE_URI,
+        mongoUrl: process.env.DATABASE_URI!,
         ttl: 14 * 24 * 60 * 60,
       }),
     }),
@@ -40,7 +43,7 @@ export default app; // ✅ export app for Supertest
 
 // Only start server if running node directly
 if (require.main === module) {
-  init().then(() => {
+  init(process.env.DATABASE_URI!).then(() => {
     app.listen(port, () =>
       console.log(`Server running at http://localhost:${port}`),
     );
