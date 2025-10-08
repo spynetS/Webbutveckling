@@ -21,13 +21,11 @@ export async function getTotalSessions(userId?: string) {
   return result[0]?.totalSessions || 0;
 }
 
-export async function getWeightProgress(userId: number) {
+export async function getWeightProgress(userId: number): Promise<number> {
   const user = await User.findById(userId).populate("goals");
 
   if (!user || !user.goals || user.goals.length === 0) {
-    return res.json(
-      new ApiResponse({ status: "fail", data: "No weight goals found" }),
-    );
+    throw new Error("No goal added");
   }
 
   const latestGoal = user.goals[user.goals.length - 1];
@@ -46,7 +44,12 @@ export async function getGoalProgress(
   goalType: string,
 ): Promise<number> {
   if (goalType === "weight") {
-    return await getWeightProgress(userId);
+    try {
+      const progress = await getWeightProgress(userId);
+      return progress;
+    } catch (error: Error) {
+      return 0;
+    }
   }
   throw new Error("Unsupported goal type: " + goalType);
 }
