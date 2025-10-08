@@ -3,6 +3,7 @@ import ApiResponse from "../database/response";
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import friendsController = require("./friendsController");
+import mongoose from "mongoose";
 
 // Added Login
 
@@ -98,14 +99,14 @@ export async function logWeight(req: Request, res: Response) {
       .status(400)
       .json(new ApiResponse({ status: "fail", data: "User not loged in" }));
   }
-  const user: User = await User.findById(req.session.userId);
+  const user: User = await User.findById(req.session.userId).populate("goals");
 
   const log = await WeightLog.create({
     weight: Number.parseFloat(req.body.weight),
   });
   user.weightLogs.push(log._id);
 
-  const weightGoal = await Goal.findOne({ label: "Weight goal" });
+  const weightGoal = user.goals.find((goal) => goal.label === "Weight goal");
   weightGoal.current = req.body.weight;
   await weightGoal.save();
 
