@@ -49,3 +49,12 @@ export async function getWeightProgress(userId: number) {
   console.log(progress);
   return progress;
 }
+
+export async function getGoalProgress(userId: string | number, goalType: string): Promise<number>
+{
+  if(goalType === "weight")
+  {
+    return await getWeightProgress(Number(userId));
+  }
+  throw new Error("Unsupported goal type: " + goalType);
+}
