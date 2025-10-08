@@ -81,11 +81,11 @@ const Dashboard = () => {
 				const _stats: Stats = data.data
 				setStats(_stats)
 
-				let datas: Data[] = [];
+				const datas: Data[] = [];
 
 				// First, find the max number of points
 				const maxPoints = Math.max(
-					..._stats?.strengthProgress.map(progress => progress.strengthPoints?.length || 0)
+					...(_stats?.strengthProgress ?? []).map(progress => progress.strengthPoints?.length || 0)
 				);
 
 				_stats?.strengthProgress.forEach(progress => {

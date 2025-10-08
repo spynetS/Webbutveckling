@@ -54,12 +54,12 @@ function calculateStrength(reps: number, weight: number): number {
   return weight * (1 + reps / 30);
 }
 
-export async function getStrengthProgress(userId: number, muscleGroup: string) {
+export async function getStrengthProgress(userId: number, _muscleGroup: string) {
   const muscles = ["Chest", "Legs", "Arms", "Back"];
   const user: User = User.findById(userId);
-  const sets = await Set.find().populate("template");
+  const sets = await Set.find({user:user}).populate("template");
 
-  let response = [];
+  const response = [];
 
   muscles.forEach((muscle) => {
     const filtered = sets.filter((s) =>
