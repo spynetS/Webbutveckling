@@ -16,13 +16,13 @@ export async function setWeightGoal(req: Request, res: Response) {
       );
     }
 
-    const user: User = await User.findById(userId);
-
-    //user.weightGoal = weightGoal;
+    const user: User = await User.findById(userId).populate("weightLogs");
 
     const newGoal = await Goal.create({
-      goal: 0,
-      current: weightGoal,
+      label: "Weight goal",
+      goal: weightGoal,
+      current: user.weightLogs[user.weightLogs.length - 1].weight,
+      start: user.weightLogs[user.weightLogs.length - 1].weight,
       achieved: false,
     });
     user.goals.push(newGoal._id);
@@ -30,7 +30,6 @@ export async function setWeightGoal(req: Request, res: Response) {
     await user.save();
 
     res.json(new ApiResponse({ data: user }));
-
   } catch (error: Error) {
     res
       .status(500)
@@ -41,21 +40,8 @@ export async function setWeightGoal(req: Request, res: Response) {
 // TODO change so we filter to get the new weight goal and return the progress of that goal
 export async function getWeightGoalProgress(req: Request, res: Response) {
   try {
-
-    //const progress = await stats.getWeightProgress(req.session.userId);
-    //res.json(new ApiResponse({ data: { progress: Math.round(progress) } }));
-
-    const userId = req.session.userId;
-    const user = await User.findById(userId).populate("goals");
-
-    if(!user || !user.goals || user.goals.length === 0)
-    {
-      return res.json(new ApiResponse({ status: "fail", data: "No weight goals found" }));
-    }
-
-    const latestGoal = user.goals[user.goals.length - 1];
-    res.json(new ApiResponse({ data: { goal: latestGoal.goal, current: latestGoal.current, achieved: latestGoal.achieved } }));
-
+    const progress = await stats.getWeightProgress(req.session.userId);
+    res.json(new ApiResponse({ data: { progress: Math.round(progress) } }));
   } catch (error: Error) {
     res
       .status(500)

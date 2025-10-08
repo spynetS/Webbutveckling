@@ -22,32 +22,23 @@ export async function getTotalSessions(userId?: string) {
 }
 
 export async function getWeightProgress(userId: number) {
-  const user = await User.findById(userId).populate("weightLogs");
-  if (
-    !user ||
-    !user.weightGoal ||
-    !user.weightLogs ||
-    user.weightLogs.length === 0
-  ) {
-    return 0;
+  const user = await User.findById(userId).populate("goals");
+
+  if (!user || !user.goals || user.goals.length === 0) {
+    return res.json(
+      new ApiResponse({ status: "fail", data: "No weight goals found" }),
+    );
   }
 
-  // weights
-  const startWeight = user.weightLogs[0].weight;
-  const currentWeight = user.weightLogs[user.weightLogs.length - 1].weight;
-  const goalWeight = user.weightGoal;
+  const latestGoal = user.goals[user.goals.length - 1];
 
-  console.log(goalWeight);
+  if (latestGoal.start - latestGoal.current == 0) return 0;
 
-  // calculate progress
-  const totalChangeNeeded = Math.abs(goalWeight - startWeight);
-  const changeSoFar = Math.abs(currentWeight - startWeight);
-  const progress =
-    totalChangeNeeded === 0
-      ? 0
-      : Math.min((changeSoFar / totalChangeNeeded) * 100, 100);
-  console.log(progress);
-  return progress;
+  return (
+    ((latestGoal.start - latestGoal.current) /
+      (latestGoal.start - latestGoal.goal)) *
+    100
+  );
 }
 
 export async function getGoalProgress(
