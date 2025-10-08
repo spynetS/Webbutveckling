@@ -21,7 +21,7 @@ export async function setWeightGoal(req: Request, res: Response) {
     //user.weightGoal = weightGoal;
 
     const newGoal = await Goal.create({
-      progress: 0,
+      goal: 0,
       current: weightGoal,
       achieved: false,
     });
@@ -54,8 +54,8 @@ export async function getWeightGoalProgress(req: Request, res: Response) {
     }
 
     const latestGoal = user.goals[user.goals.length - 1];
-    res.json(new ApiResponse({ data: { progress: latestGoal.progress, current: latestGoal.current, achieved: latestGoal.achieved } }));
-    
+    res.json(new ApiResponse({ data: { goal: latestGoal.goal, current: latestGoal.current, achieved: latestGoal.achieved } }));
+
   } catch (error: Error) {
     res
       .status(500)
