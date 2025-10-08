@@ -9,6 +9,7 @@
     // See also https://aka.ms/tsconfig/module
     "module": "CommonJS",
     "target": "esnext",
+    "esModuleInterop": true,
     "types": [],
     // For nodejs:
     // "lib": ["esnext"],
@@ -39,6 +40,6 @@
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
-    "skipLibCheck": true,
+    "skipLibCheck": true
   }
 }

@@ -24,10 +24,9 @@ if (process.env.NODE_ENV === "test") {
         mongoUrl: DATABASE_URI,
         ttl: 14 * 24 * 60 * 60,
       }),
-    })
+    }),
   );
 }
-
 
 app.use(express.json());
 app.use(cors({ origin: ["http://localhost:5173"], credentials: true }));
@@ -42,6 +41,8 @@ export default app; // ✅ export app for Supertest
 // Only start server if running node directly
 if (require.main === module) {
   init().then(() => {
-    app.listen(port, () => console.log(`Server running at http://localhost:${port}`));
+    app.listen(port, () =>
+      console.log(`Server running at http://localhost:${port}`),
+    );
   });
 }
