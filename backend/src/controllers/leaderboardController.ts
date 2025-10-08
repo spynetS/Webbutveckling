@@ -30,7 +30,7 @@ export async function lbFriends(req: Request, res: Response)
     const leaderboardfriends = await Promise.all((me.friends as any[]).map(async (f) => {
         let score = f.score || 0;
         const weightGoal = Number(f.weightGoal) || 0;
-        const percent = parseInt(await stats.getGoalProgress(f._id, "weight"));
+        let percent = parseInt(await stats.getGoalProgress(f._id, "weight"));
         // TODO fix a general function to return progress of all goals
         
             if(percent == 100)
@@ -38,6 +38,7 @@ export async function lbFriends(req: Request, res: Response)
                 score += 1;
                 f.score = score;
                 await f.save();
+                percent = 0; // reset that % mf
             }
 
 

@@ -54,7 +54,7 @@ export async function getGoalProgress(userId: string | number, goalType: string)
 {
   if(goalType === "weight")
   {
-    return await getWeightProgress(Number(userId));
+    return await getWeightProgress(userId);
   }
   throw new Error("Unsupported goal type: " + goalType);
 }
