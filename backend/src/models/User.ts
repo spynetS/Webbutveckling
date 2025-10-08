@@ -5,13 +5,21 @@ const weightLogSchema = new Schema({
   date: { type: Date, default: Date.now },
 });
 
+const goal = new Schema({
+  progress: { type: Number, required: false },
+  current: { type: Number, required: false },
+  achieved: { type: Boolean, default: false },
+});
+
 export const WeightLog = model("WeightLog", weightLogSchema);
+export const Goal = model("Goal", goal);
 
 // 1. Define an interface for TypeScript
 export interface IUser extends Document {
   name: string;
   email: string;
   score: number;
+  goals: goal[];
   weightLogs: [Schema.Types.ObjectId];
   weightGoal: number;
   friendCode: string;
@@ -25,6 +33,7 @@ const userSchema = new Schema<IUser>({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   score: { type: Number },
+  goals: [{ type: Schema.Types.ObjectId, ref: "Goal", default: [] }],
   weightLogs: [{ type: Schema.Types.ObjectId, ref: "WeightLog" }],
   weightGoal: { type: Number },
   friendCode: { type: String, unique: true, sparse: true },
@@ -35,5 +44,7 @@ const userSchema = new Schema<IUser>({
 
 // 3. Create the model
 const User = model<IUser>("User", userSchema);
+
+
 
 export default User;
