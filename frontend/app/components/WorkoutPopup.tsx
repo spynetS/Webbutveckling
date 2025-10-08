@@ -79,12 +79,14 @@ const WorkoutPopup = (props: {
 					if(props.workout){
 						props.setWorkouts(prev=>prev.filter(w=>w._id !== props.workout._id))
 					}
-					props.setWorkouts(prev => [
-						...prev,
-						res.data
-					])
+					fetch("http://localhost:3000/api/workout").then(response=>{
+						response.json().then(data=>{
+							props.setWorkouts(data.data);
+							props.setShow(false)
+						})
+					})
 
-					props.setShow(false)
+
 				}
 			})
 		})
@@ -155,7 +157,8 @@ const WorkoutPopup = (props: {
 																	  }> {
 																		  val.title
 																	  } </option>))
-						} </select>
+						}
+					</select>
 					<button className="btn btn-md btn-ghost w-fit">
 						Create Exercise
 					</button>

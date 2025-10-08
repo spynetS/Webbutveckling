@@ -15,50 +15,53 @@ import 'chartjs-adapter-date-fns';
 
 ChartJS.register(LineElement, PointElement, LinearScale, TimeScale, Title, Tooltip, Legend);
 
-const LineChartComponent: React.FC = (
-  props:
-  {
-    labels:unknown[],
-    data:number[],
-    label:string,
-    title:string,
+type Data = {
+  labels: unknown[];
+  data: number[];
+  label: string;
+};
 
-  }) => {
-  const data = {
-    labels: props.labels,
-    datasets: [
-      {
-        label:props.label,
-        data: props.data,
-        borderColor: 'rgba(75,192,192,1)',
-        backgroundColor: 'rgba(75,192,192,0.2)',
-        tension: 0.4,
-      },
-    ],
+type Props = {
+  datas: Data[];
+  title: string;
+};
+
+function getData(datas: Data[]) {
+  return {
+    labels: datas[0]?.labels || [],
+    datasets: datas.map((d, i) => ({
+      label: d.label,
+      data: d.data,
+      borderColor: `hsl(${(i * 60) % 360}, 70%, 50%)`, // different color per line
+      backgroundColor: `hsla(${(i * 60) % 360}, 70%, 50%, 0.2)`,
+      tension: 0.4,
+    })),
   };
+}
 
-    const options = {
-      responsive: true,
-      plugins: {
-        legend: { position: 'top' },
-        title: { display: true, text: props.title },
+function getOptions(title: string) {
+  return {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      title: { display: true, text: title },
+    },
+    scales: {
+      x: {
+        type: 'time',
+        time: { unit: 'day', tooltipFormat: 'PPP' },
+        title: { display: true, text: 'Date' },
       },
-      scales: {
-        x: {
-          type: 'time',
-          time: { unit: 'day', tooltipFormat: 'PPP' },
-          title: { display: true, text: 'Date' },
-        },
-        y: {
-          beginAtZero: true,
-          title: { display: true, text: props.label },
-        },
+      y: {
+        beginAtZero: true,
+        title: { display: true, text: 'Value' },
       },
-    };
+    },
+  };
+}
 
-    return(
-      <Line data={data} options={options} />
-    )
-  }
+const LineChartComponent: React.FC<Props> = ({ datas, title }) => {
+  return <Line data={getData(datas)} options={getOptions(title)} />;
+};
 
 export default LineChartComponent;
