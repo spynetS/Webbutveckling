@@ -20,6 +20,7 @@ import React, { useMemo, useState, useEffect } from "react";
 
 import type { Set } from "~/models/Set"
 import type { Exercise as ExerciseModel } from "~/models/Exercise"
+import { apiFetch } from "~/api";
 
 const Exercise = (props: { exercise: ExerciseModel, onBack: () => void}) => {
   const [sets, setSets] = useState<Set[]>([]);
@@ -38,11 +39,8 @@ const Exercise = (props: { exercise: ExerciseModel, onBack: () => void}) => {
   const logExercise = (sets:Set[]) => {
 
     sets.forEach(set=>{
-      console.log(JSON.stringify(set))
-      fetch("http://localhost:3000/api/set/",{
-        credentials:"include",
+      apiFetch("/api/set/",{
         method:"POST",
-        headers: { "Content-Type": "application/json" },
         body:JSON.stringify(set)
       }).then(_resposne=>{
       })

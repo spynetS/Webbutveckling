@@ -2,7 +2,8 @@ import { Request, Response } from "express";
 import crypto from "crypto";
 import User from "../models/User";
 import mongoose from "mongoose";
-import Set from "../models/Set"
+import Set from "../models/Set";
+import ApiResponse from "../database/response";
 
 function getUserId(req: Request): string | undefined {
   return req.session.userId;
@@ -31,38 +32,44 @@ export async function getFriends(req: Request, res: Response) {
   }
 
   function startOfToday() {
-  const d = new Date();
-  d.setHours(0, 0, 0, 0);
-  return d;
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
   }
   function endOfToday() {
-  const d = new Date();
-  d.setHours(23, 59, 59, 999);
-  return d;
+    const d = new Date();
+    d.setHours(23, 59, 59, 999);
+    return d;
   }
 
   const start = startOfToday();
   const end = endOfToday();
 
   const populated = await me.populate("friends", "name email friendCode");
-  const friends = await Promise.all ((populated.friends as any[]).map(async (f) => ({
-    _id: String(f._id),
-    name: f.name,
-    email: f.email,
-    friendCode: f.friendCode,
-    lastTrainedAt: (await Set.findOne({
-        user: new mongoose.Types.ObjectId(f._id),
-        createdAt: { $gte: start, $lte: end },
-      }).lean())?.createdAt
-  })));
+  const friends = await Promise.all(
+    (populated.friends as any[]).map(async (f) => ({
+      _id: String(f._id),
+      name: f.name,
+      email: f.email,
+      friendCode: f.friendCode,
+      lastTrainedAt: (
+        await Set.findOne({
+          user: new mongoose.Types.ObjectId(f._id),
+          createdAt: { $gte: start, $lte: end },
+        }).lean()
+      )?.createdAt,
+    })),
+  );
 
-  return res.json({
-    friendCode: me.friendCode, // handy for the page header
-    friends,
-  });
+  return res.json(
+    new ApiResponse({
+      data: {
+        friendCode: me.friendCode, // handy for the page header
+        friends: friends,
+      },
+    }),
+  );
 }
-
-
 
 /**
  * POST /api/friends
@@ -86,13 +93,16 @@ export async function addFriend(req: Request, res: Response) {
   }
 
   const other = await User.findOne({ friendCode: code.trim() });
-  if (!other) return res.status(404).json({ message: "No user with that code" });
+  if (!other)
+    return res.status(404).json({ message: "No user with that code" });
   if (String(other._id) === String(me._id))
     return res.status(400).json({ message: "You can’t add yourself" });
 
   // Add both ways (idempotent)
   const meHas = me.friends?.some((id: any) => String(id) === String(other._id));
-  const otherHas = other.friends?.some((id: any) => String(id) === String(me._id));
+  const otherHas = other.friends?.some(
+    (id: any) => String(id) === String(me._id),
+  );
 
   if (!meHas) me.friends.push(other._id as any);
   if (!otherHas) other.friends.push(me._id as any);

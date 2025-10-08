@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router";
+import { apiFetch } from "~/api";
 
-const LOGIN_URL = "http://localhost:3000/api/login";
+const LOGIN_URL = "/api/login";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,13 +15,11 @@ const Login = () => {
     setError(null);
     setLoading(true);
     try {
-      const res = await fetch(LOGIN_URL, {
-        credentials: 'include',
+      const res = await apiFetch(LOGIN_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      const body = await res.json();
+      const body = res;
 
       if (!res.ok) {
         setError(body?.data || "Incorrect username or password.");
