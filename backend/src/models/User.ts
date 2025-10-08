@@ -9,6 +9,7 @@ const goal = new Schema({
   label: { type: String, required: true },
   goal: { type: Number, required: false },
   current: { type: Number, required: false },
+  start: { type: Number, required: false },
   achieved: { type: Boolean, default: false },
 });
 
