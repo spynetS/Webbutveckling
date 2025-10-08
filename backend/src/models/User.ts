@@ -6,7 +6,8 @@ const weightLogSchema = new Schema({
 });
 
 const goal = new Schema({
-  progress: { type: Number, required: false },
+  label: { type: String, required: true },
+  goal: { type: Number, required: false },
   current: { type: Number, required: false },
   achieved: { type: Boolean, default: false },
 });
@@ -44,7 +45,5 @@ const userSchema = new Schema<IUser>({
 
 // 3. Create the model
 const User = model<IUser>("User", userSchema);
-
-
 
 export default User;
