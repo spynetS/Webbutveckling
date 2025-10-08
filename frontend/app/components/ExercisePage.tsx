@@ -45,7 +45,7 @@ const ExercisePage = (props: {
 			body:JSON.stringify({
 				id:aSet._id
 			})
-		}).then(response=>{
+		}).then(_response=>{
 			fetchData();
 
 		})
