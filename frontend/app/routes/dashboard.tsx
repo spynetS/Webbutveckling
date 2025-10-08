@@ -120,7 +120,7 @@ const Dashboard = () => {
 				onSave={logWeight}
 				inputs={(
 					<div>
-						<input className="input input-bordered" placeholder={user?.weightLogs[user?.weightLogs.length - 1].weight} value={weight} onChange={e=>setWeight(e.target.value)} />
+						<input className="input input-bordered" placeholder={user?.weightLogs.length > 0 ? user?.weightLogs[user?.weightLogs.length - 1].weight : 0} value={weight} onChange={e=>setWeight(e.target.value)} />
 					</div>
 				)}
 			/>

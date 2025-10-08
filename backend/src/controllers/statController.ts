@@ -11,7 +11,6 @@ export async function getStats(req: e.Request, res: e.Response) {
   try {
     const sessions = await getTotalSessions(req.session.userId);
     const weightProgress = await getWeightProgress(req.session.userId);
-
     const strengthProgress = await getStrengthProgress(
       req.session.userId,
       "all",

@@ -29,7 +29,7 @@ export async function getWeightProgress(userId: number) {
     !user.weightLogs ||
     user.weightLogs.length === 0
   ) {
-    throw new Error("Not enough data");
+    return 0;
   }
 
   // weights
