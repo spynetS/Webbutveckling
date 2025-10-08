@@ -7,9 +7,12 @@ export default [
   route("profile", "routes/profile.tsx"),
   route("login", "routes/login/login.tsx"),
   route("leaderboard", "routes/leaderboard.tsx"),
-  //route("exercise", "routes/exercise.tsx"),
+  //route("exercise", "routes/exercise.tsx"), 
+  route("exercise2", "routes/exercise2.tsx"),
   route("workout", "routes/workout.tsx"),
+ 
   route("friends", "routes/friends.tsx"),
   route("notifications", "routes/notifications.tsx")
+  
 
 ] satisfies RouteConfig;
