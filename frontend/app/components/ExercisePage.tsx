@@ -18,6 +18,11 @@ const ExercisePage = (props: {
 
 
 	useEffect(() => {
+		fetchData()
+
+	}, [])
+
+	const fetchData = () => {
 		fetch("http://localhost:3000/api/set").then(response => {
 			response.json().then(res => {
 				setSets(res.data)
@@ -29,8 +34,22 @@ const ExercisePage = (props: {
 				setExercises(res.data)
 			})
 		})
+	}
 
-	}, [])
+	const remove = (aSet: Set) => {
+		fetch("http://localhost:3000/api/set",{
+			method:"delete",
+			headers:{
+				"Content-Type":"application/json"
+			},
+			body:JSON.stringify({
+				id:aSet._id
+			})
+		}).then(_response=>{
+			fetchData();
+
+		})
+	}
 
 	return (
 		<>
@@ -46,7 +65,7 @@ const ExercisePage = (props: {
 						<p className="font-semibold">{aset.template.title}</p>
 						<div className="flex flex-row gap-2 items-center">
 							<p>{aset.reps} x {aset.weight}kgs</p>
-							<MdDelete />
+							<MdDelete onClick={()=>remove(aset)} />
 						</div>
 
 
