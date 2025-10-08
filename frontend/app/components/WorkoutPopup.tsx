@@ -3,6 +3,7 @@ import { IoMdAdd } from "react-icons/io";
 import type { Workout as WorkoutModel } from "~/models/Workout";
 import type { Exercise as ExerciseModel }  from "~/models/Exercise";
 import Popup from "~/components/popup";
+import { apiFetch } from "~/api";
 
 const WorkoutPopup = (props: {
 	show:boolean,
@@ -34,11 +35,10 @@ const WorkoutPopup = (props: {
 		}
 
 
-		fetch("http://localhost:3000/api/exercise").then(response => {
-			response.json().then(res=>{
-				setExercises(res.data)
-			})
+		apiFetch("/api/exercise").then(response => {
+			setExercises(response.data)
 		})
+
 	},[props.show])
 
 	useEffect(()=>{
@@ -60,12 +60,8 @@ const WorkoutPopup = (props: {
 
 	const createWorkout = () => {
 		// if we are editing we add a id at the end
-		fetch(`http://localhost:3000/api/workout${props.workout ? "/"+props.workout._id : ""}`, {
-			credentials: 'include',
+		apiFetch(`/api/workout${props.workout ? "/"+props.workout._id : ""}`, {
 			method: props.workout ? "PUT" : "POST", // if we are edditng we put instead
-			headers: {
-				"Content-Type": "application/json"
-			},
 			body: JSON.stringify(
 				{
 					title: newWorkoutTitle,
@@ -73,22 +69,16 @@ const WorkoutPopup = (props: {
 					weekday:weekday
 				}
 			)
-		}).then(response => {
-			response.json().then(res => {
-				if (res.status == "success") {
-					if(props.workout){
-						props.setWorkouts(prev=>prev.filter(w=>w._id !== props.workout._id))
-					}
-					fetch("http://localhost:3000/api/workout").then(response=>{
-						response.json().then(data=>{
-							props.setWorkouts(data.data);
-							props.setShow(false)
-						})
-					})
-
-
+		}).then(res => {
+			if (res.status == "success") {
+				if (props.workout) {
+					props.setWorkouts(prev => prev.filter(w => w._id !== props.workout._id))
 				}
-			})
+				apiFetch("/api/workout").then(response => {
+					props.setWorkouts(response.data);
+					props.setShow(false)
+				})
+			}
 		})
 	}
 

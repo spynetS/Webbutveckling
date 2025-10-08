@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router";
 import Page from "~/components/page"
 import type {User} from "~/models/User";
+import { apiFetch } from "~/api"
 
 
 export default function Profile() {
@@ -11,19 +12,13 @@ export default function Profile() {
   const [weightGoal, setWeightGoal] = useState<string>("");
 
   useEffect(()=>{
-    fetch("http://localhost:3000/api/get-user",{
-      credentials:'include'
-    }).then(response=>{
-      response.json().then(res=>{
-        setUser(res.data)
-      })
+    apiFetch("/api/get-user").then(response=>{
+      setUser(response.data)
     })
   },[])
 
   const setGoal = () => {
-    fetch("http://localhost:3000/api/set-weight-goal",{
-      credentials:'include',
-      headers:{"Content-Type":"application/json"},
+    apiFetch("/api/set-weight-goal",{
       method:'post',
       body:JSON.stringify({
         weightGoal:parseFloat(weightGoal)
