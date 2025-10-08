@@ -11,9 +11,10 @@ export const WeightLog = model("WeightLog", weightLogSchema);
 export interface IUser extends Document {
   name: string;
   email: string;
+  score: number;
   weightLogs: [Schema.Types.ObjectId];
   weightGoal: number;
-  friendCode:string;
+  friendCode: string;
   friends: Schema.Types.ObjectId[];
   createdAt: Date;
   password: string;
@@ -23,6 +24,7 @@ export interface IUser extends Document {
 const userSchema = new Schema<IUser>({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
+  score: { type: Number },
   weightLogs: [{ type: Schema.Types.ObjectId, ref: "WeightLog" }],
   weightGoal: { type: Number },
   friendCode: { type: String, unique: true, sparse: true },
