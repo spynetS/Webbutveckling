@@ -17,6 +17,10 @@ import exerciseRouter from "./exerciseTemplate";
 import setRouter from "./set";
 import workoutRouter from "./workout";
 
+
+import { getNotifications } from "../controllers/notificationsController";
+
+
 const router = Router();
 
 // Middleware to disable caching
@@ -51,6 +55,7 @@ router.get("/get-user", (req: Request, res: Response) => {
 
     User.findById(req.session.userId)
       .populate("weightLogs")
+      .populate("friends")
       .then((users) => {
         res.json(new ApiResponse({ data: users }));
       });
@@ -83,5 +88,11 @@ router.get("/weight-goal-progress", getWeightGoalProgress);
 router.use("/exercise", exerciseRouter);
 router.use("/set", setRouter);
 router.use("/workout", workoutRouter);
+
+import friendsRoutes from "./friends";
+router.use("/friends", friendsRoutes);
+
+router.get("/notifications", getNotifications);
+
 
 export default router;
