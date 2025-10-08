@@ -2,6 +2,7 @@ import User, {WeightLog} from "../models/User"
 import ApiResponse from "../database/response"
 import { Request, Response, } from "express";
 import bcrypt from "bcrypt";
+import friendsController = require("./friendsController");
 
 
 
@@ -59,7 +60,7 @@ export async function userCreate(req: Request, res: Response) {
         data: "name, email, and password are required"
       }));
     }
-    const emailRegex = /^[\w-]+@([\w-]+)+[\w-]{2,4}$/;
+    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
     if(!emailRegex.test(req.body.email))
     {
@@ -73,7 +74,8 @@ export async function userCreate(req: Request, res: Response) {
     await User.create({
       name: userName,
       email: email,
-      password: hashedPassword
+      password: hashedPassword,
+      friendCode: friendsController.makeCode()
     });
 
     res.status(201).json(new ApiResponse({ data: "User added successfully" }));
