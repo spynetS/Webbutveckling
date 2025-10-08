@@ -3,6 +3,7 @@ import { MdDelete } from "react-icons/md";
 import Popup from "~/components/popup";
 import type { Set } from "~/models/Set"
 import type { Exercise as ExerciseModel } from "~/models/Exercise";
+import { apiFetch } from "~/api";
 
 
 const ExercisePage = (props: {
@@ -23,31 +24,23 @@ const ExercisePage = (props: {
 	}, [])
 
 	const fetchData = () => {
-		fetch("http://localhost:3000/api/set").then(response => {
-			response.json().then(res => {
-				setSets(res.data)
-			})
+		apiFetch("/api/set").then(res => {
+			setSets(res.data)
 		 })
 
-		fetch("http://localhost:3000/api/exercise").then(response => {
-			response.json().then(res=>{
-				setExercises(res.data)
-			})
+		apiFetch("/api/exercise").then(res => {
+			setExercises(res.data)
 		})
 	}
 
 	const remove = (aSet: Set) => {
-		fetch("http://localhost:3000/api/set",{
+		apiFetch("/api/set",{
 			method:"delete",
-			headers:{
-				"Content-Type":"application/json"
-			},
 			body:JSON.stringify({
 				id:aSet._id
 			})
 		}).then(_response=>{
 			fetchData();
-
 		})
 	}
 

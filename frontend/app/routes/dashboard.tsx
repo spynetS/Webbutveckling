@@ -4,103 +4,92 @@ import LineChartComponent from "~/components/LineChartComponent";
 import Page from "~/components/page";
 import Popup from "~/components/popup";
 import { Link } from "react-router";
+import { apiFetch } from "~/api";
 
 type StrengthPoint = {
 	date: Date;
-	strength:number;
+	strength: number;
 }
 
 type StrengthProgress = {
-	muscleGroup:string;
-	strengthPoints:StrengthPoint[]
-	progress:number;
+	muscleGroup: string;
+	strengthPoints: StrengthPoint[]
+	progress: number;
 }
 
 type Stats = {
-	sessions:number;
-	weightProgress:number;
-	strengthProgress:StrengthProgress[];
+	sessions: number;
+	weightProgress: number;
+	strengthProgress: StrengthProgress[];
 
 };
 
 const Dashboard = () => {
-  const [user, setUser] = useState<User>();
-  const [search, _setSearch] = useState<string>("");
-  const [show, setShow] = useState<boolean>(false);
-  const [alert, setAlert] = useState<boolean>(false);
-  const [weight, setWeight] = useState<string>("");
-  const [graphTab, setGraphTab] = useState<number>(0);
+	const [user, setUser] = useState<User>();
+	const [search, _setSearch] = useState<string>("");
+	const [show, setShow] = useState<boolean>(false);
+	const [alert, setAlert] = useState<boolean>(false);
+	const [weight, setWeight] = useState<string>("");
+	const [graphTab, setGraphTab] = useState<number>(0);
 
-  useEffect(() => {
-    {
-      fetchData();
-    }
-  }, []);
+	useEffect(() => {
+		fetchData();
+	}, []);
 
 
 	//stats
-	const [stats,setStats] = useState<Stats>()
+	const [stats, setStats] = useState<Stats>()
 	const [graphStrength, setGraphStrength] = useState<unknown>();
 
-  const logWeight = () => {
-    fetch("http://localhost:3000/api/log-weight", {
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify({ weight: weight }),
-    })
-      .then((response) => {
-        response.json().then((val) => {
-          if (val.status === "success") {
-            setWeight("");
-            setAlert(true);
-            fetchData();
-          }
-        });
-      })
-      .catch(() => {});
-  };
+	const logWeight = () => {
+		apiFetch("/api/log-weight", {
+			method: "POST",
+			body: JSON.stringify({ weight: weight }),
+		})
+			.then((val) => {
 
-	const fetchData = () =>{
-		fetch("http://localhost:3000/api/get-user/"+search,{
-			credentials: 'include'
-		}).then(response=>{
-		    if (!response.ok) throw new Error("Network response was not ok");
-			response.json().then(data=>{
-				setUser(data.data)
-			});
+				if (val.status === "success") {
+					setWeight("");
+					setAlert(true);
+					fetchData();
+				}
+
+			})
+			.catch(() => {});
+	};
+
+	const fetchData = () => {
+		apiFetch("/api/get-user/" + search).then(response => {
+			if (response.status !== "success") throw new Error("Network response was not ok");
+			setUser(response.data)
+
 		})
 
-		fetch("http://localhost:3000/api/stats",{
-			credentials: 'include'
-		}).then(response=>{
-		    if (!response.ok) throw new Error("Network response was not ok");
-			response.json().then(data =>{
-				const _stats: Stats = data.data
-				setStats(_stats)
+		apiFetch("/api/stats").then(response => {
+			if (response.status !== "success") throw new Error("Network response was not ok");
 
-				const datas: Data[] = [];
+			const _stats: Stats = response.data
+			setStats(_stats)
 
-				// First, find the max number of points
-				const maxPoints = Math.max(
-					...(_stats?.strengthProgress ?? []).map(progress => progress.strengthPoints?.length || 0)
-				);
 
-				_stats?.strengthProgress.forEach(progress => {
-					datas.push({
-						data: progress.strengthPoints?.map(point => point.strength) || [],
-						labels: Array.from({ length: maxPoints }, (_, i) => i + 1), // [1, 2, 3, ...maxPoints]
-						label: progress.muscleGroup,
-						title: "",
-					});
+			const datas: Data[] = [];
+
+			// First, find the max number of points
+			const maxPoints = Math.max(
+				...(_stats?.strengthProgress ?? []).map(progress => progress.strengthPoints?.length || 0)
+			);
+
+			_stats?.strengthProgress.forEach(progress => {
+				datas.push({
+					data: progress.strengthPoints?.map(point => point.strength) || [],
+					labels: Array.from({ length: maxPoints }, (_, i) => i + 1), // [1, 2, 3, ...maxPoints]
+					label: progress.muscleGroup,
+					title: "",
 				});
-
-				console.log(datas)
-				setGraphStrength(datas)
-
 			});
+
+			console.log(datas)
+			setGraphStrength(datas)
 		})
 	}
 
@@ -112,7 +101,7 @@ const Dashboard = () => {
 			<Popup
 				show={show}
 				setShow={setShow}
-				setAlert={()=>setAlert(false)}
+				setAlert={() => setAlert(false)}
 				alert={alert}
 				alertText="Your weight was logged"
 				heading="Log your weight"
@@ -153,23 +142,23 @@ const Dashboard = () => {
 			</div>
 			<div className='flex flex-col justify-between h-3/7 mt-2'>
 				<div role="tablist" className="tabs tabs-box w-full grid grid-cols-2">
-					<a role="tab" onClick={()=>setGraphTab(0)} className={`tab ${graphTab == 0 ? "tab-active" : ""}`}>Weight</a>
-					<a role="tab" onClick={()=>setGraphTab(1)} className={`tab ${graphTab == 1 ? "tab-active" : ""}`} >Strength</a>
+					<a role="tab" onClick={() => setGraphTab(0)} className={`tab ${graphTab == 0 ? "tab-active" : ""}`}>Weight</a>
+					<a role="tab" onClick={() => setGraphTab(1)} className={`tab ${graphTab == 1 ? "tab-active" : ""}`} >Strength</a>
 				</div>
 				<div className="bg-base-200 flex h-full w-full items-center justify-center rounded-lg">
 					{graphTab == 0 ? (
 						<LineChartComponent
 							datas={[{
-								labels:user?.weightLogs.map(log=>log.date),
-								data:user?.weightLogs.map(log=>log.weight),
-								label:"Weight",
-								title:"Weight over time"
+								labels: user?.weightLogs.map(log => log.date),
+								data: user?.weightLogs.map(log => log.weight),
+								label: "Weight",
+								title: "Weight over time"
 							}]} />
 
-					):
-					 (<LineChartComponent
-						  datas={graphStrength} />
-					)}
+					) :
+						(<LineChartComponent
+							datas={graphStrength} />
+						)}
 
 				</div>
 
@@ -177,7 +166,7 @@ const Dashboard = () => {
 					<Link to="/workout" className='btn btn-lg btn-secondary'>
 						Log Excercise
 					</Link>
-					<button onClick={()=>{setShow(true)}} className='btn btn-lg btn-secondary'>
+					<button onClick={() => { setShow(true) }} className='btn btn-lg btn-secondary'>
 						Log Weight
 					</button>
 				</div>
