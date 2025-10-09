@@ -106,7 +106,10 @@ export async function logWeight(req: Request, res: Response) {
   });
   user.weightLogs.push(log._id);
 
-  const weightGoal = user.goals.find((goal) => goal.label === "Weight goal");
+  // find the first weight goal that isnt acheved
+  const weightGoal = user.goals.find(
+    (goal: Goal) => goal.label === "Weight goal" && !goal.achieved,
+  );
   weightGoal.current = req.body.weight;
   await weightGoal.save();
 

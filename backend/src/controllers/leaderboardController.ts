@@ -1,4 +1,4 @@
-import User from "../models/User";
+import User, { Goal } from "../models/User";
 import ApiResponse from "../database/response";
 import { Request, Response } from "express";
 import userController = require("./userController");
@@ -15,47 +15,51 @@ export async function lbFriends(req: Request, res: Response) {
     return res.status(401).json(ApiResponse.error("Unauthorized"));
   }
 
-  const me = await User.findById(uid).populate("friends");
+  const me = await User.findById(uid).populate("friends").populate("goals");
   if (!me) {
     return res.status(404).json(ApiResponse.error("User not found"));
   }
 
   // friends to leaderboard with data, PLES WORK
+  const users = me.friends;
+  users.push(me); // adds us
+
   const leaderboardfriends = await Promise.all(
-    (me.friends as any[]).map(async (f) => {
+    (users as User[]).map(async (f) => {
       let score = f.score || 0;
       const weightGoal = Number(f.weightGoal) || 0;
 
-      // TODO fix a general function to return progress of all goals
-
-      async function updateGoalsAndScore(user: any) // ^^^^^^^^^^^ TODO almost done, uncertain about where and how to handle the percentage w both goals in mind
-      {
+      async function updateGoalsAndScore(user: User) {
+        // ^^^^^^^^^^^ TODO almost done, uncertain about where and how to handle the percentage w both goals in mind
         let totalProgress = 0;
-        if(!user.goals)
-        {
-          return 0; 
+        if (!user.goals) {
+          return 0;
         }
 
-        for(const goal of user.goals)
-        {
-          const progress = await stats.getGoalProgress(user._id, goal.type);
+        for (const goal of user.goals) {
+          if (goal.achieved) continue;
+
+          console.log(goal);
+
+          const progress =
+            ((goal.start - goal.current) / (goal.start - goal.goal)) * 100;
+
           const percent = parseInt(progress);
           totalProgress += percent;
 
-          if(percent >= 100 && !goal.achieved)
-          {
+          if (percent >= 100) {
             goal.achieved = true; // mark as achieved, do we wanna put old ones aside or????????????
             user.score = (user.score || 0) + 1;
-            goal.progress = 0;
+            await goal.save();
+            await user.save();
           }
         }
-        
-        await user.save();
-        return totalProgress;
 
+        return totalProgress;
       }
       //let percent = parseInt(await stats.getGoalProgress(f._id, "weight")); OLD ONE
-      let percent = await updateGoalsAndScore(f);
+      const populated = await f.populate("goals");
+      let percent = await updateGoalsAndScore(populated);
 
       return {
         _id: String(f._id), //bonus ksk ksksksksksk
