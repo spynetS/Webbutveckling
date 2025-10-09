@@ -38,7 +38,9 @@ const ExercisePopup = (props:{
         muscleGroups:muscleGroups,
         exerciseType:type
       })
-    })
+    }).then(_response=>{
+		props.setShow(false);
+	})
   }
 
   return (
