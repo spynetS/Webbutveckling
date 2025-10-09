@@ -25,17 +25,37 @@ export async function lbFriends(req: Request, res: Response) {
     (me.friends as any[]).map(async (f) => {
       let score = f.score || 0;
       const weightGoal = Number(f.weightGoal) || 0;
-      let percent = parseInt(await stats.getGoalProgress(f._id, "weight"));
+
       // TODO fix a general function to return progress of all goals
 
+      async function updateGoalsAndScore(user: any) // ^^^^^^^^^^^ TODO almost done, uncertain about where and how to handle the percentage w both goals in mind
+      {
+        let totalProgress = 0;
+        if(!user.goals)
+        {
+          return 0; 
+        }
 
-      if (percent == 100) {
-        score += 1;
-        f.score = score;
-        await f.save();
-        percent = 0; // reset that % mf
+        for(const goal of user.goals)
+        {
+          const progress = await stats.getGoalProgress(user._id, goal.type);
+          const percent = parseInt(progress);
+          totalProgress += percent;
+
+          if(percent >= 100 && !goal.achieved)
+          {
+            goal.achieved = true; // mark as achieved, do we wanna put old ones aside or????????????
+            user.score = (user.score || 0) + 1;
+            goal.progress = 0;
+          }
+        }
         
+        await user.save();
+        return totalProgress;
+
       }
+      //let percent = parseInt(await stats.getGoalProgress(f._id, "weight")); OLD ONE
+      let percent = await updateGoalsAndScore(f);
 
       return {
         _id: String(f._id), //bonus ksk ksksksksksk
