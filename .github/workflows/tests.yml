@@ -27,5 +27,5 @@ jobs:
         working-directory: ./${{ matrix.folder }}
 
       - name: Run ESLint
-        run: npm test
+        run: npm run test
         working-directory: ./${{ matrix.folder }}
