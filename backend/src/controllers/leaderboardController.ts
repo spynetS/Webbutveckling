@@ -1,9 +1,6 @@
-import User, { Goal } from "../models/User";
+import User from "../models/User";
 import ApiResponse from "../database/response";
 import { Request, Response } from "express";
-import userController = require("./userController");
-import stats = require("../database/stats");
-import weightcontroller = require("./weightcontroller");
 
 function getUserId(req: Request): string | undefined {
   return req.session.userId;
@@ -53,6 +50,7 @@ export async function lbFriends(req: Request, res: Response) {
           if (percent >= 100) {
             goal.achieved = true;
             user.score = (user.score || 0) + 1;
+            score = user.score;
             await goal.save();
             await user.save();
           }
@@ -62,7 +60,7 @@ export async function lbFriends(req: Request, res: Response) {
       }
       //let percent = parseInt(await stats.getGoalProgress(f._id, "weight")); OLD ONE
       const populated = await f.populate("goals");
-      let percent = await updateGoalsAndScore(populated);
+      const percent = await updateGoalsAndScore(populated);
 
       return {
         _id: String(f._id), //bonus ksk ksksksksksk

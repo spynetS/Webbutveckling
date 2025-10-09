@@ -1,7 +1,7 @@
 import type e from "express";
 import Set from "../models/Set";
 import ApiResponse from "../database/response";
-import stats = require("../database/stats");
+import stats from "../database/stats";
 import User from "../models/User";
 
 export async function getSets(req: e.Request, res: e.Response) {

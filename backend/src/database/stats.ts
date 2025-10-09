@@ -49,7 +49,8 @@ export async function getGoalProgress(
     try {
       const progress = await getWeightProgress(userId);
       return progress;
-    } catch (error: Error) {
+    } catch (_err: Error) {
+      console.error(_err);
       return 0;
     }
   }
