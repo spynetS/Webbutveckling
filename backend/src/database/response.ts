@@ -19,4 +19,8 @@ export default class ApiResponse<T> {
     this.message = params.message;
     this.data = params.data;
   }
+
+  static error(message:string): ApiResponse<string> {
+    return new ApiResponse({status:"error",message:message})
+  }
 }
