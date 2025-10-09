@@ -28,7 +28,9 @@ export async function getWeightProgress(userId: number): Promise<number> {
     throw new Error("No goal added");
   }
 
-  const latestGoal = user.goals[user.goals.length - 1];
+  const latestGoal = user.goals.find(
+    (goal: Goal) => goal.label === "Weight goal",
+  );
 
   if (latestGoal.start - latestGoal.current == 0) return 0;
 

@@ -27,7 +27,6 @@ export async function lbFriends(req: Request, res: Response) {
   const leaderboardfriends = await Promise.all(
     (users as User[]).map(async (f) => {
       let score = f.score || 0;
-      const weightGoal = Number(f.weightGoal) || 0;
 
       async function updateGoalsAndScore(user: User) {
         // ^^^^^^^^^^^ TODO almost done, uncertain about where and how to handle the percentage w both goals in mind
@@ -41,14 +40,18 @@ export async function lbFriends(req: Request, res: Response) {
 
           console.log(goal);
 
-          const progress =
-            ((goal.start - goal.current) / (goal.start - goal.goal)) * 100;
-
+          const progress = Math.min(
+            100,
+            Math.max(
+              0,
+              ((goal.current - goal.start) / (goal.goal - goal.start)) * 100,
+            ),
+          );
           const percent = parseInt(progress);
           totalProgress += percent;
 
           if (percent >= 100) {
-            goal.achieved = true; // mark as achieved, do we wanna put old ones aside or????????????
+            goal.achieved = true;
             user.score = (user.score || 0) + 1;
             await goal.save();
             await user.save();
@@ -65,7 +68,6 @@ export async function lbFriends(req: Request, res: Response) {
         _id: String(f._id), //bonus ksk ksksksksksk
         name: f.name,
         avatar: f.avatar,
-        weightGoal,
         score,
         percent,
       };
