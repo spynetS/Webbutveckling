@@ -2,6 +2,7 @@ import User from "../models/User";
 import ApiResponse from "../database/response";
 import { Request, Response } from "express";
 import stats from "../database/stats";
+import { canDo } from "./permissionController";
 
 export async function setWeightGoal(req: Request, res: Response) {
   try {
@@ -15,6 +16,13 @@ export async function setWeightGoal(req: Request, res: Response) {
     }
 
     const user: User = await User.findById(userId);
+
+    if (!canDo(user)) {
+      return res
+        .status(401)
+        .json(new ApiResponse({ status: "fail", data: "No permissions" }));
+    }
+
     user.weightGoal = weightGoal;
     await user.save();
 

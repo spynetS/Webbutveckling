@@ -4,8 +4,32 @@ const weightLogSchema = new Schema({
   weight: { type: Number, required: true },
   date: { type: Date, default: Date.now },
 });
-
 export const WeightLog = model("WeightLog", weightLogSchema);
+
+const permissionSchema = new Schema({
+  action: {
+    type: String,
+    enum: ["read", "write", "delete", "update"],
+    required: true,
+  },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User", // assuming permissions belong to a user
+    required: true,
+  },
+  modelType: {
+    type: String,
+    required: true,
+    enum: ["ExerciseTemplate"], // list of model names
+  },
+  modelId: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    refPath: "modelType", // <-- magic here
+  },
+});
+
+export const Permission = model("Permission", permissionSchema);
 
 // 1. Define an interface for TypeScript
 export interface IUser extends Document {
@@ -13,7 +37,7 @@ export interface IUser extends Document {
   email: string;
   weightLogs: [Schema.Types.ObjectId];
   weightGoal: number;
-  friendCode:string;
+  friendCode: string;
   friends: Schema.Types.ObjectId[];
   createdAt: Date;
   password: string;

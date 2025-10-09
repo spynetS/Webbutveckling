@@ -17,9 +17,8 @@ import exerciseRouter from "./exerciseTemplate";
 import setRouter from "./set";
 import workoutRouter from "./workout";
 
-
 import { getNotifications } from "../controllers/notificationsController";
-
+import User from "../models/User";
 
 const router = Router();
 
@@ -29,24 +28,8 @@ router.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-router.get("/test", (req: Request, res: Response) => {
-  const name = req.query.name;
-  if (!name) {
-    res.json(
-      new ApiResponse({
-        status: "fail",
-        data: "You must proivide name and email!",
-      }),
-    );
-  }
-
-  User.create([{ name: req.body.userName, email: name + "@asd.com" }])
-    .then(() => {
-      res.json(new ApiResponse({ data: "added" }));
-    })
-    .catch((error: Error) => {
-      res.json(new ApiResponse({ status: "fail", data: error.message }));
-    });
+router.get("/test", async (req: Request, res: Response) => {
+  const user: User = await User.findOne();
 });
 
 router.get("/get-user", (req: Request, res: Response) => {
@@ -93,6 +76,5 @@ import friendsRoutes from "./friends";
 router.use("/friends", friendsRoutes);
 
 router.get("/notifications", getNotifications);
-
 
 export default router;
