@@ -47,7 +47,7 @@ export async function getFriends(req: Request, res: Response) {
 
   const populated = await me.populate("friends", "name email friendCode");
   const friends = await Promise.all(
-    (populated.friends as any[]).map(async (f) => ({
+    (populated.friends as User[]).map(async (f) => ({
       _id: String(f._id),
       name: f.name,
       email: f.email,
@@ -99,13 +99,13 @@ export async function addFriend(req: Request, res: Response) {
     return res.status(400).json({ message: "You can’t add yourself" });
 
   // Add both ways (idempotent)
-  const meHas = me.friends?.some((id: any) => String(id) === String(other._id));
+  const meHas = me.friends?.some((id: string) => String(id) === String(other._id));
   const otherHas = other.friends?.some(
-    (id: any) => String(id) === String(me._id),
+    (id: string) => String(id) === String(me._id),
   );
 
-  if (!meHas) me.friends.push(other._id as any);
-  if (!otherHas) other.friends.push(me._id as any);
+  if (!meHas) me.friends.push(other._id as string);
+  if (!otherHas) other.friends.push(me._id as string);
 
   await me.save();
   await other.save();

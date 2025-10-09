@@ -2,8 +2,9 @@ import User, { WeightLog, Goal } from "../models/User";
 import ApiResponse from "../database/response";
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import friendsController = require("./friendsController");
 import mongoose from "mongoose";
+
+import friendsController from "./friendsController";
 
 // Added Login
 

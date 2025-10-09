@@ -6,10 +6,9 @@ import User from "../models/User";
 
 export async function getSets(req: e.Request, res: e.Response) {
   Set.find()
-
     .populate("template") // replace ObjectIds in exercises with the actual Exercise documents
     .populate("user", "name email") // optionally select only certain fields from user
-
+    .sort({ createdAt: 1 }) // oldest first
     .then((found) => {
       res.json(new ApiResponse({ data: found }));
     })
@@ -52,9 +51,7 @@ export async function createSet(req: e.Request, res: e.Response) {
 
 export async function deleteSet(req: e.Request, res: e.Response) {
   if (!("id" in req.body)) {
-    res.json(
-      new ApiResponse({ status: "error", message: "No id was provided!" }),
-    );
+    res.json(new ApiResponse({ status: "fail", data: "No id was provided!" }));
     return;
   }
   const set: Set = Set.findById(req.body.id);
