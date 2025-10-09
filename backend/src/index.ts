@@ -17,7 +17,7 @@ const port = process.env.PORT || 3000;
 // Middleware
 if (process.env.NODE_ENV === "test") {
   app.use((req, _res, next) => {
-    req.session = { userId: "000000000000000000000001" } as any;
+    req.session = { userId: "000000000000000000000001" } as unknown;
     next();
   });
 } else {

@@ -1,7 +1,6 @@
 import type e from "express";
 import Set from "../models/Set";
 import ApiResponse from "../database/response";
-import mongoose from "mongoose"
 
 export async function getSets(req: e.Request, res: e.Response) {
   Set.find()
@@ -38,9 +37,7 @@ export async function createSet(req: e.Request, res: e.Response) {
 
 export async function deleteSet(req: e.Request, res: e.Response) {
   if (!("id" in req.body)) {
-    res.json(
-      new ApiResponse({ status: "fail", data: "No id was provided!" }),
-    );
+    res.json(new ApiResponse({ status: "fail", data: "No id was provided!" }));
     return;
   }
   const set: Set = Set.findById(req.body.id);
