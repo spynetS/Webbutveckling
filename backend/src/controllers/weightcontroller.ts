@@ -1,9 +1,8 @@
 import User from "../models/User";
 import ApiResponse from "../database/response";
 import { Request, Response } from "express";
-import stats from "../database/stats";
+import stats, { getStrengthProgress } from "../database/stats";
 import { Goal } from "../models/User";
-import userController = require("./userController");
 
 // TODO change so this function adds a new 'weight goal' to the users goals array
 export async function setWeightGoal(req: Request, res: Response) {
@@ -19,10 +18,9 @@ export async function setWeightGoal(req: Request, res: Response) {
 
     const user: User = await User.findById(userId).populate("weightLogs");
 
-    if(!user.weightLogs || user.weightLogs.length === 0)
-    {
+    if (!user.weightLogs || user.weightLogs.length === 0) {
       return res.json(
-        new ApiResponse({status : "fail", data: "no weightlog"}),
+        new ApiResponse({ status: "fail", data: "no weightlog" }),
       );
     }
 
@@ -35,10 +33,43 @@ export async function setWeightGoal(req: Request, res: Response) {
     });
 
     user.goals.push(newGoal._id);
-    
+
     await user.save();
 
     res.json(new ApiResponse({ data: user }));
+  } catch (error: Error) {
+    res
+      .status(500)
+      .json(new ApiResponse({ status: "error", message: error.message }));
+  }
+}
+
+export async function setStrengthGoal(req: Request, res: Response) {
+  try {
+    const userId = req.session.userId;
+    const { strengthGoal } = req.body;
+
+    if (!strengthGoal) {
+      return res.json(
+        new ApiResponse({ status: "fail", data: "strengthGoal is required" }),
+      );
+    }
+    const user: User = await User.findById(userId);
+
+    const progress = await getStrengthProgress(userId);
+
+    const newGoal = await Goal.create({
+      label: "Strength goal",
+      goal: progress.totalStartStrength * strengthGoal,
+      current: progress.totalStrength,
+      start: progress.totalStartStrength,
+      achieved: false,
+    });
+
+    user.goals.push(newGoal._id);
+
+    await user.save();
+    res.json(new ApiResponse({ data: progress }));
   } catch (error: Error) {
     res
       .status(500)

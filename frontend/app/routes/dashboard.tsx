@@ -20,7 +20,9 @@ type StrengthProgress = {
 type Stats = {
 	sessions: number;
 	weightProgress: number;
-	strengthProgress: StrengthProgress[];
+	strengthProgress: {
+		strengthData: StrengthProgress[];
+	}
 
 };
 
@@ -76,10 +78,10 @@ const Dashboard = () => {
 
 			// First, find the max number of points
 			const maxPoints = Math.max(
-				...(_stats?.strengthProgress ?? []).map(progress => progress.strengthPoints?.length || 0)
+				...(_stats?.strengthProgress.strengthData ?? []).map(progress => progress.strengthPoints?.length || 0)
 			);
 
-			_stats?.strengthProgress.forEach(progress => {
+			_stats?.strengthProgress.strengthData.forEach(progress => {
 				datas.push({
 					data: progress.strengthPoints?.map(point => point.strength) || [],
 					labels: Array.from({ length: maxPoints }, (_, i) => i + 1), // [1, 2, 3, ...maxPoints]

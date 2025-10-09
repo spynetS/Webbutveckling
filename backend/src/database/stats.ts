@@ -83,20 +83,41 @@ export async function getStrengthProgress(
     });
 
     let progress = 0;
+    let startStrength = 0;
 
     if (strengthPoints.length > 0) {
-      const startStrength = strengthPoints[0].strength; // get the number
+      startStrength = strengthPoints[0].strength; // get the number
       const maxStrength = Math.max(...strengthPoints.map((sp) => sp.strength));
 
       progress = ((maxStrength - startStrength) / startStrength) * 100;
     }
 
     response.push({
+      startStrength: startStrength,
       muscleGroup: muscle,
       progress: progress,
       strengthPoints: strengthPoints,
     });
   });
 
-  return response;
+  const totalStrength = response.reduce((sum, item) => {
+    if (item.strengthPoints.length > 0) {
+      const max = Math.max(...item.strengthPoints.map((sp) => sp.strength));
+      return sum + max;
+    }
+    return sum + (item.startStrength || 0);
+  }, 0);
+
+  const totalStartStrength = response.reduce(
+    (sum, item) => sum + (item.startStrength || 0),
+    0,
+  );
+
+  return { strengthData: response, totalStrength, totalStartStrength };
+}
+
+export async function getTotalStrengthProgress(userId: number) {
+  const progress = await getStrengthProgress(userId, "");
+  console.log(progress);
+  return progress;
 }
