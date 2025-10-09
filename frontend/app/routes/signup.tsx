@@ -42,17 +42,17 @@ export default function Signup() {
         <div className="mt-8 w-80 flex flex-col gap-3">
           {/* UserName */}
           <label className="floating-label">
-            <span>Your Name</span>
+            <span>Username</span>
             <input value={userName} onChange={(e)=>setuserName(e.target.value)} type="text" placeholder="UserName" className="input input-md" />
           </label>
           {/* Email */}
           <label className="floating-label">
-            <span>Your Email</span>
+            <span>Email</span>
             <input value={email} onChange={(e)=>setEmail(e.target.value)} type="text" placeholder="mail@site.com" className="input input-md" />
           </label>
           {/* Password */}
           <label className="floating-label">
-            <span>Your Name</span>
+            <span>Password</span>
             <input value={password} onChange={(e)=>setPassword(e.target.value)} type="password" placeholder="Password" className="input input-md" />
           </label>
           {/* Login button, how da fck do I connect it */}
