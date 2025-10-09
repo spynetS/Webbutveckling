@@ -28,11 +28,13 @@ export async function lbFriends(req: Request, res: Response) {
       let percent = parseInt(await stats.getGoalProgress(f._id, "weight"));
       // TODO fix a general function to return progress of all goals
 
+
       if (percent == 100) {
         score += 1;
         f.score = score;
         await f.save();
         percent = 0; // reset that % mf
+        
       }
 
       return {

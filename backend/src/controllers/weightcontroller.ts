@@ -3,6 +3,7 @@ import ApiResponse from "../database/response";
 import { Request, Response } from "express";
 import stats from "../database/stats";
 import { Goal } from "../models/User";
+import userController = require("./userController");
 
 // TODO change so this function adds a new 'weight goal' to the users goals array
 export async function setWeightGoal(req: Request, res: Response) {
@@ -18,6 +19,13 @@ export async function setWeightGoal(req: Request, res: Response) {
 
     const user: User = await User.findById(userId).populate("weightLogs");
 
+    if(!user.weightLogs || user.weightLogs.length === 0)
+    {
+      return res.json(
+        new ApiResponse({status : "fail", data: "no weightlog"}),
+      );
+    }
+
     const newGoal = await Goal.create({
       label: "Weight goal",
       goal: weightGoal,
@@ -25,8 +33,9 @@ export async function setWeightGoal(req: Request, res: Response) {
       start: user.weightLogs[user.weightLogs.length - 1].weight,
       achieved: false,
     });
-    user.goals.push(newGoal._id);
 
+    user.goals.push(newGoal._id);
+    
     await user.save();
 
     res.json(new ApiResponse({ data: user }));
