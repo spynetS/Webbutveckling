@@ -22,7 +22,7 @@ export default function Signup() {
         body: JSON.stringify({ userName, email, password }),
       });
       const data = res;
-      setResponse(data);
+      setResponse(data.data);
     } catch (error:Error) {
       console.error("Error:", error);
       setResponse({ error: "Request failed" });
