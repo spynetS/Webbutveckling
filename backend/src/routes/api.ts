@@ -11,15 +11,15 @@ import { getStats } from "../controllers/statController";
 import {
   setWeightGoal,
   getWeightGoalProgress,
+  setStrengthGoal,
 } from "../controllers/weightcontroller";
 
 import exerciseRouter from "./exerciseTemplate";
 import setRouter from "./set";
 import workoutRouter from "./workout";
 
-
 import { getNotifications } from "../controllers/notificationsController";
-
+import { lbFriends } from "../controllers/leaderboardController";
 
 const router = Router();
 
@@ -82,6 +82,7 @@ router.post("/signup", userCreate);
 router.post("/login", userLogin);
 router.post("/log-weight", logWeight);
 router.post("/set-weight-goal", setWeightGoal);
+router.post("/set-strength-goal", setStrengthGoal);
 router.get("/weight-goal-progress", getWeightGoalProgress);
 
 // register the api routes
@@ -93,6 +94,6 @@ import friendsRoutes from "./friends";
 router.use("/friends", friendsRoutes);
 
 router.get("/notifications", getNotifications);
-
+router.get("/leaderboard/friends", lbFriends);
 
 export default router;

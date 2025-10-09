@@ -1,6 +1,8 @@
 import type e from "express";
 import Set from "../models/Set";
 import ApiResponse from "../database/response";
+import stats from "../database/stats";
+import User from "../models/User";
 
 export async function getSets(req: e.Request, res: e.Response) {
   Set.find()
@@ -33,6 +35,18 @@ export async function createSet(req: e.Request, res: e.Response) {
     .catch((err) => {
       res.json(new ApiResponse({ status: "error", message: err.message }));
     });
+
+  const userObj: User = await User.findById(req.session.userId).populate(
+    "goals",
+  );
+
+  const strengthGoal = userObj.goals.find(
+    (goal: Goal) => goal.label === "Strength goal" && !goal.achieved,
+  );
+  strengthGoal.current = (
+    await stats.getStrengthProgress(user, "")
+  ).totalStrength;
+  await strengthGoal.save();
 }
 
 export async function deleteSet(req: e.Request, res: e.Response) {

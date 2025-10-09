@@ -1,8 +1,10 @@
 import User from "../models/User";
 import ApiResponse from "../database/response";
 import { Request, Response } from "express";
-import stats from "../database/stats";
+import stats, { getStrengthProgress } from "../database/stats";
+import { Goal } from "../models/User";
 
+// TODO change so this function adds a new 'weight goal' to the users goals array
 export async function setWeightGoal(req: Request, res: Response) {
   try {
     const userId = req.session.userId;
@@ -14,8 +16,24 @@ export async function setWeightGoal(req: Request, res: Response) {
       );
     }
 
-    const user: User = await User.findById(userId);
-    user.weightGoal = weightGoal;
+    const user: User = await User.findById(userId).populate("weightLogs");
+
+    if (!user.weightLogs || user.weightLogs.length === 0) {
+      return res.json(
+        new ApiResponse({ status: "fail", data: "no weightlog" }),
+      );
+    }
+
+    const newGoal = await Goal.create({
+      label: "Weight goal",
+      goal: weightGoal,
+      current: user.weightLogs[user.weightLogs.length - 1].weight,
+      start: user.weightLogs[user.weightLogs.length - 1].weight,
+      achieved: false,
+    });
+
+    user.goals.push(newGoal._id);
+
     await user.save();
 
     res.json(new ApiResponse({ data: user }));
@@ -26,6 +44,40 @@ export async function setWeightGoal(req: Request, res: Response) {
   }
 }
 
+export async function setStrengthGoal(req: Request, res: Response) {
+  try {
+    const userId = req.session.userId;
+    const { strengthGoal } = req.body;
+
+    if (!strengthGoal) {
+      return res.json(
+        new ApiResponse({ status: "fail", data: "strengthGoal is required" }),
+      );
+    }
+    const user: User = await User.findById(userId);
+
+    const progress = await getStrengthProgress(userId);
+
+    const newGoal = await Goal.create({
+      label: "Strength goal",
+      goal: progress.totalStartStrength * strengthGoal,
+      current: progress.totalStrength,
+      start: progress.totalStartStrength,
+      achieved: false,
+    });
+
+    user.goals.push(newGoal._id);
+
+    await user.save();
+    res.json(new ApiResponse({ data: progress }));
+  } catch (error: Error) {
+    res
+      .status(500)
+      .json(new ApiResponse({ status: "error", message: error.message }));
+  }
+}
+
+// TODO change so we filter to get the new weight goal and return the progress of that goal
 export async function getWeightGoalProgress(req: Request, res: Response) {
   try {
     const progress = await stats.getWeightProgress(req.session.userId);

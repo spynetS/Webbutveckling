@@ -21,43 +21,55 @@ export async function getTotalSessions(userId?: string) {
   return result[0]?.totalSessions || 0;
 }
 
-export async function getWeightProgress(userId: number) {
-  const user = await User.findById(userId).populate("weightLogs");
-  if (
-    !user ||
-    !user.weightGoal ||
-    !user.weightLogs ||
-    user.weightLogs.length === 0
-  ) {
-    throw new Error("Not enough data");
+export async function getWeightProgress(userId: number): Promise<number> {
+  const user = await User.findById(userId).populate("goals");
+
+  if (!user || !user.goals || user.goals.length === 0) {
+    throw new Error("No goal added");
   }
 
-  // weights
-  const startWeight = user.weightLogs[0].weight;
-  const currentWeight = user.weightLogs[user.weightLogs.length - 1].weight;
-  const goalWeight = user.weightGoal;
+  const latestGoal = user.goals.find(
+    (goal: Goal) => goal.label === "Weight goal",
+  );
 
-  console.log(goalWeight);
+  if (latestGoal.start - latestGoal.current == 0) return 0;
 
-  // calculate progress
-  const totalChangeNeeded = Math.abs(goalWeight - startWeight);
-  const changeSoFar = Math.abs(currentWeight - startWeight);
-  const progress =
-    totalChangeNeeded === 0
-      ? 0
-      : Math.min((changeSoFar / totalChangeNeeded) * 100, 100);
-  console.log(progress);
-  return progress;
+  return (
+    ((latestGoal.start - latestGoal.current) /
+      (latestGoal.start - latestGoal.goal)) *
+    100
+  );
+}
+
+export async function getGoalProgress(
+  userId: string | number,
+  goalType: string,
+): Promise<number> {
+  if (goalType === "weight") {
+    try {
+      const progress = await getWeightProgress(userId);
+      return progress;
+    } catch (_err: Error) {
+      console.error(_err);
+      return 0;
+    }
+  }
+  throw new Error("Unsupported goal type: " + goalType);
 }
 
 function calculateStrength(reps: number, weight: number): number {
   return weight * (1 + reps / 30);
 }
 
-export async function getStrengthProgress(userId: number, _muscleGroup: string) {
+export async function getStrengthProgress(
+  userId: number,
+  _muscleGroup: string,
+) {
   const muscles = ["Chest", "Legs", "Arms", "Back"];
 
-  const sets = await Set.find({user:new mongoose.Types.ObjectId(userId)}).populate("template");
+  const sets = await Set.find({
+    user: new mongoose.Types.ObjectId(userId),
+  }).populate("template");
 
   const response = [];
 
@@ -74,20 +86,41 @@ export async function getStrengthProgress(userId: number, _muscleGroup: string) 
     });
 
     let progress = 0;
+    let startStrength = 0;
 
     if (strengthPoints.length > 0) {
-      const startStrength = strengthPoints[0].strength; // get the number
+      startStrength = strengthPoints[0].strength; // get the number
       const maxStrength = Math.max(...strengthPoints.map((sp) => sp.strength));
 
       progress = ((maxStrength - startStrength) / startStrength) * 100;
     }
 
     response.push({
+      startStrength: startStrength,
       muscleGroup: muscle,
       progress: progress,
       strengthPoints: strengthPoints,
     });
   });
 
-  return response;
+  const totalStrength = response.reduce((sum, item) => {
+    if (item.strengthPoints.length > 0) {
+      const max = Math.max(...item.strengthPoints.map((sp) => sp.strength));
+      return sum + max;
+    }
+    return sum + (item.startStrength || 0);
+  }, 0);
+
+  const totalStartStrength = response.reduce(
+    (sum, item) => sum + (item.startStrength || 0),
+    0,
+  );
+
+  return { strengthData: response, totalStrength, totalStartStrength };
+}
+
+export async function getTotalStrengthProgress(userId: number) {
+  const progress = await getStrengthProgress(userId, "");
+  console.log(progress);
+  return progress;
 }

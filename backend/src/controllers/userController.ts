@@ -98,12 +98,19 @@ export async function logWeight(req: Request, res: Response) {
       .status(400)
       .json(new ApiResponse({ status: "fail", data: "User not loged in" }));
   }
-  const user: User = await User.findById(req.session.userId);
+  const user: User = await User.findById(req.session.userId).populate("goals");
 
   const log = await WeightLog.create({
     weight: Number.parseFloat(req.body.weight),
   });
   user.weightLogs.push(log._id);
+
+  // find the first weight goal that isnt acheved
+  const weightGoal = user.goals.find(
+    (goal: Goal) => goal.label === "Weight goal" && !goal.achieved,
+  );
+  weightGoal.current = req.body.weight;
+  await weightGoal.save();
 
   user
     .save()
