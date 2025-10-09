@@ -1,5 +1,8 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
+import apiRouter from "./routes/api";
+
+import { init } from "./database/database";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import apiRouter from "./routes/api";

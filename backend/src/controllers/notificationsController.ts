@@ -3,8 +3,6 @@ import { Types } from "mongoose";
 import ApiResponse from "../database/response";
 import Set from "../models/Set";                 // <-- adjust path if needed
 import User from "../models/User";               // already in your repo
-import UserFriend from "../models/user.friends"; // <-- adjust to your actual filename/export
-import console = require("console");
 
 function startOfToday() {
   const d = new Date();
