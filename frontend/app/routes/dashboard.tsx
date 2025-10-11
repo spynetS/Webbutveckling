@@ -27,13 +27,15 @@ type Stats = {
 };
 
 const Dashboard = () => {
-	const [user, setUser] = useState<User>();
-	const [search, _setSearch] = useState<string>("");
-	const [show, setShow] = useState<boolean>(false);
-	const [alert, setAlert] = useState<boolean>(false);
-	const [weight, setWeight] = useState<string>("");
-	const [graphTab, setGraphTab] = useState<number>(0);
+  const [user, setUser] = useState<User>();
+  const [search, _setSearch] = useState<string>("");
+  const [show, setShow] = useState<boolean>(false);
+  const [alert, setAlert] = useState<boolean>(false);
+  const [weight, setWeight] = useState<string>("");
+  const [graphTab, setGraphTab] = useState<number>(0);
 
+	console.log("What the fuck");
+	
 	useEffect(() => {
 		fetchData();
 	}, []);
@@ -111,7 +113,7 @@ const Dashboard = () => {
 				onSave={logWeight}
 				inputs={(
 					<div>
-						<input className="input input-bordered" placeholder={user?.weightLogs.length > 0 ? user?.weightLogs[user?.weightLogs.length - 1].weight : 0} value={weight} onChange={e=>setWeight(e.target.value)} />
+						<input className="input input-bordered" placeholder={user?.weightLogs.length > 0 ? user?.weightLogs[user?.weightLogs.length - 1].weight : 0} value={weight} onChange={e => setWeight(e.target.value)} />
 					</div>
 				)}
 			/>

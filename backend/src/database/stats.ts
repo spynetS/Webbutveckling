@@ -1,5 +1,5 @@
-import Set from "../models/Set";
-import User from "../models/User";
+pimport Set from "../models/Set";
+mport User from "../models/User";
 import mongoose from "mongoose";
 
 export async function getTotalSessions(userId?: string) {
