@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import Page from "~/components/page"
 import type {User} from "~/models/User";
 import { apiFetch } from "~/api"
+import type {Stats} from "~/models/Stats"
 
 
 export default function Profile() {
@@ -11,13 +12,18 @@ export default function Profile() {
   const [user, setUser] = useState<User>(null);
   const [weightGoal, setWeightGoal] = useState<string>("");
   const [strengthGoal, setStrengthGoal] = useState<string>("");
-
+	const [stats, setStats] = useState<Stats>();
 
     useEffect(() => {
         apiFetch("/api/get-user").then(response => {
-      setUser(response.data)
-    })
-  },[])
+					setUser(response.data)
+				})
+
+			apiFetch("/api/stats").then(response => {
+					setStats(response.data)
+			})
+			
+		},[])
 
   const setGoal = () => {
     apiFetch("/api/set-weight-goal",{
@@ -101,7 +107,7 @@ export default function Profile() {
 
                         <div className="stat">
                             <div className="stat-title">Weight, Age</div>
-                            <div className="stat-value">70kg, 21 </div>
+                          <div className="stat-value">{user?.weightLogs[0].weight}kg, {stats?.strengthProgress.totalStrength}</div>
                             <input className="input input-md input-bordered" placeholder="Weight goal" value={weightGoal} onChange={e => setWeightGoal(e.target.value)} />
                             <button onClick={setGoal} className="btn btn-md btn-primary">
                                 Save

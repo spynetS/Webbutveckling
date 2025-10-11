@@ -109,9 +109,10 @@ export async function logWeight(req: Request, res: Response) {
   const weightGoal = user.goals.find(
     (goal: Goal) => goal.label === "Weight goal" && !goal.achieved,
   );
-  weightGoal.current = req.body.weight;
-  await weightGoal.save();
-
+	if(weightGoal){
+		weightGoal.current = req.body.weight;
+		await weightGoal.save();
+	}
   user
     .save()
     .then(() => {

@@ -5,26 +5,7 @@ import Page from "~/components/page";
 import Popup from "~/components/popup";
 import { Link } from "react-router";
 import { apiFetch } from "~/api";
-
-type StrengthPoint = {
-	date: Date;
-	strength: number;
-}
-
-type StrengthProgress = {
-	muscleGroup: string;
-	strengthPoints: StrengthPoint[]
-	progress: number;
-}
-
-type Stats = {
-	sessions: number;
-	weightProgress: number;
-	strengthProgress: {
-		strengthData: StrengthProgress[];
-	}
-
-};
+import type {Stats} from "~/models/Stats"
 
 const Dashboard = () => {
   const [user, setUser] = useState<User>();

@@ -3,5 +3,5 @@ export type User = {
   email: string;
   password: string;
   weightGoal: number;
-  weightLogs: number[];
+  weightLogs: {weight:number}[];
 };

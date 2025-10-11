@@ -43,10 +43,12 @@ export async function createSet(req: e.Request, res: e.Response) {
   const strengthGoal = userObj.goals.find(
     (goal: Goal) => goal.label === "Strength goal" && !goal.achieved,
   );
-  strengthGoal.current = (
-    await stats.getStrengthProgress(user, "")
-  ).totalStrength;
-  await strengthGoal.save();
+	if(strengthGoal){
+		strengthGoal.current = (
+			await stats.getStrengthProgress(user, "")
+		).totalStrength;
+		await strengthGoal.save();
+	}
 }
 
 export async function deleteSet(req: e.Request, res: e.Response) {
