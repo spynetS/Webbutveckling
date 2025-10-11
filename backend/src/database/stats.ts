@@ -57,7 +57,7 @@ export async function getGoalProgress(
   throw new Error("Unsupported goal type: " + goalType);
 }
 
-function calculateStrength(reps: number, weight: number): number {
+export function calculateStrength(reps: number, weight: number): number {
   return weight * (1 + reps / 30);
 }
 
