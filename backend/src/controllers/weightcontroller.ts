@@ -59,7 +59,7 @@ export async function setStrengthGoal(req: Request, res: Response) {
     const progress = await getStrengthProgress(userId);
 
 		const previusStrengthGoal = await Goal.findOne({label:"Strength goal"}).sort({ createdAt: -1 });
-		let start = previusStrengthGoal ? previusStrengthGoal.current : progress.totalStartStrength;
+		const start = previusStrengthGoal ? previusStrengthGoal.current : progress.totalStartStrength;
 		
     const newGoal = await Goal.create({
       label: "Strength goal",

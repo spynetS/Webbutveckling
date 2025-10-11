@@ -21,7 +21,6 @@ import React, { useMemo, useState, useEffect } from "react";
 import type { Set } from "~/models/Set"
 import type { Exercise as ExerciseModel } from "~/models/Exercise"
 import { apiFetch } from "~/api";
-import Popup from "~/components/popup";
 import ExerciseGraph from "~/components/exerciseGraph";
 
 const Exercise = (props: { exercise: ExerciseModel, onBack: () => void }) => {
