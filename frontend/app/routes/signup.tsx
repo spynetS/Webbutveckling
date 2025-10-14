@@ -30,9 +30,13 @@ export default function Signup() {
   };
   return (
     <main className='w-full h-screen flex flex-col items-center pt-40'>
-      <div className="mb-8">
-        for the image logo :D
+
+      <div className="avatar flex flex-col items-center mb-2">
+        <div className="w-24 rounded-full">
+          <img src="app\Images\Logo2.png" alt="Logo" />
+        </div>
       </div>
+      
         <p id="test" className="text-5xl font-bold w-64 text-center">
             FitnessDual
         </p>
@@ -55,8 +59,8 @@ export default function Signup() {
             <span>Password</span>
             <input value={password} onChange={(e)=>setPassword(e.target.value)} type="password" placeholder="Password" className="input input-md" />
           </label>
-          {/* Login button, how da fck do I connect it */}
-          <button className="btn btn-neutral" onClick={() => { handleSubmit()}}>Sign up!</button>
+          {/* Sign up button */}
+          <button className="btn h-13 btn-neutral" onClick={() => { handleSubmit()}}>Sign up!</button>
           <p>{response}</p>
         </div>
         <p className="text-1xl font-cursive text-center mt-3 text-gray-500">
