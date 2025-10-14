@@ -26,6 +26,7 @@ import type { Set } from "~/models/Set"
 import type { Exercise as ExerciseModel } from "~/models/Exercise"
 import ImagePickerModal from "~/components/exercisechooser"
 
+
 const Exercise = (props: { exercise: ExerciseModel, onBack: () => void}) => {
   const [sets, setSets] = useState<Set[]>([]);
   const [notes, setNotes] = useState("");
@@ -81,6 +82,18 @@ const Exercise = (props: { exercise: ExerciseModel, onBack: () => void}) => {
     })
     logExercise(sets);
   };
+
+	//	const putImage = () => {
+		//		apiFetch("/api/exercise/set-image",{
+	//			method:"put",
+	//			body:{
+	//				id:props.exercise._id,
+	//				image:img
+	//			}
+	//		}).then(response=>{
+	//			
+	//		})
+	//	}
 
   return (
     <div className="w-full h-screen flex flex-col gap-5 px-2 py-5">

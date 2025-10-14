@@ -5,6 +5,7 @@ export interface IExerciseTemplate extends Document {
   title: string;
   description: string;
   muscleGroups: string[];
+	image: string;
   exerciseType: string;
   creator: Schema.Types.ObjectId;
   createdAt: Date;
@@ -15,6 +16,7 @@ const exerciseTemplateSchema = new Schema<IExerciseTemplate>({
   title: { type: String, required: true },
   description: { type: String },
   muscleGroups: [{ type: String }],
+	image: {type: String },
   exerciseType: { type: String },
   creator: { type: Schema.Types.ObjectId, required: true, ref: "User" },
   createdAt: { type: Date, default: Date.now },
