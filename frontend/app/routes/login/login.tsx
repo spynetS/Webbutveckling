@@ -21,7 +21,7 @@ const Login = () => {
       });
       const body = res;
 
-      if (!res.ok) {
+      if (res.status === "fail") {
         setError(body?.data || "Incorrect username or password.");
         return;
       }
@@ -43,23 +43,22 @@ const Login = () => {
       </div>
 
       <p className="text-5xl font-bold text-center mt-3">Fitnessduel</p>
-      <p className="text-5xl font-bold text-center mt-3">Hello</p>
-      <p className="text-5xl font-bold text-center mt-3">Login</p>
+      <p className="text-5xl font-bold text-center mt-4">Login</p>
 
       <div className="flex flex-col items-center w-full">
-        {error && (
+        {error && error.message && (
           <div
             role="alert"
             className="w-full max-w-sm mb-3 rounded-md border px-3 py-2 text-sm"
             style={{ background: "#ffdce0", borderColor: "#f5c6cb", color: "#86181d" }}
           >
-            {error}
+            {error.message}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="w-full max-w-sm grid gap-3">
+        <form onSubmit={handleSubmit} className="w-full max-w-sm grid gap-3 ml-2">
           {/* Email */}
-          <label className="input validator">
+          <label className="input validator ml-6 width-full h-12">
             <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor">
                 <rect width="20" height="16" x="2" y="4" rx="2"></rect>
@@ -78,7 +77,7 @@ const Login = () => {
           <div className="validator-hint hidden">Enter valid email address</div>
 
           {/* Password */}
-          <label className="input validator">
+          <label className="input validator ml-6 width-full h-12">
             <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor">
                 <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"></path>
@@ -97,7 +96,7 @@ const Login = () => {
           </label>
 
           {/* Login Button */}
-          <button className="btn btn-neutral" type="submit" disabled={loading}>
+          <button className="btn btn-neutral h-13" type="submit" disabled={loading}>
             {loading ? "Signing in…" : "Login"}
           </button>
         </form>
