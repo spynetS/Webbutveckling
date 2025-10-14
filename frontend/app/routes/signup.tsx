@@ -47,20 +47,20 @@ export default function Signup() {
           {/* UserName */}
           <label className="floating-label">
             <span>Username</span>
-            <input value={userName} onChange={(e)=>setuserName(e.target.value)} type="text" placeholder="UserName" className="input input-md" />
+            <input value={userName} onChange={(e)=>setuserName(e.target.value)} type="text" placeholder="Username" className="input input-md h-12 text-md px-4" />
           </label>
           {/* Email */}
           <label className="floating-label">
             <span>Email</span>
-            <input value={email} onChange={(e)=>setEmail(e.target.value)} type="email" placeholder="mail@site.com" className="input input-md" />
+            <input value={email} onChange={(e)=>setEmail(e.target.value)} type="email" placeholder="mail@site.com" className="input input-md h-12 text-md px-4" />
           </label>
           {/* Password */}
           <label className="floating-label">
             <span>Password</span>
-            <input value={password} onChange={(e)=>setPassword(e.target.value)} type="password" placeholder="Password" className="input input-md" />
+            <input value={password} onChange={(e)=>setPassword(e.target.value)} type="password" placeholder="Password" className="input input-md h-12 text-md px-4" />
           </label>
           {/* Sign up button */}
-          <button className="btn h-13 btn-neutral" onClick={() => { handleSubmit()}}>Sign up!</button>
+          <button className="btn btn-neutral h-13 text-xl px-8 py-2" onClick={() => { handleSubmit()}}>Sign up!</button>
           <p>{response}</p>
         </div>
         <p className="text-1xl font-cursive text-center mt-3 text-gray-500">
