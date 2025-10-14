@@ -35,15 +35,6 @@ export default function Exercise2() {
         </button>
       </div>
 
-      <ImagePickerModal
-        open={open}
-        onClose={() => setOpen(false)}
-        onSelect={(img) => {
-          setSelected(img.url);
-          setOpen(false);
-        }}
-        title="Välj övning Bosse"
-      />
     </main>
   );
 }

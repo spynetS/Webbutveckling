@@ -24,11 +24,14 @@ import React, { useMemo, useState, useEffect } from "react";
 
 import type { Set } from "~/models/Set"
 import type { Exercise as ExerciseModel } from "~/models/Exercise"
+import ImagePickerModal from "~/components/exercisechooser"
 
 const Exercise = (props: { exercise: ExerciseModel, onBack: () => void}) => {
   const [sets, setSets] = useState<Set[]>([]);
   const [notes, setNotes] = useState("");
-
+	const [img, setImage]  = useState<string>("");
+	const [open, setOpen] = useState<boolean>(false);
+	
   useEffect(()=>{
     console.log(props.exercise)
   },[]);
@@ -85,17 +88,40 @@ const Exercise = (props: { exercise: ExerciseModel, onBack: () => void}) => {
       <p className="text-sm text-base-content/70">{today}</p>
       <div>
         <a onClick={()=>props.onBack()} className="btn btn-ghost text-center text-xl">Back</a>
-        <p className="text-2xl font-bold text-center mt-2">{props.exercise?.title}</p>
+				{!img ? 
+        (<p className="text-2xl font-bold text-center mt-2">{props.exercise?.title}</p>)
+					:
+					(null)
+				}
       </div>
 
 
-      <div className="card bg-base-100 w-fit shadow-sm items-center">
-        <figure>
+      <div className="card bg-base-100 w-full shadow-sm items-center flex flex-col">
+
+				<ImagePickerModal
+					open={open}
+					onClose={() => setOpen(false)}
+					onSelect={(img) => {
+						setImage(img.url);
+						setOpen(false);
+					}}
+					title="Välj övning Bosse"
+				/>
+
+				{img ? (
+
           <img
-            src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+						onClick={()=>setOpen(true)}
+						className="h-48"
+            src={img}
             alt="Exercise"
           />
-        </figure>
+
+				) : (
+					<div onClick={()=>setOpen(true)} className="w-full h-32 bg-gray-100 rounded-xl flex flex-col items-center justify-center" >
+						<p>Choose an image</p>
+				</div>
+				)}
       </div>
 
       <div className="rounded-box border border-base-content/5 bg-base-100">
