@@ -35,15 +35,15 @@ const Login = () => {
   }
 
   return (
-    <main className="w-full h-screen flex flex-col gap-5 px-2 py-5">
+    <main className="w-full h-screen flex flex-col px-2 py-5 pt-40">
       <div className="avatar flex flex-col items-center">
         <div className="w-24 rounded-full">
-          <img src="Logo2.png" />
+          <img src="app/Images/Logo2.png" />
         </div>
       </div>
 
       <p className="text-5xl font-bold text-center mt-3">Fitnessduel</p>
-      <p className="text-5xl font-bold text-center mt-4">Login</p>
+      <p className="text-5xl font-bold text-center mt-4 mb-5">Login</p>
 
       <div className="flex flex-col items-center w-full">
         {error && error.message && (
