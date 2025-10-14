@@ -42,6 +42,8 @@ export interface IUser extends Document {
   email: string;
   score: number;
   goals: goal[];
+	xp   : number;
+	level: number;
   weightLogs: [Schema.Types.ObjectId];
   weightGoal: number;
   friendCode: string;
@@ -56,6 +58,8 @@ const userSchema = new Schema<IUser>({
   email: { type: String, required: true, unique: true },
   score: { type: Number },
   goals: [{ type: Schema.Types.ObjectId, ref: "Goal", default: [] }],
+	xp   : { type: Number, default:0 },
+	level: { type: Number, default:0 },
   weightLogs: [{ type: Schema.Types.ObjectId, ref: "WeightLog" }],
   weightGoal: { type: Number },
   friendCode: { type: String, unique: true, sparse: true },

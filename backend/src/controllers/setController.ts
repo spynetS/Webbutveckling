@@ -1,8 +1,9 @@
 import type e from "express";
 import Set from "../models/Set";
 import ApiResponse from "../database/response";
-import stats from "../database/stats";
+import stats, { calculateStrength } from "../database/stats";
 import User from "../models/User";
+import { addXp } from "./userController"
 
 export async function getSets(req: e.Request, res: e.Response) {
   Set.find()
@@ -40,6 +41,9 @@ export async function createSet(req: e.Request, res: e.Response) {
     "goals",
   );
 
+	const strength = calculateStrength(reps,weight);
+	addXp(userObj,strength);
+	
   const strengthGoal = userObj.goals.find(
     (goal: Goal) => goal.label === "Strength goal" && !goal.achieved,
   );

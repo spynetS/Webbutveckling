@@ -82,9 +82,9 @@ export default function Profile() {
                     </p>
                     <div
                         className="radial-progress text-primary font-bold"
-                        style={{ "--value": 70 } as React.CSSProperties}
+                      style={{ "--value": (user?.xp / ( 100 * ( user?.level ** 2 ) ) ) * 100} as React.CSSProperties}
                     >
-                        23
+											{user?.level}
                     </div>
 
                     {/* Bio for your profile */}
@@ -101,7 +101,7 @@ export default function Profile() {
 
                         <div className="stat">
                             <div className="stat-title">Weight, Age</div>
-                            <div className="stat-value">70kg, 21 </div>
+                          <div className="stat-value">{user?.weightLogs[user?.weightLogs?.length - 1].weight}kg</div>
                             <input className="input input-md input-bordered" placeholder="Weight goal" value={weightGoal} onChange={e => setWeightGoal(e.target.value)} />
                             <button onClick={setGoal} className="btn btn-md btn-primary">
                                 Save
