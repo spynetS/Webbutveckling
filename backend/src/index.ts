@@ -3,9 +3,10 @@ import cors from "cors";
 import apiRouter from "./routes/api";
 
 import { init } from "./database/database";
-
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import apiRouter from "./routes/api";
+import { init } from "./database/database";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -13,50 +14,41 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-// init the database
-init(process.env.DATABASE_URI!);
-
 // Middleware
-// TODO make a .env file for the secret
-app.use(
-  session({
-    secret: "your-secret-key",
-    resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({
-      mongoUrl: process.env.DATABASE_URI!, // your MongoDB connection
-      ttl: 14 * 24 * 60 * 60, // session expiration in seconds (14 days)
+if (process.env.NODE_ENV === "test") {
+  app.use((req, _res, next) => {
+    req.session = { userId: "000000000000000000000001" } as unknown;
+    next();
+  });
+} else {
+  app.use(
+    session({
+      secret: "your-secret-key",
+      resave: false,
+      saveUninitialized: false,
+      store: MongoStore.create({
+        mongoUrl: process.env.DATABASE_URI!,
+        ttl: 14 * 24 * 60 * 60,
+      }),
     }),
-    cookie: {
-      secure: false, // true if using HTTPS
-      httpOnly: true,
-      sameSite: "lax",
-    },
-  }),
-);
+  );
+}
 
 app.use(express.json());
-
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "http://127.0.0.1:5173",
-      "http://192.168.1.170:38045",
-    ], // allowed origins
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true, // allow cookies
-  }),
-);
-
-// Routes
+app.use(cors({ origin: ["http://localhost:5173"], credentials: true }));
 app.use("/api", apiRouter);
 
-// Health check
-app.get("/", (req: Request, res: Response) => {
-  res.json({ message: "Express + TypeScript REST API is running 🚀" });
+app.get("/", (_req: Request, res: Response) => {
+  res.json({ message: "API running 🚀" });
 });
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
+export default app; // ✅ export app for Supertest
+
+// Only start server if running node directly
+if (require.main === module) {
+  init(process.env.DATABASE_URI!).then(() => {
+    app.listen(port, () =>
+      console.log(`Server running at http://localhost:${port}`),
+    );
+  });
+}

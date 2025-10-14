@@ -2,6 +2,9 @@ import * as e from "express";
 import ExerciseTemplate from "../models/ExerciseTemplate";
 import ApiResponse from "../database/response";
 import User from "../models/User";
+import mongoose from "mongoose";
+import Set from "../models/Set"
+import { calculateStrength } from "../database/stats"
 
 export async function getExercise(req: e.Request, res: e.Response) {
   ExerciseTemplate.find().then((found) => {
@@ -47,6 +50,7 @@ export async function deleteExercise(req: e.Request, res: e.Response) {
     });
 }
 
+
 export async function setImage(req: e.Request, res: e.Response){
 	if (!("id" in req.body)) {
     res.json(
@@ -64,4 +68,29 @@ export async function setImage(req: e.Request, res: e.Response){
 	exercise.image = req.body.image;
 	await exercise.save();
 	res.json(new ApiResponse({data:{}}));
+}
+export async function stats(req: e.Request, res: e.Response) {
+
+	const reps = [];
+	const weights = [];
+	const strengths = [];
+	const dates = [];
+	if("_id" in req.body){
+		const sets = await Set.find({template:new mongoose.Types.ObjectId(req.body._id)})
+		sets.forEach(aSet => {
+			reps.push(aSet.reps)
+			weights.push(aSet.weight)
+			strengths.push(calculateStrength(aSet.reps,aSet.weight))
+			dates.push(aSet.createdAt)
+			
+		});
+		return res.json(new ApiResponse({data:{
+			reps:reps,
+			weights:weights,
+			strengths:strengths,
+			labels:dates
+		}}))
+	}
+
+	
 }

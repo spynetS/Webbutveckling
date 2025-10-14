@@ -22,7 +22,7 @@ export default function Signup() {
         body: JSON.stringify({ userName, email, password }),
       });
       const data = res;
-      setResponse(data);
+      setResponse(data.data);
     } catch (error:Error) {
       console.error("Error:", error);
       setResponse({ error: "Request failed" });
@@ -48,7 +48,7 @@ export default function Signup() {
           {/* Email */}
           <label className="floating-label">
             <span>Email</span>
-            <input value={email} onChange={(e)=>setEmail(e.target.value)} type="text" placeholder="mail@site.com" className="input input-md" />
+            <input value={email} onChange={(e)=>setEmail(e.target.value)} type="email" placeholder="mail@site.com" className="input input-md" />
           </label>
           {/* Password */}
           <label className="floating-label">
