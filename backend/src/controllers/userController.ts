@@ -2,7 +2,7 @@ import User, {WeightLog} from "../models/User"
 import ApiResponse from "../database/response"
 import { Request, Response, } from "express";
 import bcrypt from "bcrypt";
-import friendsController = require("./friendsController");
+import friendsController from "./friendsController";
 
 
 

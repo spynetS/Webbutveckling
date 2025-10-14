@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import { apiFetch } from "~/api";
+
 export default function Signup() {
 
   {/* UserName input */}
@@ -15,14 +17,11 @@ export default function Signup() {
   const handleSubmit = async (): Promise<void> => {
     
     try {
-      const res = await fetch("http://localhost:3000/api/signup", {
+      const res = await apiFetch("/api/signup", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({ userName, email, password }),
       });
-      const data = await res.json();
+      const data = res;
       setResponse(data);
     } catch (error:Error) {
       console.error("Error:", error);
@@ -43,17 +42,17 @@ export default function Signup() {
         <div className="mt-8 w-80 flex flex-col gap-3">
           {/* UserName */}
           <label className="floating-label">
-            <span>Your Name</span>
+            <span>Username</span>
             <input value={userName} onChange={(e)=>setuserName(e.target.value)} type="text" placeholder="UserName" className="input input-md" />
           </label>
           {/* Email */}
           <label className="floating-label">
-            <span>Your Email</span>
+            <span>Email</span>
             <input value={email} onChange={(e)=>setEmail(e.target.value)} type="text" placeholder="mail@site.com" className="input input-md" />
           </label>
           {/* Password */}
           <label className="floating-label">
-            <span>Your Name</span>
+            <span>Password</span>
             <input value={password} onChange={(e)=>setPassword(e.target.value)} type="password" placeholder="Password" className="input input-md" />
           </label>
           {/* Login button, how da fck do I connect it */}

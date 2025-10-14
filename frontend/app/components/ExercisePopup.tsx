@@ -1,6 +1,6 @@
 import React, { useState, type ChangeEvent } from "react";
 import Popup from "~/components/popup";
-
+import { apiFetch } from "~/api";
 
 const ExercisePopup = (props:{
 	show:boolean,
@@ -27,12 +27,8 @@ const ExercisePopup = (props:{
   };
 
   const createExercise = () => {
-    fetch("http://localhost:3000/api/exercise",{
-      credentials:"include",
+    apiFetch("/api/exercise",{
       method:"post",
-      headers: {
-        "Content-Type": "application/json"
-      },
       body:JSON.stringify({
         title:title,
         muscleGroups:muscleGroups,

@@ -1,4 +1,3 @@
-
 /* Back arrow and Fitnessduel title*X/
 
 /* Friends title *X/
@@ -15,14 +14,13 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
+import { apiFetch } from "~/api";
 
 type Friend = {
   _id: string;
   name: string;
   lastTrainedAt: string | null; // ISO string from API
 };
-
-const API = "http://localhost:3000/api"; // adjust if your backend is on a different base path
 
 function timeAgo(iso: string | null): string {
   if (!iso) return "aldrig"; // never
@@ -50,15 +48,16 @@ export default function Friends() {
     try {
       setLoading(true);
       const [codeRes, listRes] = await Promise.all([
-        fetch(`${API}/get-user`, { credentials: "include" }),
-        fetch(`${API}/friends`, { credentials: "include" }),
+        apiFetch(`/api/get-user`),
+        apiFetch(`/api/friends`),
       ]);
-      if (codeRes.ok) {
-        const { data } = await codeRes.json();
+
+      if (codeRes.status==="success") {
+        const { data } = codeRes;
         setFriendCode(data.friendCode);
       }
-      if (listRes.ok) {
-        const { friends } = await listRes.json();
+      if (listRes.status === "success") {
+        const { friends } = listRes.data
         setFriends(friends);
       }
     } finally {
@@ -76,17 +75,15 @@ export default function Friends() {
 
   const handleAdd = useCallback(async () => {
     if (!addCode.trim()) return;
-    const res = await fetch(`${API}/friends`, {
+    const res = await apiFetch(`/api/friends`, {
       method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ code: addCode.trim() }),
     });
-    if (res.ok) {
+    if (res.status==="success") {
       setAddCode("");
       await load();
     } else {
-      const { message } = await res.json().catch(() => ({ message: "Error" }));
+      const { message } = res
       alert(message || "Could not add friend");
     }
   }, [addCode, load]);

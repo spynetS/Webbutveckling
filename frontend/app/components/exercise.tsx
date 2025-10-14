@@ -24,7 +24,10 @@ import React, { useMemo, useState, useEffect } from "react";
 
 import type { Set } from "~/models/Set"
 import type { Exercise as ExerciseModel } from "~/models/Exercise"
+
 import ImagePickerModal from "~/components/exercisechooser"
+
+import { apiFetch } from "~/api";
 
 
 const Exercise = (props: { exercise: ExerciseModel, onBack: () => void}) => {
@@ -34,7 +37,10 @@ const Exercise = (props: { exercise: ExerciseModel, onBack: () => void}) => {
 	const [open, setOpen] = useState<boolean>(false);
 	
   useEffect(()=>{
-    console.log(props.exercise)
+		if(props.exercise.image)
+			{
+				setImage(props.exercise.image)
+			}
   },[]);
 
   const today = useMemo(
@@ -46,11 +52,8 @@ const Exercise = (props: { exercise: ExerciseModel, onBack: () => void}) => {
   const logExercise = (sets:Set[]) => {
 
     sets.forEach(set=>{
-      console.log(JSON.stringify(set))
-      fetch("http://localhost:3000/api/set/",{
-        credentials:"include",
+      apiFetch("/api/set/",{
         method:"POST",
-        headers: { "Content-Type": "application/json" },
         body:JSON.stringify(set)
       }).then(_resposne=>{
       })
@@ -83,17 +86,17 @@ const Exercise = (props: { exercise: ExerciseModel, onBack: () => void}) => {
     logExercise(sets);
   };
 
-	//	const putImage = () => {
-		//		apiFetch("/api/exercise/set-image",{
-	//			method:"put",
-	//			body:{
-	//				id:props.exercise._id,
-	//				image:img
-	//			}
-	//		}).then(response=>{
-	//			
-	//		})
-	//	}
+const putImage = (image) => {
+		apiFetch("/api/exercise/set-image",{
+		method:"put",
+			body:JSON.stringify({
+			id:props.exercise._id,
+			image:image
+			})
+	}).then(response=>{
+		
+	})
+}
 
   return (
     <div className="w-full h-screen flex flex-col gap-5 px-2 py-5">
@@ -116,6 +119,7 @@ const Exercise = (props: { exercise: ExerciseModel, onBack: () => void}) => {
 					onClose={() => setOpen(false)}
 					onSelect={(img) => {
 						setImage(img.url);
+						putImage(img.url);
 						setOpen(false);
 					}}
 					title="Välj övning Bosse"

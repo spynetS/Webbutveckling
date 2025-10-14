@@ -60,7 +60,7 @@ export async function setImage(req: e.Request, res: e.Response){
     );
     return;
   }
-  const exercise: ExerciseTemplate = ExerciseTemplate.findById(req.body.id);
+  const exercise: ExerciseTemplate = await ExerciseTemplate.findById(req.body.id);
 	exercise.image = req.body.image;
 	await exercise.save();
 	res.json(new ApiResponse({data:{}}));
