@@ -8,7 +8,6 @@ export default [
   route("login", "routes/login/login.tsx"),
   route("leaderboard", "routes/leaderboard.tsx"),
   //route("exercise", "routes/exercise.tsx"), 
-  route("exercise2", "routes/exercise2.tsx"),
   route("workout", "routes/workout.tsx"),
  
   route("friends", "routes/friends.tsx"),

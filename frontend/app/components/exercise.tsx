@@ -96,7 +96,7 @@ const putImage = (image) => {
 			id:props.exercise._id,
 			image:image
 			})
-	}).then(response=>{
+	}).then(_response=>{
 		
 	})
 }
