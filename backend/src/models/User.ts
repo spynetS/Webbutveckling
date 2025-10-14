@@ -32,11 +32,6 @@ const permissionSchema = new Schema({
     required: true,
     enum: ["ExerciseTemplate"], // list of model names
   },
-  modelId: {
-    type: Schema.Types.ObjectId,
-    required: true,
-    refPath: "modelType", // <-- magic here
-  },
 });
 
 export const Permission = model("Permission", permissionSchema);

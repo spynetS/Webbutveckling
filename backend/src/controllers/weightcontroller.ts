@@ -22,7 +22,7 @@ export async function setWeightGoal(req: Request, res: Response) {
 
     const user: User = await User.findById(userId).populate("weightLogs");
 
-    if (!canDo(user)) {
+    if (! (await canDo(user))) {
       return res
         .status(401)
         .json(new ApiResponse({ status: "fail", data: "No permissions" }));
