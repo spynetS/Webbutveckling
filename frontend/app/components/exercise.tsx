@@ -13,6 +13,10 @@
 /* Buttom to ad */
 
 
+/* creating a geller ie function*/
+
+
+
 
 
 
@@ -20,18 +24,27 @@ import React, { useMemo, useState, useEffect } from "react";
 
 import type { Set } from "~/models/Set"
 import type { Exercise as ExerciseModel } from "~/models/Exercise"
+
+import ImagePickerModal from "~/components/exercisechooser"
+
 import { apiFetch } from "~/api";
 import ExerciseGraph from "~/components/exerciseGraph";
 
-const Exercise = (props: { exercise: ExerciseModel, onBack: () => void }) => {
-	const [sets, setSets] = useState<Set[]>([]);
-	const [notes, setNotes] = useState("");
 
+const Exercise = (props: { exercise: ExerciseModel, onBack: () => void}) => {
+  const [sets, setSets] = useState<Set[]>([]);
+  const [notes, setNotes] = useState("");
+	const [img, setImage]  = useState<string>("");
+	const [open, setOpen] = useState<boolean>(false);
 	const [showGraph, setShowGraph] = useState<boolean>(false);
+
 	
-	useEffect(() => {
-		console.log(props.exercise)
-	}, []);
+  useEffect(()=>{
+		if(props.exercise.image)
+			{
+				setImage(props.exercise.image)
+			}
+  },[]);
 
 	const today = useMemo(
 		() => new Intl.DateTimeFormat("en-US", { dateStyle: "long" }).format(new Date()),
@@ -76,29 +89,65 @@ const Exercise = (props: { exercise: ExerciseModel, onBack: () => void }) => {
 		logExercise(sets);
 	};
 
-	return (
-		<div className="w-full h-screen flex flex-col gap-2 px-2 py-5">
-			<ExerciseGraph
+const putImage = (image) => {
+		apiFetch("/api/exercise/set-image",{
+		method:"put",
+			body:JSON.stringify({
+			id:props.exercise._id,
+			image:image
+			})
+	}).then(_response=>{
+		
+	})
+}
+
+  return (
+    <div className="w-full h-screen flex flex-col gap-5 px-2 py-5">
+		<ExerciseGraph
 				show={showGraph}
 				setShow={setShowGraph}
-				exercise={props.exercise} />
-
-			<p className="text-sm text-base-content/70">{today}</p>
+			exercise={props.exercise} />
+	
+      <p className="text-sm text-base-content/70">{today}</p>
 			<div className="flex flex-row justify-between ">
 				<a onClick={() => props.onBack()} className="btn btn-ghost text-center text-xl">Back</a>
 				<button onClick={()=>setShowGraph(true)} className="btn btn-ghost text-center text-xl">Show graph</button>
 			</div>
-			<p className="text-2xl font-bold text-center mt-2">{props.exercise?.title}</p>
+				{!img ? 
+        (<p className="text-2xl font-bold text-center mt-2">{props.exercise?.title}</p>)
+					:
+					(null)
+				}
 
+      <div className="card bg-base-100 w-full shadow-sm items-center flex flex-col">
 
-			<div className="card bg-base-100 w-fit max-h-32 shadow-sm items-center">
-				<figure>
-					<img
-						src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-						alt="Exercise"
-					/>
-				</figure>
-			</div>
+				<ImagePickerModal
+					open={open}
+					onClose={() => setOpen(false)}
+					onSelect={(img) => {
+						setImage(img.url);
+						putImage(img.url);
+						setOpen(false);
+					}}
+					title="Välj övning Bosse"
+				/>
+
+				{img ? (
+
+          <img
+						onClick={()=>setOpen(true)}
+						className="h-48"
+            src={img}
+            alt="Exercise"
+          />
+
+				) : (
+					<div onClick={()=>setOpen(true)} className="w-full h-32 bg-gray-100 rounded-xl flex flex-col items-center justify-center" >
+						<p>Choose an image</p>
+				</div>
+				)}
+      </div>
+
 
 			<div className="rounded-box border border-base-content/5 bg-base-100">
 				<table className="table">

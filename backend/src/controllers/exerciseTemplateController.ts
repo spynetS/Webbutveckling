@@ -50,6 +50,25 @@ export async function deleteExercise(req: e.Request, res: e.Response) {
     });
 }
 
+
+export async function setImage(req: e.Request, res: e.Response){
+	if (!("id" in req.body)) {
+    res.json(
+      new ApiResponse({ status: "fail", data: "No id was provided!" }),
+    );
+    return;
+  }
+	if (!("image" in req.body)) {
+    res.json(
+      new ApiResponse({ status: "fail", data: "No image was provided!" }),
+    );
+    return;
+  }
+  const exercise: ExerciseTemplate = await ExerciseTemplate.findById(req.body.id);
+	exercise.image = req.body.image;
+	await exercise.save();
+	res.json(new ApiResponse({data:{}}));
+}
 export async function stats(req: e.Request, res: e.Response) {
 
 	const reps = [];
@@ -73,6 +92,5 @@ export async function stats(req: e.Request, res: e.Response) {
 		}}))
 	}
 
-	
 	
 }
