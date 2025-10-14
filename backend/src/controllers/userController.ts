@@ -3,6 +3,7 @@ import ApiResponse from "../database/response";
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { makeCode } from "./friendsController";
+import { calculateStrength } from "../database/stats";
 
 // Added Login
 
@@ -120,4 +121,19 @@ export async function logWeight(req: Request, res: Response) {
     .catch((error: Error) => {
       res.json(new ApiResponse({ status: "error", message: error.message }));
     });
+}
+
+
+export async function addXp (user:User, xp:number) {
+	
+	user.xp += xp;
+
+	const xp_needed = 100 * ( (user.level ?? 0) ** 2 );
+	console.log(xp_needed)
+	
+	if(user.xp >= xp_needed){
+		user.level ++;
+	}
+	await user.save();
+	
 }
