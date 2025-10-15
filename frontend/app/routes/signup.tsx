@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 
 import { apiFetch } from "~/api";
+import { Link } from "react-router";
+
 
 export default function Signup() {
 
@@ -12,15 +14,17 @@ export default function Signup() {
   const [password, setPassword] = useState<string>("");
   {/* Response from the server */}
   const [response, setResponse] = useState<unknown>(null);
+	const [loading, setLoading] = useState<boolean>(false)
 
   // ALFRED YOU LEGEND!!!!
   const handleSubmit = async (): Promise<void> => {
-    
+    setLoading(true);
     try {
       const res = await apiFetch("/api/signup", {
         method: "POST",
         body: JSON.stringify({ userName, email, password }),
       });
+			setLoading(false);
       const data = res;
       setResponse(data.data);
     } catch (error:Error) {
@@ -60,7 +64,13 @@ export default function Signup() {
             <input value={password} onChange={(e)=>setPassword(e.target.value)} type="password" placeholder="Password" className="input input-md h-12 text-md px-4" />
           </label>
           {/* Sign up button */}
-          <button className="btn btn-neutral h-13 text-xl px-8 py-2" onClick={() => { handleSubmit()}}>Sign up!</button>
+          <button className="btn btn-neutral h-13 text-xl px-8 py-2" onClick={() => { handleSubmit()}}>
+						{loading ? "Signing up…" : "Signup"}
+					</button>
+        <Link className="btn mt-2" to='/login'>
+					Login
+        </Link>
+
           <p>{response}</p>
         </div>
         <p className="text-1xl font-cursive text-center mt-3 text-gray-500">

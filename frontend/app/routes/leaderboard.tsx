@@ -15,7 +15,22 @@ export default function Leaderboard() {
 
 return (
   <Page>
-    <div className="max-w-md mx-auto bg-white rounded-2xl shadow-lg p-8 text-center flex flex-col justify-between min-h-[400px]">
+    <div className="max-w-md mx-auto bg-white rounded-2xl shadow-lg p-8 text-center flex flex-col justify-between min-h-[400px] h-full">
+
+			<div className="fab bottom-24">
+				{/* a focusable div with tabIndex is necessary to work on all browsers. role="button" is necessary for accessibility */}
+				<div tabIndex={0} role="button" className="btn btn-lg btn-circle btn-info">+</div>
+
+				{/* close button should not be focusable so it can close the FAB when clicked. It's just a visual placeholder */}
+				<div className="fab-close">
+					Close <span className="btn btn-circle btn-lg btn-error">✕</span>
+				</div>
+
+				{/* buttons that show up when FAB is open */}
+				<div>Weight goal <button className="btn btn-lg btn-circle">W</button></div>
+				<div>Strength goal <button className="btn btn-lg btn-circle">S</button></div>
+			</div>
+			
       <div className="space-y-6">
         
         {/* Title */}
@@ -56,11 +71,6 @@ return (
 
                 {/* Player info */}
                 <div className="flex items-center gap-4 flex-1">
-                  <img
-                    src={player.avatar}
-                    alt={player.name}
-                    className="w-10 h-10 rounded-full"
-                  />
                   <span className="font-semibold text-lg">{player.name}</span>
                 </div>
 

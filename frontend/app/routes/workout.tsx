@@ -102,7 +102,7 @@ const Workout = () => {
                         ))}
                     </select>
                     <div className="w-full flex flex-col md:flex-row md:flex-wrap gap-3">
-                        {workouts.filter(workout=>weekday == "all" || workout.weekday === weekday).map((workout, i) => (
+                        {workouts?.filter(workout=>weekday == "all" || workout.weekday === weekday).map((workout, i) => (
                             <Card
                                 key={i}
                                 workout={workout}

@@ -1,11 +1,17 @@
 import type e from "express";
 import Set from "../models/Set";
 import ApiResponse from "../database/response";
-import stats from "../database/stats";
+import { getStrengthProgress } from "../database/stats";
 import User from "../models/User";
+import ExerciseTemplate from "../models/ExerciseTemplate";
 
 export async function getSets(req: e.Request, res: e.Response) {
-  Set.find()
+
+	if(!req.session.userId) return res.status(401).json(new ApiResponse({status:"fail"}));
+
+	const user:User = await User.findById(req.session.userId)
+	
+		Set.find({user:user})
     .populate("template") // replace ObjectIds in exercises with the actual Exercise documents
     .populate("user", "name email") // optionally select only certain fields from user
     .sort({ createdAt: 1 }) // oldest first
@@ -18,14 +24,17 @@ export async function getSets(req: e.Request, res: e.Response) {
 }
 
 export async function createSet(req: e.Request, res: e.Response) {
-  const { reps, weight, duration, user, template } = req.body;
+  const { reps, weight, duration, template } = req.body;
 
+	const userObj:User = await User.findById(req.session.userId).populate("goals");
+	const templateObj :ExerciseTemplate = await ExerciseTemplate.findById(template);
+	
   const payload = {
     reps: Number(reps),
     weight: Number(weight),
     duration: Number(duration),
-    user,
-    template,
+    user:userObj._id,
+    template:templateObj._id
   };
 
   Set.create(payload)
@@ -36,15 +45,11 @@ export async function createSet(req: e.Request, res: e.Response) {
       res.json(new ApiResponse({ status: "error", message: err.message }));
     });
 
-  const userObj: User = await User.findById(req.session.userId).populate(
-    "goals",
-  );
-
   const strengthGoal = userObj.goals.find(
     (goal: Goal) => goal.label === "Strength goal" && !goal.achieved,
   );
   strengthGoal.current = (
-    await stats.getStrengthProgress(user, "")
+    await getStrengthProgress(userObj._id, "")
   ).totalStrength;
   await strengthGoal.save();
 }

@@ -77,7 +77,7 @@ const Exercise = (props: { exercise: ExerciseModel, onBack: () => void}) => {
 			prev.map((r, idx) => (idx === i ? { ...r, [field]: val } : r))
 		);
 	};
-	const addSet = () => setSets((prev) => [...prev, { template: props.exercise._id, user: props.exercise.creator, duration: 0, reps: 0, weight: 0 }]);
+	const addSet = () => setSets((prev) => [...prev, { template: props.exercise._id, duration: 0, reps: 0, weight: 0 }]);
 
 	const saveLog = () => {
 		sets.forEach(set => {
