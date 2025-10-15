@@ -16,12 +16,34 @@ const goal = new Schema({
 export const WeightLog = model("WeightLog", weightLogSchema);
 export const Goal = model("Goal", goal);
 
+const permissionSchema = new Schema({
+  action: {
+    type: String,
+    enum: ["read", "write", "delete", "update"],
+    required: true,
+  },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User", // assuming permissions belong to a user
+    required: true,
+  },
+  modelType: {
+    type: String,
+    required: true,
+    enum: ["ExerciseTemplate"], // list of model names
+  },
+});
+
+export const Permission = model("Permission", permissionSchema);
+
 // 1. Define an interface for TypeScript
 export interface IUser extends Document {
   name: string;
   email: string;
   score: number;
   goals: goal[];
+	xp   : number;
+	level: number;
   weightLogs: [Schema.Types.ObjectId];
   weightGoal: number;
   friendCode: string;
@@ -36,6 +58,8 @@ const userSchema = new Schema<IUser>({
   email: { type: String, required: true, unique: true },
   score: { type: Number },
   goals: [{ type: Schema.Types.ObjectId, ref: "Goal", default: [] }],
+	xp   : { type: Number, default:0 },
+	level: { type: Number, default:0 },
   weightLogs: [{ type: Schema.Types.ObjectId, ref: "WeightLog" }],
   weightGoal: { type: Number },
   friendCode: { type: String, unique: true, sparse: true },

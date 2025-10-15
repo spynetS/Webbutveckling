@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import Page from "~/components/page"
 import type {User} from "~/models/User";
 import { apiFetch } from "~/api"
+import { IoMdNotifications } from "react-icons/io";
 
 
 export default function Profile() {
@@ -44,7 +45,12 @@ export default function Profile() {
   };
 
   return (
-        <Page>
+    <Page>
+			<Link to="/notifications" className="rounded-full shadow-lg bg-base-100 fixed top-2 right-2 z-50 w-12 h-12 " >
+				<IoMdNotifications className="w-full h-full" />
+			</Link>
+
+			
             <div className="w-full h-screen flex flex-col items-center pt-0">
 
                 {/* Banner and Avatar, HOLY FCK STYLING IS ANNOYING */}
@@ -82,9 +88,9 @@ export default function Profile() {
                     </p>
                     <div
                         className="radial-progress text-primary font-bold"
-                        style={{ "--value": 70 } as React.CSSProperties}
+                      style={{ "--value": (user?.xp / ( 100 * ( user?.level ** 2 ) ) ) * 100} as React.CSSProperties}
                     >
-                        23
+											{user?.level}
                     </div>
 
                     {/* Bio for your profile */}
@@ -101,7 +107,7 @@ export default function Profile() {
 
                         <div className="stat">
                             <div className="stat-title">Weight, Age</div>
-                            <div className="stat-value">70kg, 21 </div>
+                          <div className="stat-value">{user?.weightLogs[user?.weightLogs?.length - 1].weight}kg</div>
                             <input className="input input-md input-bordered" placeholder="Weight goal" value={weightGoal} onChange={e => setWeightGoal(e.target.value)} />
                             <button onClick={setGoal} className="btn btn-md btn-primary">
                                 Save

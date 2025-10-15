@@ -1,9 +1,15 @@
 import type e from "express";
 import Set from "../models/Set";
 import ApiResponse from "../database/response";
+
 import { getStrengthProgress } from "../database/stats";
 import User from "../models/User";
 import ExerciseTemplate from "../models/ExerciseTemplate";
+
+import stats, { calculateStrength } from "../database/stats";
+import User from "../models/User";
+import { addXp } from "./userController"
+
 
 export async function getSets(req: e.Request, res: e.Response) {
 
@@ -44,6 +50,11 @@ export async function createSet(req: e.Request, res: e.Response) {
     .catch((err) => {
       res.json(new ApiResponse({ status: "error", message: err.message }));
     });
+
+
+	const strength = calculateStrength(reps,weight);
+	addXp(userObj,strength);
+	
 
   const strengthGoal = userObj.goals.find(
     (goal: Goal) => goal.label === "Strength goal" && !goal.achieved,
