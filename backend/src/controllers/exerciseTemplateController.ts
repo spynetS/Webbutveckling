@@ -75,13 +75,16 @@ export async function stats(req: e.Request, res: e.Response) {
 	const weights = [];
 	const strengths = [];
 	const dates = [];
+	
 	if("_id" in req.body){
 		const sets = await Set.find({template:new mongoose.Types.ObjectId(req.body._id),user:new mongoose.Types.ObjectId(req.session.userId)})
+		let index = 0;
 		sets.forEach(aSet => {
 			reps.push(aSet.reps)
 			weights.push(aSet.weight)
 			strengths.push(calculateStrength(aSet.reps,aSet.weight))
-			dates.push(aSet.createdAt)
+			dates.push(index)
+			index++;
 			
 		});
 		return res.json(new ApiResponse({data:{

@@ -52,13 +52,12 @@ const Exercise = (props: { exercise: ExerciseModel, onBack: () => void}) => {
 	);
 
 
-	const logExercise = (sets: Set[]) => {
+	const logExercise = async (sets: Set[]) => {
 
 		sets.forEach(set => {
 			apiFetch("/api/set/", {
 				method: "POST",
 				body: JSON.stringify(set)
-			}).then(_resposne => {
 			})
 		})
 	}
@@ -86,7 +85,7 @@ const Exercise = (props: { exercise: ExerciseModel, onBack: () => void}) => {
 			set.duration = parseFloat(set.duration);
 			return set;
 		})
-		logExercise(sets);
+		logExercise(sets).then(_r=>{})
 	};
 
 const putImage = (image) => {

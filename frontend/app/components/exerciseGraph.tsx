@@ -51,8 +51,8 @@ const ExerciseGraph = (props: {
 						{
 							labels: stats?.labels,
 							data: stats?.strengths,
-							label: "Weight",
-							title: "Weight over time"
+							label: "Strength",
+							title: "Strength over time"
 						}]} />
 
 				</div>
