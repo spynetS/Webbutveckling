@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { apiFetch } from "~/api";
 
 type Notification = {
   id: string;
