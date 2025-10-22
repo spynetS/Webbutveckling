@@ -52,13 +52,12 @@ const Exercise = (props: { exercise: ExerciseModel, onBack: () => void}) => {
 	);
 
 
-	const logExercise = (sets: Set[]) => {
+	const logExercise = async (sets: Set[]) => {
 
 		sets.forEach(set => {
 			apiFetch("/api/set/", {
 				method: "POST",
 				body: JSON.stringify(set)
-			}).then(_resposne => {
 			})
 		})
 	}
@@ -77,7 +76,7 @@ const Exercise = (props: { exercise: ExerciseModel, onBack: () => void}) => {
 			prev.map((r, idx) => (idx === i ? { ...r, [field]: val } : r))
 		);
 	};
-	const addSet = () => setSets((prev) => [...prev, { template: props.exercise._id, user: props.exercise.creator, duration: 0, reps: 0, weight: 0 }]);
+	const addSet = () => setSets((prev) => [...prev, { template: props.exercise._id, duration: 0, reps: 0, weight: 0 }]);
 
 	const saveLog = () => {
 		sets.forEach(set => {
@@ -86,7 +85,7 @@ const Exercise = (props: { exercise: ExerciseModel, onBack: () => void}) => {
 			set.duration = parseFloat(set.duration);
 			return set;
 		})
-		logExercise(sets);
+		logExercise(sets).then(_r=>{})
 	};
 
 const putImage = (image) => {
