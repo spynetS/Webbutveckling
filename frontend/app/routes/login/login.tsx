@@ -104,7 +104,7 @@ const Login = () => {
         <Link className="btn mt-2" to='/signup'>
           Sign up
         </Link>
-      </div>
+				      </div>
 
       <p className="text-1xl font cursive text-center mt-3 text-gray-500">
         Compete agaisnt your friends

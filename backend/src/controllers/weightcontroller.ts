@@ -1,6 +1,10 @@
 import User from "../models/User";
 import ApiResponse from "../database/response";
 import { Request, Response } from "express";
+
+import stats from "../database/stats";
+import { canDo } from "./permissionController";
+
 import stats, { getStrengthProgress } from "../database/stats";
 import { Goal } from "../models/User";
 
@@ -18,6 +22,7 @@ export async function setWeightGoal(req: Request, res: Response) {
 
     const user: User = await User.findById(userId).populate("weightLogs");
 
+
     if (!user.weightLogs || user.weightLogs.length === 0) {
       return res.json(
         new ApiResponse({ status: "fail", data: "no weightlog" }),
@@ -33,6 +38,7 @@ export async function setWeightGoal(req: Request, res: Response) {
     });
 
     user.goals.push(newGoal._id);
+
 
     await user.save();
 

@@ -5,7 +5,12 @@ import ApiResponse from "../database/response";
 import User from "../models/User";
 
 export async function getWorkout(req: e.Request, res: e.Response) {
-  Workout.find()
+
+	if(!req.session.userId) return res.status(401).json(new ApiResponse({status:"fail"}));
+
+	const user: User = await User.findById(req.session.userId);
+	
+  Workout.find({user:user})
     .populate("exercises") // replace ObjectIds in exercises with the actual Exercise documents
     .populate("user", "name email") // optionally select only certain fields from user
     .then((found) => {

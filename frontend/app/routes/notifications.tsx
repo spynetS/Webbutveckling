@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { apiFetch } from "~/api";
+import { Link } from "react-router";
 
 type Notification = {
   id: string;
@@ -50,7 +51,7 @@ export default function Notifications() {
   return (
     <main className="w-full h-screen flex flex-col gap-5 px-2 py-5">
       <div className="navbar bg-base-100 shadow-sm items-center">
-        <a className="btn btn-ghost text-center mt-3 text-xl">Arrow</a>
+        <Link to="/profile" className="btn btn-ghost text-center mt-3 text-xl">Arrow</Link>
         <a className="text-4xl font-bold text-center mt-3 items-center">FitnessDuel</a>
       </div>
 
