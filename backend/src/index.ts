@@ -35,7 +35,7 @@ if (process.env.NODE_ENV === "test") {
 }
 
 app.use(express.json());
-app.use(cors({ origin: ["http://localhost:5173"], credentials: true }));
+app.use(cors({ origin: ["http://localhost:5173", "http://127.0.0.1:5173"], credentials: true }));
 app.use("/api", apiRouter);
 
 app.get("/", (_req: Request, res: Response) => {
