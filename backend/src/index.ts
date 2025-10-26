@@ -14,6 +14,9 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
+const DATABASE_URI = process.env.DATABASE_URI
+console.log(DATABASE_URI)
+
 // Middleware
 if (process.env.NODE_ENV === "test") {
   app.use((req, _res, next) => {
@@ -50,5 +53,7 @@ if (require.main === module) {
     app.listen(port, () =>
       console.log(`Server running at http://localhost:${port}`),
     );
-  });
+		}).catch(error=>{
+		console.log("Could not init database. Have .env?")
+		})
 }
