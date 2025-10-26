@@ -3,7 +3,24 @@
 FitnessDuel is a website where you can track your fitness journey. The main feauture is that you can set up goals and /"compete"/ agains your freinds to meet your goals.
 
 * Run the project
+
+** Docker compose
+If you have docker and docker compose installed you can simply run
+#+begin_src bash
+sudo docker-compose up --build -d
+#+end_src
+
+and the backend will start at
+*localhost:3000*
+and the frontend will start at
+*localhost:5137*
+
+/It will also start a mongodb server localy which the backend will use/
+
+
+** Bash
 The backend /Express.js/
+
 #+begin_src bash
 cd backend
 npm install
