@@ -1,16 +1,19 @@
 import User, { Permission } from "../models/User";
 
-export async function canDo(user: User, modelType: string, action:string): boolean {
-  const permissions: Permission[] = await Permission.find({ user: user, modelType: modelType });
+export async function canDo(user: User, modelType: string, action: string): Promise<boolean> {
+  const permissions: Permission[] = await Permission.find({ user, modelType });
 
-	if(!permissions) return false;
-	
-	permissions.forEach(perm=>{
-		if(perm.action === action)
-			return true;
-	})
-	
-  return false;
+  if (!permissions || permissions.length === 0) {
+    throw new Error("Permission denied");
+  }
+
+  for (const perm of permissions) {
+    if (perm.action === action) {
+      return true; // ✅ returns from canDo
+    }
+  }
+
+  throw new Error("Permission denied");
 }
 
 
