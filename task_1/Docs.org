@@ -1,8 +1,8 @@
 2. Identify scalability and fault-tolerance issues/3. Discuss the identified issues
 
 + S1. Resource usage
-  no big problem for the frontend (most logic is on client side), but backend express and the database will have problems with an increased number of users and requests.
-  scalability
+  - no big problem for the frontend (most logic is on client side), but backend express and the database will have problems with an increased number of users and requests.
+  - scalability
 
 + S2. Shared state
   - We have a single database which can't be divided?
